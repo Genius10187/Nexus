@@ -83,6 +83,10 @@ public class Main extends Application {
             URL url = new File(path).toURI().toURL();
             FXMLLoader loader = new FXMLLoader(url);
             Parent parent = loader.load();
+
+            //controller will be null if not all methods are present!!!
+            Object controller = loader.getController();
+
             Scene scene = new Scene(parent);
 
             Stage stage;
@@ -97,7 +101,7 @@ public class Main extends Application {
 
             addStage(stage);
 
-            return loader.getController();
+            return controller;
         } catch (IOException e) {
             log(Level.SEVERE, e);
             return null;

@@ -1,11 +1,10 @@
 package com.meti.server;
 
+import com.meti.server.util.Cargo;
+import com.meti.server.util.Command;
 import com.meti.util.Loop;
 
-import java.io.EOFException;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.net.Socket;
 import java.util.logging.Level;
 
@@ -40,7 +39,7 @@ public class ClientLoop extends Loop {
                 String className = next.getClass().getName();
 
                 switch (className) {
-                    case "com.meti.server.Command":
+                    case "com.meti.server.util.Command":
                         runCommand((Command) next);
                         break;
                     default:
@@ -61,7 +60,7 @@ public class ClientLoop extends Loop {
             case "login":
                 String password = (String) next.getArgs()[0];
                 if (password.equals(server.getPassword())) {
-                    getInstance().log(Level.INFO, "Client " + socket.getInetAddress() + " has connected");
+                    getInstance().log(Level.INFO, "Client " + socket.getInetAddress() + " has connected with valid password");
                 } else {
                     getInstance().log(Level.INFO, "Client has invalid password, kicking out!");
                     socket.close();
@@ -70,6 +69,27 @@ public class ClientLoop extends Loop {
             case "disconnect":
                 socket.close();
                 break;
+            case "list":
+                Cargo cargo = new Cargo<>();
+                //forgot to do assetManager, hold on
+                break;
+        }
+    }
+
+    //hating on spell check once again :)
+    public void sendAll(Serializable... serializables) throws IOException {
+        //reduces excessive flushing
+        for (Serializable serializable : serializables) {
+            send(serializable, false);
+        }
+
+        output.flush();
+    }
+
+    public void send(Serializable serializable, boolean flush) throws IOException {
+        output.writeObject(serializable);
+        if (flush) {
+            output.flush();
         }
     }
 }

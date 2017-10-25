@@ -4,6 +4,7 @@ import com.meti.util.Activator;
 import com.meti.util.Loop;
 import com.meti.util.Stoppable;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -32,6 +33,8 @@ public class Server implements Stoppable {
     private Activator<Socket> onClientConnect;
     private Activator<Socket> onClientDisconnect;
     private String password;
+
+    private final File directory = new File("Nexus");
 
     public Server(int port) throws IOException {
         this.serverSocket = new ServerSocket(port);

@@ -1,7 +1,6 @@
 package com.meti.client;
 
-import com.meti.client.fxml.ClientDisplay;
-import com.meti.server.Command;
+import com.meti.server.util.Command;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -9,8 +8,6 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.net.InetAddress;
 import java.net.Socket;
-
-import static com.meti.Main.getInstance;
 
 /**
  * @author SirMathhman
@@ -29,11 +26,7 @@ public class Client {
         this.input = new ObjectInputStream(socket.getInputStream());
 
         Command command = new Command("login", password);
-        output.writeObject(command);
-
         send(command, true);
-
-
     }
 
     public void send(Serializable serializable, boolean flush) throws IOException {
