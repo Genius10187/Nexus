@@ -1,6 +1,7 @@
 package com.meti.server;
 
 import com.meti.server.asset.AssetManager;
+import com.meti.server.util.Command;
 import com.meti.util.Activator;
 import com.meti.util.Loop;
 import com.meti.util.Stoppable;
@@ -23,15 +24,19 @@ import static com.meti.Main.getInstance;
  * @since 10/20/2017
  */
 public class Server implements Stoppable {
+    private final Commander commander = new Commander();
+
     private final AssetManager manager = new AssetManager();
     private final ServerSocket serverSocket;
 
     private final List<Loop> connectionLoops = new ArrayList<>();
     private final List<Socket> sockets = new ArrayList<>();
+
     private final ListenLoop listenLoop = new ListenLoop(this);
     private final DisconnectLoop disconnectLoop = new DisconnectLoop();
     private final ClientExecutor executor = new ClientExecutor();
     private final File directory = new File("Nexus");
+
     private Activator<Socket> onClientConnect;
     private Activator<Socket> onClientDisconnect;
     private String password;
@@ -93,6 +98,10 @@ public class Server implements Stoppable {
 
     public AssetManager getAssetManager() {
         return manager;
+    }
+
+    public void runCommand(Command command) throws IOException {
+        commander.runCommand(command);
     }
 
     public class DisconnectLoop extends Loop {
