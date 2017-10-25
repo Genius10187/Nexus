@@ -36,16 +36,6 @@ public class Client {
         }
     }
 
-    //hating on spell check once again :)
-    public void sendAll(Serializable... serializables) throws IOException {
-        //reduces excessive flushing
-        for (Serializable serializable : serializables) {
-            send(serializable, false);
-        }
-
-        output.flush();
-    }
-
     public Object receive() throws IOException, ClassNotFoundException {
         return input.readObject();
     }

@@ -1,14 +1,15 @@
 package com.meti.server;
 
+import com.meti.server.asset.AssetChange;
 import com.meti.server.util.Command;
 import com.meti.util.Loop;
-import com.meti.util.Utility;
 
 import java.io.*;
 import java.net.Socket;
 import java.util.logging.Level;
 
 import static com.meti.Main.getInstance;
+import static com.meti.util.Utility.castIfOfInstance;
 
 /**
  * @author SirMathhman
@@ -21,8 +22,10 @@ public class ClientLoop extends Loop implements Sendable {
     private final Socket socket;
     private final ObjectInputStream input;
     private final ObjectOutputStream output;
+    private final Server server;
 
     public ClientLoop(Server server, Socket socket) throws IOException {
+        this.server = server;
         this.socket = socket;
 
         //we need to construct the output stream first
@@ -40,13 +43,14 @@ public class ClientLoop extends Loop implements Sendable {
                 Object next = input.readObject();
                 String className = next.getClass().getName();
 
-                switch (className) {
-                    case "com.meti.server.util.Command":
-                        commander.runCommand(Utility.castIfOfInstance(next, Command.class));
-                        break;
-                    default:
-                        getInstance().log(Level.WARNING, "Found no type handling" +
-                                "for class type " + className);
+                if (className.equals("com.meti.server.util.Command")) {
+                    commander.runCommand(castIfOfInstance(next, Command.class));
+                } else if (next instanceof AssetChange) {
+                    AssetChange assetChange = castIfOfInstance(next, AssetChange.class);
+                    assetChange.update(server.getAssetManager().getAsset(assetChange.getAssetPath()));
+                } else {
+                    getInstance().log(Level.WARNING, "Found no type handling " +
+                            "for class type " + className);
                 }
             } catch (EOFException e) {
                 socket.close();
@@ -55,16 +59,6 @@ public class ClientLoop extends Loop implements Sendable {
         } catch (Exception e) {
             getInstance().log(Level.WARNING, e);
         }
-    }
-
-    //hating on spell check once again :)
-    public void sendAll(Serializable... serializables) throws IOException {
-        //reduces excessive flushing
-        for (Serializable serializable : serializables) {
-            send(serializable, false);
-        }
-
-        output.flush();
     }
 
     public void send(Serializable serializable, boolean flush) throws IOException {

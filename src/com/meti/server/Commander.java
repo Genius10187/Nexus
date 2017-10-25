@@ -3,10 +3,12 @@ package com.meti.server;
 import com.meti.server.asset.Asset;
 import com.meti.server.util.Cargo;
 import com.meti.server.util.Command;
+import com.meti.util.Utility;
 
 import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.logging.Level;
 
 import static com.meti.Main.getInstance;
@@ -40,14 +42,18 @@ public class Commander {
                 socket.close();
                 break;
             case "list":
-                Cargo cargo = new Cargo<>();
-                ArrayList<Asset<?>> assets = server.getAssetManager().getAssets();
+                Cargo<String> cargo = new Cargo<>();
+                HashMap<String, Asset<?>> assets = server.getAssetManager().getAssets();
                 ArrayList<String> paths = new ArrayList<>();
-                assets.forEach(asset -> paths.add(asset.getPath()));
+                paths.addAll(assets.keySet());
                 cargo.getContents().addAll(paths);
 
                 sendable.send(cargo, true);
                 break;
+            case "get":
+                String path = Utility.castIfOfInstance(next.getArgs()[0], String.class);
+                Asset<?> asset = server.getAssetManager().getAsset(path);
+                sendable.send(asset, true);
         }
     }
 }

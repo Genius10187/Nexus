@@ -1,13 +1,13 @@
 package com.meti.server.asset;
 
 import com.meti.server.asset.text.TextBuilder;
-import com.meti.util.Utility;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import static com.meti.util.Utility.*;
 
 public class AssetManager {
     private final Class[] builderClasses = {
@@ -15,11 +15,11 @@ public class AssetManager {
     };
 
     private final HashMap<String, AssetBuilder<?>> builders = new HashMap<>();
-    private final ArrayList<Asset<?>> assets = new ArrayList<>();
+    private final HashMap<String, Asset<?>> assets = new HashMap<>();
 
     public void load() throws IllegalAccessException, InstantiationException {
         for (Class c : builderClasses) {
-            AssetBuilder<?> builder = Utility.castIfOfInstance(c.newInstance(), AssetBuilder.class);
+            AssetBuilder<?> builder = castIfOfInstance(c.newInstance(), AssetBuilder.class);
             for (String ext : builder.getExtensions()) {
                 builders.put(ext, builder);
             }
@@ -29,11 +29,11 @@ public class AssetManager {
     public void read(File directory) throws IOException {
         throwIfNotLoaded();
 
-        Utility.createIfNotExists(directory, true);
-        List<File> files = Utility.getFiles(directory);
+        createIfNotExists(directory, true);
+        List<File> files = getFiles(directory);
 
         for (File file : files) {
-            assets.add(builders.get(Utility.getExtension(file)).build(file));
+            assets.put(file.getPath(), builders.get(getExtension(file)).build(file));
         }
     }
 
@@ -43,7 +43,11 @@ public class AssetManager {
         }
     }
 
-    public ArrayList<Asset<?>> getAssets() {
+    public HashMap<String, Asset<?>> getAssets() {
         return assets;
+    }
+
+    public Asset<?> getAsset(String path) {
+        return assets.get(path);
     }
 }

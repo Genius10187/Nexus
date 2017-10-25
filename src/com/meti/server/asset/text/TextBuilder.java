@@ -9,10 +9,10 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class TextBuilder implements AssetBuilder<TextAsset> {
+public class TextBuilder implements AssetBuilder<ArrayList<String>> {
 
     @Override
-    public Asset<TextAsset> build(File file) throws IOException {
+    public Asset<ArrayList<String>> build(File file) throws IOException {
         ArrayList<String> lines = new ArrayList<>();
         BufferedReader reader = new BufferedReader(new FileReader(file));
 
@@ -21,7 +21,7 @@ public class TextBuilder implements AssetBuilder<TextAsset> {
             lines.add(line);
         }
 
-        return new Asset<>(file, new TextAsset(file, lines));
+        return new TextAsset(file, lines);
     }
 
     @Override

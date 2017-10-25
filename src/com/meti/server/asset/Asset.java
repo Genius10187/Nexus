@@ -5,7 +5,7 @@ import java.io.Serializable;
 
 public class Asset<T extends Serializable> implements Serializable {
     private final File file;
-    private T content;
+    protected T content;
 
     public Asset(File file, T content) {
         this.file = file;
@@ -24,7 +24,7 @@ public class Asset<T extends Serializable> implements Serializable {
         this.content = content;
     }
 
-    public String getPath() {
-        return file.getPath();
+    public File getFile() {
+        return file;
     }
 }
