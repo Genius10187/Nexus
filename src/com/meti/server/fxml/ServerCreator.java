@@ -67,7 +67,7 @@ public class ServerCreator implements Initializable {
 
     //again, not sure if fxml methods should have exception throwing
     @FXML
-    public void connect() throws IOException {
+    public void connect() throws IOException, IllegalAccessException, InstantiationException {
         //could be generated in generateField
         if (server == null) server = new Server(Integer.parseInt(port.getText()));
 

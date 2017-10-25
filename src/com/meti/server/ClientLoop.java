@@ -1,11 +1,13 @@
 package com.meti.server;
 
+import com.meti.server.asset.Asset;
 import com.meti.server.util.Cargo;
 import com.meti.server.util.Command;
 import com.meti.util.Loop;
 
 import java.io.*;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.logging.Level;
 
 import static com.meti.Main.getInstance;
@@ -71,7 +73,12 @@ public class ClientLoop extends Loop {
                 break;
             case "list":
                 Cargo cargo = new Cargo<>();
-                //forgot to do assetManager, hold on
+                ArrayList<Asset<?>> assets = server.getAssetManager().getAssets();
+                ArrayList<String> paths = new ArrayList<>();
+                assets.forEach(asset -> paths.add(asset.getPath()));
+                cargo.getContents().addAll(paths);
+
+                send(cargo, true);
                 break;
         }
     }

@@ -21,7 +21,7 @@ public class TextBuilder implements AssetBuilder<TextAsset> {
             lines.add(line);
         }
 
-        return new Asset<>(new TextAsset(lines));
+        return new Asset<>(file, new TextAsset(file, lines));
     }
 
     @Override

@@ -45,4 +45,8 @@ public class Client {
 
         output.flush();
     }
+
+    public Object receive() throws IOException, ClassNotFoundException {
+        return input.readObject();
+    }
 }

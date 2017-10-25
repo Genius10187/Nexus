@@ -1,5 +1,6 @@
 package com.meti.server;
 
+import com.meti.server.asset.AssetManager;
 import com.meti.util.Activator;
 import com.meti.util.Loop;
 import com.meti.util.Stoppable;
@@ -22,6 +23,7 @@ import static com.meti.Main.getInstance;
  * @since 10/20/2017
  */
 public class Server implements Stoppable {
+    private final AssetManager manager = new AssetManager();
     private final ServerSocket serverSocket;
 
     private final List<Loop> connectionLoops = new ArrayList<>();
@@ -29,12 +31,10 @@ public class Server implements Stoppable {
     private final ListenLoop listenLoop = new ListenLoop(this);
     private final DisconnectLoop disconnectLoop = new DisconnectLoop();
     private final ClientExecutor executor = new ClientExecutor();
-
+    private final File directory = new File("Nexus");
     private Activator<Socket> onClientConnect;
     private Activator<Socket> onClientDisconnect;
     private String password;
-
-    private final File directory = new File("Nexus");
 
     public Server(int port) throws IOException {
         this.serverSocket = new ServerSocket(port);
@@ -63,11 +63,16 @@ public class Server implements Stoppable {
         return serverSocket;
     }
 
-    public void listen() {
-        new Thread(listenLoop).start();
-        new Thread(disconnectLoop).start();
+    public void listen() throws IOException, InstantiationException, IllegalAccessException {
+        getInstance().log(Level.INFO, "Reading directory");
+
+        manager.load();
+        manager.read(directory);
 
         getInstance().log(Level.INFO, "Listening for clients");
+
+        new Thread(listenLoop).start();
+        new Thread(disconnectLoop).start();
     }
 
     public void setOnClientConnect(Activator<Socket> onClientConnect) {
@@ -84,6 +89,10 @@ public class Server implements Stoppable {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public AssetManager getAssetManager() {
+        return manager;
     }
 
     public class DisconnectLoop extends Loop {

@@ -40,7 +40,7 @@ public class ClientCreator {
     }
 
     @FXML
-    public void connect() throws IOException {
+    public void connect() throws IOException, ClassNotFoundException {
         InetAddress addressObj = InetAddress.getByName(address.getText());
         int portInt = Integer.parseInt(port.getText());
         Client client = new Client(addressObj, portInt, password.getText());
@@ -48,7 +48,9 @@ public class ClientCreator {
         //controller returning null... hmmmm
         Object controller = getInstance().buildStage("assets\\fxml\\ClientDisplay.fxml", null);
         if (controller instanceof ClientDisplay) {
-            ((ClientDisplay) controller).setClient(client);
+            ClientDisplay castController = (ClientDisplay) controller;
+            castController.setClient(client);
+            castController.load();
         } else {
             throw new RuntimeException("Controller not instance of ClientDisplay");
         }

@@ -10,7 +10,7 @@ public class Utility {
     }
 
     public static <T> T castIfOfInstance(Object obj, Class<T> c) {
-        if (obj.getClass().isAssignableFrom(c)) {
+        if (c.isAssignableFrom(obj.getClass())) {
             return c.cast(obj);
         } else {
             return null;

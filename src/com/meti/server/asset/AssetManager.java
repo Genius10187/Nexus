@@ -42,4 +42,8 @@ public class AssetManager {
             throw new RuntimeException("AssetManager not loaded!");
         }
     }
+
+    public ArrayList<Asset<?>> getAssets() {
+        return assets;
+    }
 }
