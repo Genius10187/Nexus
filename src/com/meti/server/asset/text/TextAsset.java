@@ -5,24 +5,26 @@ import com.meti.server.asset.Asset;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.stream.Collectors;
 
-public class TextAsset extends Asset<ArrayList<String>> {
-    public TextAsset(File file, String... args) {
+public class TextAsset extends Asset<String> {
+    public TextAsset(File file, String... lines) {
         super(file);
 
-        setContent(new ArrayList<>());
-        this.content.addAll(Arrays.asList(args));
+        String content = Arrays.stream(lines).collect(Collectors.joining());
+
+        setContent(content);
     }
 
     //list interface not serializable
     public TextAsset(File file, ArrayList<String> lines) {
         super(file);
 
-        setContent(new ArrayList<>());
-        this.content.addAll(lines);
-    }
-
-    public ArrayList<String> getLines() {
-        return content;
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < lines.size() - 2; i++) {
+            builder.append(lines.get(i) + "\n");
+        }
+        builder.append(lines.get(lines.size() - 1));
+        setContent(builder.toString());
     }
 }

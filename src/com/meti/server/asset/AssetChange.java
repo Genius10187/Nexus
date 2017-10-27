@@ -13,5 +13,5 @@ public abstract class AssetChange implements Serializable {
         return assetPath;
     }
 
-    public abstract void update(Asset<?> asset);
+    public abstract <T extends Serializable> void update(Asset<T> asset);
 }

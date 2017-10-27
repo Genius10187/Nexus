@@ -2,10 +2,9 @@ package com.meti.server.asset.text;
 
 import com.meti.server.asset.Asset;
 import com.meti.server.asset.AssetChange;
+import com.meti.util.Utility;
 
-import java.util.ArrayList;
-
-import static com.meti.util.Utility.castIfOfInstance;
+import java.io.Serializable;
 
 public class TextChange extends AssetChange {
     public static final int CHAR_ADDED = 0;
@@ -19,10 +18,17 @@ public class TextChange extends AssetChange {
     }
 
     @Override
-    public void update(Asset<?> asset) {
-        ArrayList<?> content = castIfOfInstance(asset.getContent(), ArrayList.class);
+    public <T extends Serializable> void update(Asset<T> asset) {
+        String content = Utility.castIfOfInstance(asset.getContent(), String.class);
 
-        String line = castIfOfInstance(content.get(content.size() - 1), String.class);
+        if (type == CHAR_ADDED) {
+            content = content + character;
+        } else if (type == CHAR_REMOVED) {
+            content = content.substring(0, content.length() - 2);
+        }
+
+        //...
+        asset.setContent((T) content);
     }
 
     public void setCharacter(String character) {

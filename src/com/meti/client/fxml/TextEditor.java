@@ -9,8 +9,6 @@ import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyEvent;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.function.Consumer;
 
 import static com.meti.Main.getInstance;
 import static com.meti.util.Utility.castIfOfInstance;
@@ -43,8 +41,7 @@ public class TextEditor extends Editor {
 
     private void init(Asset<?> asset) {
         Object content = asset.getContent();
-        ArrayList<?> textList = castIfOfInstance(content, ArrayList.class);
-        textList.forEach((Consumer<Object>) o -> display.appendText(castIfOfInstance(o, String.class) + "\n"));
+        display.setText(Utility.castIfOfInstance(content, String.class));
     }
 
     @FXML

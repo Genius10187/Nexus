@@ -9,10 +9,10 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class TextBuilder implements AssetBuilder<ArrayList<String>> {
+public class TextBuilder implements AssetBuilder<String> {
 
     @Override
-    public Asset<ArrayList<String>> build(File file) throws IOException {
+    public Asset<String> build(File file) throws IOException {
         ArrayList<String> lines = new ArrayList<>();
         BufferedReader reader = new BufferedReader(new FileReader(file));
 
