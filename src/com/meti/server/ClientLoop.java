@@ -48,6 +48,8 @@ public class ClientLoop extends Loop implements Sendable {
                 } else if (next instanceof AssetChange) {
                     AssetChange assetChange = castIfOfInstance(next, AssetChange.class);
                     assetChange.update(server.getAssetManager().getAsset(assetChange.getAssetPath()));
+
+                    //has been change, update all clientloops
                 } else {
                     getInstance().log(Level.WARNING, "Found no type handling " +
                             "for class type " + className);

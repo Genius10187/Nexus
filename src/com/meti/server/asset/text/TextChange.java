@@ -27,6 +27,7 @@ public class TextChange extends AssetChange {
             content = content.substring(0, content.length() - 2);
         }
 
+        //bug lives here?
         //...
         asset.setContent((T) content);
     }

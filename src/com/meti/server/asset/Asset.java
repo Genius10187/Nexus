@@ -27,4 +27,12 @@ public class Asset<T extends Serializable> implements Serializable {
     public File getFile() {
         return file;
     }
+
+    @Override
+    public String toString() {
+        return "Asset{" +
+                "file=" + file +
+                ", content=" + content +
+                '}';
+    }
 }

@@ -45,7 +45,6 @@ public class ClientCreator {
         int portInt = Integer.parseInt(port.getText());
         Client client = new Client(addressObj, portInt, password.getText());
 
-        //controller returning null... hmmmm
         Object controller = getInstance().buildStage("assets\\fxml\\ClientDisplay.fxml", null);
         if (controller instanceof ClientDisplay) {
             ClientDisplay castController = (ClientDisplay) controller;

@@ -46,16 +46,23 @@ public class ClientDisplay implements Initializable {
     }
 
     @FXML
-    public void openEditors() throws IOException, ClassNotFoundException {
+    public void openEditors() throws IOException {
         List<TreeItem<String>> items = fileTreeView.getSelectionModel().getSelectedItems();
 
         List<Asset<?>> assets = new ArrayList<>();
+        System.out.println(items);
+
         for (TreeItem<String> item : items) {
             String path = getPathFromTreeItem(item);
             Command command = new Command("get", path);
             client.send(command, true);
 
-            assets.add(Utility.castIfOfInstance(client.receive(), Asset.class));
+            //maybe sending too many objects?
+
+       /*     Object receive = client.receive();
+            Asset e = Utility.castIfOfInstance(receive, Asset.class);
+            System.out.println("Receive: " + e);
+            assets.add(e);*/
         }
 
         for (Asset<?> asset : assets) {

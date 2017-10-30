@@ -28,32 +28,33 @@ public class Commander {
     }
 
     public void runCommand(Command next) throws IOException {
-        switch (next.getName()) {
-            case "login":
-                String password = (String) next.getArgs()[0];
-                if (password.equals(server.getPassword())) {
-                    getInstance().log(Level.INFO, "Client " + socket.getInetAddress() + " has connected with valid password");
-                } else {
-                    getInstance().log(Level.INFO, "Client has invalid password, kicking out!");
-                    socket.close();
-                }
-                break;
-            case "disconnect":
-                socket.close();
-                break;
-            case "list":
-                Cargo<String> cargo = new Cargo<>();
-                HashMap<String, Asset<?>> assets = server.getAssetManager().getAssets();
-                ArrayList<String> paths = new ArrayList<>();
-                paths.addAll(assets.keySet());
-                cargo.getContents().addAll(paths);
+        System.out.println(next.toString());
 
-                sendable.send(cargo, true);
-                break;
-            case "get":
-                String path = Utility.castIfOfInstance(next.getArgs()[0], String.class);
-                Asset<?> asset = server.getAssetManager().getAsset(path);
-                sendable.send(asset, true);
+        if ("login".equals(next.getName())) {
+            String password = (String) next.getArgs()[0];
+            if (password.equals(server.getPassword())) {
+                getInstance().log(Level.INFO, "Client " + socket.getInetAddress() + " has connected with valid password");
+            } else {
+                getInstance().log(Level.INFO, "Client has invalid password, kicking out!");
+                socket.close();
+            }
+        } else if ("disconnect".equals(next.getName())) {
+            socket.close();
+        } else if ("list".equals(next.getName())) {
+            Cargo<String> cargo = new Cargo<>();
+            HashMap<String, Asset<?>> assets = server.getAssetManager().getAssets();
+            ArrayList<String> paths = new ArrayList<>();
+            paths.addAll(assets.keySet());
+            cargo.getContents().addAll(paths);
+
+            sendable.send(cargo, true);
+
+        } else if ("get".equals(next.getName())) {//should be declared other side...
+            String path = Utility.castIfOfInstance(next.getArgs()[0], String.class);
+            Asset<?> asset = server.getAssetManager().getAsset(path);
+
+            System.out.println("Send: " + asset);
+            sendable.send(asset, true);
         }
     }
 }
