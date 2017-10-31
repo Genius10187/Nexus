@@ -3,9 +3,11 @@ package com.meti.client.fxml;
 import com.meti.Main;
 import com.meti.client.Client;
 import com.meti.server.asset.Asset;
+import com.meti.server.asset.AssetChange;
 import com.meti.server.util.Cargo;
 import com.meti.server.util.Command;
 import com.meti.util.Utility;
+import javafx.animation.AnimationTimer;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TreeItem;
@@ -39,33 +41,30 @@ public class ClientDisplay implements Initializable {
     private Client client;
 
     private HashMap<String, TreeItem<String>> localMap;
-    private HashMap<String, Editor> editors = new HashMap<>();
+    private HashMap<String, Editor> editorByExt = new HashMap<>();
+    private HashMap<Class, Editor> editorByChangeClass = new HashMap<>();
 
     public void setClient(Client client) {
         this.client = client;
     }
 
-    @FXML
-    public void openEditors() throws IOException, ClassNotFoundException {
-        List<TreeItem<String>> items = fileTreeView.getSelectionModel().getSelectedItems();
-        List<Asset<?>> assets = new ArrayList<>();
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        for (Class c : editorClasses) {
+            try {
+                Editor instance = Utility.castIfOfInstance(c.newInstance(), Editor.class);
 
-        for (TreeItem<String> item : items) {
-            String path = getPathFromTreeItem(item);
-            Command command = new Command("get", path);
-            client.send(command, true);
+                for (String ext : instance.getExtensions()) {
+                    editorByExt.put(ext, instance);
 
-            //maybe sending too many objects?
-
-            Object receive = client.receive();
-            Asset e = Utility.castIfOfInstance(receive, Asset.class);
-            System.out.println("Receive: " + e);
-            assets.add(e);
-        }
-
-        for (Asset<?> asset : assets) {
-            String ext = getExtension(asset.getFile());
-            editors.get(ext).load(asset, client);
+                    Class[] changes = instance.getAssetChangeClasses();
+                    for (Class change : changes) {
+                        editorByChangeClass.put(change.getClass(), instance);
+                    }
+                }
+            } catch (InstantiationException | IllegalAccessException e) {
+                Main.getInstance().log(Level.WARNING, e);
+            }
         }
     }
 
@@ -124,18 +123,38 @@ public class ClientDisplay implements Initializable {
         }
     }
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        for (Class c : editorClasses) {
-            try {
-                Editor instance = Utility.castIfOfInstance(c.newInstance(), Editor.class);
-                instance.setClient(client);
-                for (String ext : instance.getExtensions()) {
-                    editors.put(ext, instance);
-                }
-            } catch (InstantiationException | IllegalAccessException e) {
-                Main.getInstance().log(Level.WARNING, e);
-            }
+    @FXML
+    public void openEditors() throws IOException, ClassNotFoundException {
+        List<TreeItem<String>> items = fileTreeView.getSelectionModel().getSelectedItems();
+        List<Asset<?>> assets = new ArrayList<>();
+
+        for (TreeItem<String> item : items) {
+            String path = getPathFromTreeItem(item);
+            Command command = new Command("get", path);
+            client.send(command, true);
+
+            Object receive = client.receive();
+            Asset e = Utility.castIfOfInstance(receive, Asset.class);
+            assets.add(e);
         }
+
+        for (Asset<?> asset : assets) {
+            String ext = getExtension(asset.getFile());
+            editorByExt.get(ext).load(asset, client);
+        }
+
+        AnimationTimer timer = new AnimationTimer() {
+            @Override
+            public void handle(long now) {
+                List<AssetChange> changes = client.getChanges();
+
+                for (AssetChange change : changes) {
+                    Editor e = editorByChangeClass.get(change.getClass());
+                    e.update(change);
+                }
+            }
+        };
+
+        timer.start();
     }
 }

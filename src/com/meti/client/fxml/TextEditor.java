@@ -2,22 +2,42 @@ package com.meti.client.fxml;
 
 import com.meti.client.Client;
 import com.meti.server.asset.Asset;
+import com.meti.server.asset.AssetChange;
 import com.meti.server.asset.text.TextChange;
 import com.meti.util.Utility;
+import javafx.animation.AnimationTimer;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyEvent;
 
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
+import java.util.logging.Level;
 
 import static com.meti.Main.getInstance;
 import static com.meti.util.Utility.castIfOfInstance;
 
-public class TextEditor extends Editor {
+public class TextEditor extends Editor implements Initializable {
     @FXML
     private TextArea display;
 
-    private Asset<?> asset;
+    private int counter = 60;
+
+    @Override
+    public void update(AssetChange change) {
+        if (change instanceof TextChange) {
+            display.setText(((TextChange) change).getValue());
+        }
+    }
+
+    @Override
+    public Class[] getAssetChangeClasses() {
+        return new Class[]{
+                TextEditor.class
+        };
+    }
 
     @Override
     public String[] getExtensions() {
@@ -35,22 +55,41 @@ public class TextEditor extends Editor {
         castIfOfInstance(controller, TextEditor.class).init(asset);
     }
 
-    public void setAsset(Asset<?> asset) {
-        this.asset = asset;
-    }
-
     private void init(Asset<?> asset) {
         Object content = asset.getContent();
         display.setText(Utility.castIfOfInstance(content, String.class));
     }
 
-    @FXML
-    public void update(KeyEvent event) throws IOException {
-        TextChange change = new TextChange(asset.getFile().getPath());
-        String c = event.getText();
-        change.setType(TextChange.CHAR_ADDED);
-        change.setCharacter(c);
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        AnimationTimer timer = new AnimationTimer() {
+            @Override
+            public void handle(long now) {
+                counter--;
 
-        client.send(change, true);
+                if (counter == 0) {
+                    if (client != null && display != null && asset != null) {
+                        TextChange change = new TextChange(asset.getFile().getPath());
+                        change.setValue(display.getText());
+
+                        try {
+                            client.send(change, true);
+
+
+                        } catch (IOException e) {
+                            getInstance().log(Level.WARNING, e);
+                        }
+                    }
+                    counter = 60;
+                }
+            }
+        };
+
+        timer.start();
+    }
+
+    @FXML
+    public void update(KeyEvent event) {
+        counter = 60;
     }
 }

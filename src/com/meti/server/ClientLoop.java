@@ -6,6 +6,8 @@ import com.meti.util.Loop;
 
 import java.io.*;
 import java.net.Socket;
+import java.util.Arrays;
+import java.util.List;
 import java.util.logging.Level;
 
 import static com.meti.Main.getInstance;
@@ -24,7 +26,9 @@ public class ClientLoop extends Loop implements Sendable {
     private final ObjectOutputStream output;
     private final Server server;
 
-    public ClientLoop(Server server, Socket socket) throws IOException {
+    private final List<ClientLoop> clientLoops;
+
+    public ClientLoop(Server server, Socket socket, ClientLoop... clientLoops) throws IOException {
         this.server = server;
         this.socket = socket;
 
@@ -34,6 +38,8 @@ public class ClientLoop extends Loop implements Sendable {
         this.input = new ObjectInputStream(socket.getInputStream());
 
         this.commander = new Commander(server, socket, this);
+
+        this.clientLoops = Arrays.asList(clientLoops);
     }
 
     @Override
@@ -43,15 +49,17 @@ public class ClientLoop extends Loop implements Sendable {
                 Object next = input.readObject();
                 String className = next.getClass().getName();
 
-                System.out.println("Server Receive: " + next);
-
                 if (className.equals("com.meti.server.util.Command")) {
                     commander.runCommand(castIfOfInstance(next, Command.class));
                 } else if (next instanceof AssetChange) {
                     AssetChange assetChange = castIfOfInstance(next, AssetChange.class);
                     assetChange.update(server.getAssetManager().getAsset(assetChange.getAssetPath()));
 
-                    //has been change, update all clientloops
+                    //has been change, update all clientLoops
+                    for (ClientLoop clientLoop : clientLoops) {
+                        clientLoop.send(assetChange, true);
+                    }
+
                 } else {
                     getInstance().log(Level.WARNING, "Found no type handling " +
                             "for class type " + className);
@@ -66,12 +74,24 @@ public class ClientLoop extends Loop implements Sendable {
     }
 
     @Override
-    public void send(Serializable serializable, boolean flush) throws IOException {
-        System.out.println("Server Send: " + serializable);
+    public Serializable receive() throws IOException, ClassNotFoundException {
+        return (Serializable) input.readObject();
+    }
 
-        output.writeObject(serializable);
+    @Override
+    public void send(Serializable serializable, boolean flush) throws IOException {
+        //learned something new today, caused so many problems...
+        output.writeUnshared(serializable);
         if (flush) {
             output.flush();
         }
+    }
+
+    public List<ClientLoop> getClientLoops() {
+        return clientLoops;
+    }
+
+    public Commander getCommander() {
+        return commander;
     }
 }

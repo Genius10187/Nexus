@@ -29,7 +29,7 @@ public class Server implements Stoppable {
     private final AssetManager manager = new AssetManager();
     private final ServerSocket serverSocket;
 
-    private final List<Loop> connectionLoops = new ArrayList<>();
+    private final List<ClientLoop> clientLoops = new ArrayList<>();
     private final List<Socket> sockets = new ArrayList<>();
 
     private final ListenLoop listenLoop = new ListenLoop(this);
@@ -49,7 +49,7 @@ public class Server implements Stoppable {
     public void stop() {
         listenLoop.setRunning(false);
 
-        for (Loop loop : connectionLoops) {
+        for (Loop loop : clientLoops) {
             loop.setRunning(false);
         }
 
@@ -122,7 +122,7 @@ public class Server implements Stoppable {
     public class ListenLoop extends Loop {
         private final Server parent;
 
-        public ListenLoop(Server parent) {
+        ListenLoop(Server parent) {
             this.parent = parent;
         }
 
@@ -135,7 +135,7 @@ public class Server implements Stoppable {
                 getInstance().log(Level.INFO, "Located client at " + socket.getInetAddress());
 
                 sockets.add(socket);
-                executor.execute(new ClientLoop(parent, socket));
+                executor.execute(new ClientLoop(parent, socket, clientLoops.toArray(new ClientLoop[0])));
 
                 onClientConnect.activate(socket);
             } catch (SocketException e) {
@@ -149,15 +149,19 @@ public class Server implements Stoppable {
     public class ClientExecutor implements Executor {
 
         @Override
-        public void execute(Runnable command) {
-            if (command instanceof Loop) {
-                connectionLoops.add((Loop) command);
+        public void execute(Runnable runnable) {
+            if (runnable instanceof ClientLoop) {
+                ClientLoop command = (ClientLoop) runnable;
+
+                clientLoops.forEach(clientLoop -> clientLoop.getClientLoops().add(command));
+
+                clientLoops.add(command);
             } else {
                 getInstance().log(Level.WARNING, "Located object of not subtype Loop");
             }
 
             //make sure we execute the thread
-            new Thread(command).start();
+            new Thread(runnable).start();
         }
     }
 }
