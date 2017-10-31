@@ -28,8 +28,6 @@ public class Commander {
     }
 
     public void runCommand(Command next) throws IOException {
-        System.out.println(next.toString());
-
         if ("login".equals(next.getName())) {
             String password = (String) next.getArgs()[0];
             if (password.equals(server.getPassword())) {
@@ -53,7 +51,6 @@ public class Commander {
             String path = Utility.castIfOfInstance(next.getArgs()[0], String.class);
             Asset<?> asset = server.getAssetManager().getAsset(path);
 
-            System.out.println("Send: " + asset);
             sendable.send(asset, true);
         }
     }

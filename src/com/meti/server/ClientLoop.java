@@ -43,6 +43,8 @@ public class ClientLoop extends Loop implements Sendable {
                 Object next = input.readObject();
                 String className = next.getClass().getName();
 
+                System.out.println("Server Receive: " + next);
+
                 if (className.equals("com.meti.server.util.Command")) {
                     commander.runCommand(castIfOfInstance(next, Command.class));
                 } else if (next instanceof AssetChange) {
@@ -63,7 +65,10 @@ public class ClientLoop extends Loop implements Sendable {
         }
     }
 
+    @Override
     public void send(Serializable serializable, boolean flush) throws IOException {
+        System.out.println("Server Send: " + serializable);
+
         output.writeObject(serializable);
         if (flush) {
             output.flush();
