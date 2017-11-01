@@ -67,24 +67,28 @@ public class ServerCreator implements Initializable {
 
     //again, not sure if fxml methods should have exception throwing
     @FXML
-    public void connect() throws IOException, IllegalAccessException, InstantiationException {
-        //could be generated in generateField
-        if (server == null) server = new Server(Integer.parseInt(port.getText()));
+    public void connect() {
+        try {
+            //could be generated in generateField
+            if (server == null) server = new Server(Integer.parseInt(port.getText()));
 
-        //inspection says could produce NullPointerException, analysis of source code
-        //implies inspection incorrect
-        server.listen();
+            //inspection says could produce NullPointerException, analysis of source code
+            //implies inspection incorrect
+            server.listen();
 
-        //might have security issues here...
-        server.setPassword(password.getText());
+            //might have security issues here...
+            server.setPassword(password.getText());
 
-        getInstance().addStoppable(server);
+            getInstance().addStoppable(server);
 
-        Object controller = getInstance().buildStage("assets\\fxml\\ServerDisplay.fxml", null);
-        if (controller instanceof ServerDisplay) {
-            ((ServerDisplay) controller).setServer(server);
-        } else {
-            throw new RuntimeException("Controller not instance of ServerDisplay");
+            Object controller = getInstance().buildStage("assets\\fxml\\ServerDisplay.fxml", null);
+            if (controller instanceof ServerDisplay) {
+                ((ServerDisplay) controller).setServer(server);
+            } else {
+                throw new RuntimeException("Controller not instance of ServerDisplay");
+            }
+        } catch (IOException | InstantiationException | IllegalAccessException e) {
+            getInstance().handleException(e);
         }
     }
 }

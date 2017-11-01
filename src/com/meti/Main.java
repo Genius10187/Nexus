@@ -150,7 +150,7 @@ public class Main extends Application {
         new ServerCreator().start();
     }
 
-    public void handle(Exception e) {
+    public void handleException(Exception e) {
         StringWriter writer = new StringWriter();
         e.printStackTrace(new PrintWriter(writer));
         createDialog(writer.toString());

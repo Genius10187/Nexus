@@ -58,7 +58,7 @@ public class ClientCreator {
                 throw new RuntimeException("Controller not instance of ClientDisplay");
             }
         } catch (Exception e) {
-            Main.getInstance().handle(e);
+            Main.getInstance().handleException(e);
         }
     }
 }
