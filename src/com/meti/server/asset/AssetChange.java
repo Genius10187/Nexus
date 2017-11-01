@@ -3,9 +3,11 @@ package com.meti.server.asset;
 import java.io.Serializable;
 
 public abstract class AssetChange implements Serializable {
+    private final Class<? extends Asset> assetClass;
     private final String assetPath;
 
-    public AssetChange(String assetPath) {
+    public AssetChange(Class<? extends Asset> assetClass, String assetPath) {
+        this.assetClass = assetClass;
         this.assetPath = assetPath;
     }
 

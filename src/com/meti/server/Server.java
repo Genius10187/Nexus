@@ -129,13 +129,18 @@ public class Server implements Stoppable {
         @Override
         public void loop() {
             try {
-                //may throw a socket exception while the loop is listening
+                //may throw a socket exception while the clientLoop is listening
                 Socket socket = serverSocket.accept();
 
                 getInstance().log(Level.INFO, "Located client at " + socket.getInetAddress());
 
                 sockets.add(socket);
-                executor.execute(new ClientLoop(parent, socket, clientLoops.toArray(new ClientLoop[0])));
+
+                ClientLoop clientLoop = new ClientLoop(parent, socket);
+                clientLoop.getClientLoops().addAll(clientLoops);
+                clientLoop.getClientLoops().add(clientLoop);
+
+                executor.execute(clientLoop);
 
                 onClientConnect.activate(socket);
             } catch (SocketException e) {

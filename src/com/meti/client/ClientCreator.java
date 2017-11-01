@@ -1,5 +1,6 @@
 package com.meti.client;
 
+import com.meti.Main;
 import com.meti.client.fxml.ClientDisplay;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -39,19 +40,25 @@ public class ClientCreator {
         stage.show();
     }
 
+    //be careful, we don't get exception logs!
     @FXML
-    public void connect() throws IOException, ClassNotFoundException {
-        InetAddress addressObj = InetAddress.getByName(address.getText());
-        int portInt = Integer.parseInt(port.getText());
-        Client client = new Client(addressObj, portInt, password.getText());
+    public void connect() {
+        try {
+            InetAddress addressObj = InetAddress.getByName(address.getText());
+            int portInt = Integer.parseInt(port.getText());
 
-        Object controller = getInstance().buildStage("assets\\fxml\\ClientDisplay.fxml", null);
-        if (controller instanceof ClientDisplay) {
-            ClientDisplay castController = (ClientDisplay) controller;
-            castController.setClient(client);
-            castController.load();
-        } else {
-            throw new RuntimeException("Controller not instance of ClientDisplay");
+            Client client = new Client(addressObj, portInt, password.getText());
+
+            Object controller = getInstance().buildStage("assets\\fxml\\ClientDisplay.fxml", null);
+            if (controller instanceof ClientDisplay) {
+                ClientDisplay castController = (ClientDisplay) controller;
+                castController.setClient(client);
+                castController.load();
+            } else {
+                throw new RuntimeException("Controller not instance of ClientDisplay");
+            }
+        } catch (Exception e) {
+            Main.getInstance().handle(e);
         }
     }
 }
