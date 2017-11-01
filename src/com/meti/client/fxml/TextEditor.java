@@ -35,7 +35,7 @@ public class TextEditor extends Editor implements Initializable {
     @Override
     public Class[] getAssetChangeClasses() {
         return new Class[]{
-                TextEditor.class
+                TextChange.class
         };
     }
 

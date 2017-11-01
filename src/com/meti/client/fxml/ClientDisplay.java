@@ -16,10 +16,7 @@ import javafx.scene.control.TreeView;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.logging.Level;
 
@@ -42,7 +39,6 @@ public class ClientDisplay implements Initializable {
 
     private HashMap<String, TreeItem<String>> localMap;
     private HashMap<String, Editor> editorByExt = new HashMap<>();
-    private HashMap<Class, Editor> editorByChangeClass = new HashMap<>();
 
     public void setClient(Client client) {
         this.client = client;
@@ -56,16 +52,25 @@ public class ClientDisplay implements Initializable {
 
                 for (String ext : instance.getExtensions()) {
                     editorByExt.put(ext, instance);
-
-                    Class[] changes = instance.getAssetChangeClasses();
-                    for (Class change : changes) {
-                        editorByChangeClass.put(change.getClass(), instance);
-                    }
                 }
             } catch (InstantiationException | IllegalAccessException e) {
                 Main.getInstance().log(Level.WARNING, e);
             }
         }
+
+        AnimationTimer timer = new AnimationTimer() {
+            @Override
+            public void handle(long now) {
+                Queue<AssetChange> changes = client.getChanges();
+                if (changes.size() != 0) {
+                    AssetChange change = changes.poll();
+
+                    change.getAssetPath();
+                }
+            }
+        };
+
+        timer.start();
     }
 
     public String getPathFromTreeItem(TreeItem<String> item) {
@@ -142,19 +147,5 @@ public class ClientDisplay implements Initializable {
             String ext = getExtension(asset.getFile());
             editorByExt.get(ext).load(asset, client);
         }
-
-        AnimationTimer timer = new AnimationTimer() {
-            @Override
-            public void handle(long now) {
-                List<AssetChange> changes = client.getChanges();
-
-                for (AssetChange change : changes) {
-                    Editor e = editorByChangeClass.get(change.getClass());
-                    e.update(change);
-                }
-            }
-        };
-
-        timer.start();
     }
 }

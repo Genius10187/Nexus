@@ -10,8 +10,8 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.PriorityQueue;
+import java.util.Queue;
 
 /**
  * @author SirMathhman
@@ -19,7 +19,7 @@ import java.util.List;
  * @since 10/22/2017
  */
 public class Client implements Sendable {
-    private final List<AssetChange> changes = new ArrayList<>();
+    private final Queue<AssetChange> changes = new PriorityQueue<>();
 
     private final Socket socket;
     private final ObjectInputStream input;
@@ -54,7 +54,7 @@ public class Client implements Sendable {
         }
     }
 
-    public List<AssetChange> getChanges() {
+    public Queue<AssetChange> getChanges() {
         return changes;
     }
 }

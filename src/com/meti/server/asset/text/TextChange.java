@@ -6,17 +6,16 @@ import com.meti.server.asset.AssetChange;
 import java.io.Serializable;
 
 public class TextChange extends AssetChange {
-
-
     private String value;
 
     public TextChange(String assetPath) {
-        super(assetPath);
+        super(TextAsset.class, assetPath);
     }
 
     @Override
     public <T extends Serializable> void update(Asset<T> asset) {
-        //String content = Utility.castIfOfInstance(asset.getContent(), String.class);
+        //String content = Utility.castIfOfInstance(
+        // sset.getContent(), String.class);
 
         //hmmm
         asset.setContent((T) value);

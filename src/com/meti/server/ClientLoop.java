@@ -6,8 +6,8 @@ import com.meti.util.Loop;
 
 import java.io.*;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.logging.Level;
 
 import static com.meti.Main.getInstance;
@@ -26,7 +26,7 @@ public class ClientLoop extends Loop implements Sendable {
     private final ObjectOutputStream output;
     private final Server server;
 
-    private final List<ClientLoop> clientLoops;
+    private final ArrayList<ClientLoop> clientLoops;
 
     public ClientLoop(Server server, Socket socket, ClientLoop... clientLoops) throws IOException {
         this.server = server;
@@ -39,7 +39,8 @@ public class ClientLoop extends Loop implements Sendable {
 
         this.commander = new Commander(server, socket, this);
 
-        this.clientLoops = Arrays.asList(clientLoops);
+        this.clientLoops = new ArrayList<>();
+        this.clientLoops.addAll(Arrays.asList(clientLoops));
     }
 
     @Override
@@ -87,7 +88,7 @@ public class ClientLoop extends Loop implements Sendable {
         }
     }
 
-    public List<ClientLoop> getClientLoops() {
+    public ArrayList<ClientLoop> getClientLoops() {
         return clientLoops;
     }
 

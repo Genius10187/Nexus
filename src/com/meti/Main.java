@@ -2,7 +2,9 @@ package com.meti;
 
 import com.meti.client.ClientCreator;
 import com.meti.server.fxml.ServerCreator;
+import com.meti.util.Dialog;
 import com.meti.util.Stoppable;
+import com.meti.util.Utility;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -34,6 +36,14 @@ public class Main extends Application {
     private final ArrayList<Stage> appStages = new ArrayList<>();
     private AnimationTimer stageTimer;
 
+    public static Main getInstance() {
+        return instance;
+    }
+
+    public static void main(String[] args) {
+        launch(args);
+    }
+
     @Override
     public void start(Stage primaryStage) {
         instance = this;
@@ -46,13 +56,13 @@ public class Main extends Application {
             @Override
             public void handle(long now) {
                 boolean allShowing = false;
-                for(Stage stage : appStages){
-                    if(stage.isShowing()){
+                for (Stage stage : appStages) {
+                    if (stage.isShowing()) {
                         allShowing = true;
                     }
                 }
 
-                if(!allShowing){
+                if (!allShowing) {
                     Platform.exit();
                     System.exit(0);
                 }
@@ -118,16 +128,12 @@ public class Main extends Application {
         appStages.add(stage);
     }
 
-    public static Main getInstance() {
-        return instance;
-    }
-
-    public static void main(String[] args) {
-        launch(args);
-    }
-
     public void addStoppable(Stoppable stoppable) {
         stoppables.add(stoppable);
+    }
+
+    public void createDialog(String message) {
+        Utility.castIfOfInstance(buildStage("assets\\fxml\\Dialog.fxml", null), Dialog.class).setMessage(message);
     }
 
     @FXML
@@ -142,5 +148,11 @@ public class Main extends Application {
     @FXML
     public void startServer() {
         new ServerCreator().start();
+    }
+
+    public void handle(Exception e) {
+        StringWriter writer = new StringWriter();
+        e.printStackTrace(new PrintWriter(writer));
+        createDialog(writer.toString());
     }
 }
