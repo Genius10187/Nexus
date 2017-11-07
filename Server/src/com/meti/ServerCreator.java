@@ -3,8 +3,8 @@ package com.meti;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 
-import java.io.File;
 import java.io.IOException;
+import java.net.ServerSocket;
 
 /**
  * @author SirMathhman
@@ -15,17 +15,20 @@ public class ServerCreator {
     @FXML
     private TextField portField;
 
-    private Action<Integer> onPortChanged;
+    private Action<String> onPortChanged;
 
     private ServerBuilder serverBuilder;
 
     @FXML
     public void generateLocalPort() {
         try {
-            Server server = serverBuilder.buildServer();
+            //temporary socket?
+            ServerSocket serverSocket = new ServerSocket(0);
 
             //I see no reasons why this wouldn't work
-            portField.setText(String.valueOf(server.getServerSocket().getLocalPort()));
+            portField.setText(String.valueOf(serverSocket.getLocalPort()));
+
+            serverSocket.close();
         } catch (IOException e) {
             serverBuilder.getConsole().log(e);
         }
@@ -42,31 +45,19 @@ public class ServerCreator {
 
     @FXML
     public void hostServer() {
-        //why so many try catches?!?!
-        try {
-            Integer portInteger = Integer.valueOf(portField.getText());
+        onPortChanged.act(portField.getText());
 
-            if(portInteger > 0) {
-                this.onPortChanged.act(portInteger);
-                this.serverBuilder.host();
-            } else {
-                Dialog dialog = Utility.openNewDialog();
-                dialog.setMessageText("Port entered is not greater or equal to 0");
-            }
-        } catch (NumberFormatException e) {
-            try {
-                Dialog dialog = Utility.openNewDialog();
-                dialog.setMessageText("Port entered is not a number");
-            } catch (IOException e1) {
-                //this is a funny exception (an exception caused by an exception, LOL)
-                serverBuilder.getConsole().log(e1);
-            }
+        try {
+            serverBuilder.host();
         } catch (IOException e) {
+            //should we give a more detailed report to the user
+            //or should we assume the user has an idea
+            //on how servers work ¯\_(ツ)_/¯
             serverBuilder.getConsole().log(e);
         }
     }
 
-    public void setOnPortChanged(Action<Integer> onPortChanged) {
+    public void setOnPortChanged(Action<String> onPortChanged) {
         this.onPortChanged = onPortChanged;
     }
 

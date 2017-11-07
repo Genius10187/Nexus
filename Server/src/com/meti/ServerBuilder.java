@@ -17,28 +17,18 @@ public class ServerBuilder {
 
     private Server server;
 
-    private InetAddress localAddress;
-    private int maxQueueSize;
-    private int port;
+    private String localAddressToken;
+    private String maxQueueSizeToken;
+    private String portToken;
 
     //default field values
     public ServerBuilder(Console console) {
         this.console = console;
 
-        localAddress = null;
-        maxQueueSize = 50;
-        port = 0;
-    }
-
-    public Server buildServer() throws IOException {
-        if (localAddress != null) {
-            server = new Server(port, maxQueueSize, localAddress);
-        } else {
-            server = new Server(port, maxQueueSize);
-        }
-
-        // do we really need "server" as a field?
-        return server;
+        //may run into some bugs here...
+        localAddressToken = null;
+        maxQueueSizeToken = "50";
+        portToken = "0";
     }
 
     //we have primaryStage here because this is the first fxml loaded by the main class
@@ -53,7 +43,7 @@ public class ServerBuilder {
         creator.setServerBuilder(this);
 
         //should be safe
-        creator.setOnPortChanged(param -> port = param);
+        creator.setOnPortChanged(param -> portToken = param);
     }
 
     public void openAdvancedDialog() throws IOException {
@@ -65,12 +55,30 @@ public class ServerBuilder {
         creator.setServerBuilder(this);
 
         //see creator.setOnPortChanged for possible problems
-        creator.setOnMaxQueueSizeChanged(param -> maxQueueSize = param);
-        creator.setOnLocalAddress(param -> localAddress = param);
+        creator.setOnMaxQueueSizeChanged(param -> maxQueueSizeToken = param);
+        creator.setOnLocalAddress(param -> localAddressToken = param);
     }
 
-    public void host() {
+    public void host() throws IOException {
+        if (server == null) {
+            buildServer();
+        }
+
         server.host();
+    }
+
+    public Server buildServer() throws IOException {
+        int port = Integer.parseInt(portToken);
+        int maxQueueSize = Integer.parseInt(maxQueueSizeToken);
+        InetAddress localAddress = InetAddress.getByName(localAddressToken);
+
+        if (localAddressToken != null) {
+            server = new Server(port, maxQueueSize, localAddress);
+        } else {
+            server = new Server(port, maxQueueSize);
+        }
+
+        return server;
     }
 
     public Console getConsole() {
