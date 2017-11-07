@@ -58,7 +58,7 @@ public class ServerBuilder {
 
     public void openAdvancedDialog() throws IOException {
         ServerAdvancedCreator creator = Utility.buildFXML(
-                new File("Server\\assets\\fxml\\ServerCreator.fxml"),
+                new File("Server\\assets\\fxml\\ServerAdvancedCreator.fxml"),
                 null
         );
 
