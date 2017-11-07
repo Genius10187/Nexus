@@ -67,21 +67,23 @@ public class ServerBuilder {
         server.host();
     }
 
-    public Server buildServer() throws IOException {
+    private void buildServer() throws IOException {
         int port = Integer.parseInt(portToken);
         int maxQueueSize = Integer.parseInt(maxQueueSizeToken);
         InetAddress localAddress = InetAddress.getByName(localAddressToken);
 
         if (localAddressToken != null) {
-            server = new Server(port, maxQueueSize, localAddress);
+            server = new Server(port, maxQueueSize, localAddress, console);
         } else {
-            server = new Server(port, maxQueueSize);
+            server = new Server(port, maxQueueSize, console);
         }
-
-        return server;
     }
 
     public Console getConsole() {
         return console;
+    }
+
+    public Server getServer() {
+        return server;
     }
 }
