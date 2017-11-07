@@ -1,10 +1,12 @@
 package com.meti;
 
+import com.sun.deploy.trace.TraceLevel;
 import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.InetAddress;
+import java.util.logging.Level;
 
 /**
  * @author SirMathhman
@@ -12,6 +14,8 @@ import java.net.InetAddress;
  * @since 11/7/2017
  */
 public class ServerBuilder {
+    private final Console console;
+
     private Server server;
 
     //TODO: advanced settings will update these fields...
@@ -20,7 +24,9 @@ public class ServerBuilder {
     private int port;
 
     //default field values
-    public ServerBuilder() {
+    public ServerBuilder(Console console) {
+        this.console = console;
+
         localAddress = null;
         maxQueueSize = 50;
         port = 0;
@@ -39,6 +45,8 @@ public class ServerBuilder {
 
     //we have primaryStage here because this is the first fxml loaded by the main class
     public void openDefaultDialog(Stage primaryStage) throws IOException {
+        console.log(Level.FINE, "Opening default dialog");
+
         ServerCreator creator = Utility.buildFXML(
                 new File("Server\\assets\\fxml\\ServerCreator.fxml"),
                 primaryStage
@@ -57,5 +65,9 @@ public class ServerBuilder {
 
     public void host() {
         server.host();
+    }
+
+    public Console getConsole() {
+        return console;
     }
 }
