@@ -38,6 +38,7 @@ public class ServerAdvancedCreator {
         }
     }
 
+    //method called every time one character is written to the field
     @FXML
     public void maxQueueSizeChanged() {
         try {
@@ -47,17 +48,15 @@ public class ServerAdvancedCreator {
                 this.onMaxQueueSizeChanged.act(portInteger);
                 this.serverBuilder.host();
             } else {
+                //this might be annoying if someone automatically put in a hyphen...
                 Dialog dialog = Utility.openNewDialog();
                 dialog.setMessageText("Max queue size entered is not greater or equal to 0");
             }
         } catch (NumberFormatException e) {
-            try {
-                Dialog dialog = Utility.openNewDialog();
-                dialog.setMessageText("Max queue size entered is not a number");
-            } catch (IOException e1) {
-                //this is a funny exception (an exception caused by an exception, LOL)
-                serverBuilder.getConsole().log(e1);
-            }
+            /*we really shouldn't do anything about exceptions, but in this case
+            there isn't really anything that we should do...
+            also we don't want to log this, because it would be excessive whenever the user
+            types in a character the system can't parse*/
         } catch (IOException e) {
             serverBuilder.getConsole().log(e);
         }
