@@ -1,6 +1,5 @@
 package com.meti;
 
-import com.sun.deploy.trace.TraceLevel;
 import javafx.stage.Stage;
 
 import java.io.File;
@@ -18,7 +17,6 @@ public class ServerBuilder {
 
     private Server server;
 
-    //TODO: advanced settings will update these fields...
     private InetAddress localAddress;
     private int maxQueueSize;
     private int port;
@@ -53,14 +51,22 @@ public class ServerBuilder {
         );
 
         creator.setServerBuilder(this);
-        creator.setOnPortChanged(param -> {
-            //should be safe
-            port = param;
-        });
+
+        //should be safe
+        creator.setOnPortChanged(param -> port = param);
     }
 
-    public void openAdvancedDialog() {
-        //TODO: Server advanced dialog
+    public void openAdvancedDialog() throws IOException {
+        ServerAdvancedCreator creator = Utility.buildFXML(
+                new File("Server\\assets\\fxml\\ServerCreator.fxml"),
+                null
+        );
+
+        creator.setServerBuilder(this);
+
+        //see creator.setOnPortChanged for possible problems
+        creator.setOnMaxQueueSizeChanged(param -> maxQueueSize = param);
+        creator.setOnLocalAddress(param -> localAddress = param);
     }
 
     public void host() {
