@@ -33,7 +33,11 @@ public class ServerCreator {
 
     @FXML
     public void openAdvancedSettings() {
-        serverBuilder.openAdvancedDialog();
+        try {
+            serverBuilder.openAdvancedDialog();
+        } catch (IOException e) {
+            serverBuilder.getConsole().log(e);
+        }
     }
 
     @FXML
