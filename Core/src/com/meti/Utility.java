@@ -19,6 +19,10 @@ public class Utility {
     private Utility() {
     }
 
+    public static Dialog openNewDialog() throws IOException {
+        return buildFXML(new File("Core\\assets\\fxml\\Dialog.fxml"), null);
+    }
+
     //untestable
     public static <T> T buildFXML(File location, Stage preexisting) throws IOException {
         return buildFXML(new FileInputStream(location), preexisting);
@@ -30,6 +34,10 @@ public class Utility {
         FXMLLoader loader = new FXMLLoader();
         Parent parent = loader.load(inputStream);
         toSet.setScene(new Scene(parent));
+
+        if (!toSet.isShowing()) {
+            toSet.show();
+        }
 
         return loader.getController();
     }
