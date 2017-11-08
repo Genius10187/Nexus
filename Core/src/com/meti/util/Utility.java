@@ -9,6 +9,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author SirMathhman
@@ -17,6 +19,38 @@ import java.io.InputStream;
  */
 public class Utility {
     private Utility() {
+    }
+
+    public static List<File> search(File directory, String... extensions) {
+        ArrayList<File> files = new ArrayList<>();
+        search(directory, files, extensions);
+        return files;
+    }
+
+    private static void search(File file, ArrayList<File> files, String... extensions) {
+        if (file.isDirectory()) {
+            File[] fileArray = file.listFiles();
+            if (fileArray != null && fileArray.length != 0) {
+                for (File foundFile : fileArray) {
+                    search(foundFile, files, extensions);
+                }
+            }
+        } else {
+            if (extensions.length == 0) {
+                files.add(file);
+            } else {
+                for (String ext : extensions) {
+                    if (getExtension(file).equals(ext)) {
+                        files.add(file);
+                    }
+                }
+            }
+        }
+    }
+
+    private static String getExtension(File file) {
+        String[] nameArgs = file.getName().split("\\.");
+        return nameArgs[nameArgs.length - 1];
     }
 
     public static Dialog openNewDialog() throws IOException {
