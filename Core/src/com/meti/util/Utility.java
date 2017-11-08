@@ -48,7 +48,7 @@ public class Utility {
         }
     }
 
-    private static String getExtension(File file) {
+    public static String getExtension(File file) {
         String[] nameArgs = file.getName().split("\\.");
         return nameArgs[nameArgs.length - 1];
     }
