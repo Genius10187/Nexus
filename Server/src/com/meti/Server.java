@@ -13,6 +13,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -106,6 +107,18 @@ public class Server {
 
     public ArrayList<Client> getClients() {
         return clients;
+    }
+
+    public void runCommand(Command command) {
+        switch (command.getName().toLowerCase()) {
+            case "say":
+                String[] params = command.getParams();
+                String line = (params.length == 1) ? params[0] : Arrays.toString(params);
+                console.log(line);
+                break;
+            default:
+                console.log("Unknown command!");
+        }
     }
 
     private class ClientListener implements Runnable {

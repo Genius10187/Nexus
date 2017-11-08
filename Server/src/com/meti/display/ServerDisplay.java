@@ -1,6 +1,7 @@
 package com.meti.display;
 
 import com.meti.Server;
+import com.meti.io.Command;
 import com.meti.util.Utility;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
@@ -8,6 +9,7 @@ import javafx.scene.control.TextField;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 
 public class ServerDisplay {
     private Server server;
@@ -54,7 +56,10 @@ public class ServerDisplay {
         //reset the input token
         input.setText("");
 
-        //TODO: handle input
+        String[] args = line.split(" ");
+
+        Command command = new Command(args[0], Arrays.copyOfRange(args, 1, args.length));
+        server.runCommand(command);
     }
 
     public void setServer(Server server) {
