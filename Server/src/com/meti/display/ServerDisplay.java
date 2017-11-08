@@ -31,7 +31,12 @@ public class ServerDisplay {
 
     @FXML
     public void openFiles() {
-        //TODO:  openFiles
+        try {
+            FilesDisplay filesDisplay = Utility.buildFXML(new File("Server\\assets\\fxml\\Files.fxml"), null);
+            filesDisplay.setServer(server);
+        } catch (IOException e) {
+            server.getConsole().log(e);
+        }
     }
 
     //not sure if this is a good idea or not, especially
