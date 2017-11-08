@@ -37,7 +37,10 @@ public class ServerMain extends Application {
         console.log("Stopping application");
 
         try {
-            builder.getServer().stop();
+        	//random change, bug
+        	if(builder != null && builder.getServer() != null) {
+        		builder.getServer().stop();
+        	}
             Platform.exit();
         } catch (IOException | InterruptedException e) {
             System.exit(-1);
