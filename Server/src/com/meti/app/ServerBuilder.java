@@ -68,9 +68,13 @@ public class ServerBuilder {
             buildServer();
         }
 
+        //helpful information
+        console.log("Hosting the server at " + server.getServerSocket().getInetAddress());
+
+
         server.host();
 
-        ServerDisplay display = Utility.buildFXML(new File("assets\\fxml\\ServerDisplay.fxml"), null);
+        ServerDisplay display = Utility.buildFXML(new File("Server\\assets\\fxml\\ServerDisplay.fxml"), null);
         display.setServer(server);
     }
 

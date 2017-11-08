@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -43,12 +45,19 @@ public class Server {
     }
 
     public void stop() throws IOException, InterruptedException {
+        console.log("Shutting down thread service");
         service.shutdown();
+
+        console.log("Shutting down server socket");
         serverSocket.close();
 
         if (!service.isTerminated()) {
+            console.log("Thread service failed to shut down, forcing shutdown!");
+
             Thread.sleep(TIME_FOR_INSTANT_SHUTDOWN);
-            service.shutdownNow();
+            List<Runnable> stillRunning = service.shutdownNow();
+
+            console.log("Successfully shut down thread service when " + stillRunning.size() + " threads were still running");
         }
     }
 
@@ -56,12 +65,20 @@ public class Server {
 
         @Override
         public void run() {
+            console.log("Listening for clients");
+
             while (!Thread.currentThread().isInterrupted()) {
-                try {
-                    Socket socket = serverSocket.accept();
-                    service.submit(new ClientHandler(socket));
-                } catch (IOException e) {
-                    console.log(e);
+                if (!serverSocket.isClosed()) {
+                    try {
+                        Socket socket = serverSocket.accept();
+                        service.submit(new ClientHandler(socket));
+                    } catch (SocketException e) {
+                        break;
+                    } catch (IOException e) {
+                        console.log(e);
+                    }
+                } else {
+                    break;
                 }
             }
         }
@@ -77,6 +94,8 @@ public class Server {
 
         @Override
         public void run() {
+            console.log("Located client at " + client.getSocket().getInetAddress());
+
             while (!client.getSocket().isClosed()) {
                 try {
                     //should we assume this is an instance of Command?

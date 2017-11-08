@@ -33,6 +33,8 @@ public class ServerMain extends Application {
 
     @Override
     public void stop() {
+        console.log("Stopping application");
+
         try {
             builder.getServer().stop();
             Platform.exit();
