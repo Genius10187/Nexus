@@ -5,6 +5,7 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -20,6 +21,10 @@ public class Server {
     private final ExecutorService service = Executors.newCachedThreadPool();
     private final ServerSocket serverSocket;
     private final Console console;
+
+    private Action<Client> onClientConnect;
+    private Action<Client> onClientDisconnect;
+    private ArrayList<Client> clients;
 
     /*
     maxQueueSize and backlog are the same thing
@@ -61,6 +66,22 @@ public class Server {
         }
     }
 
+    public void setOnClientConnect(Action<Client> onClientConnect) {
+        this.onClientConnect = onClientConnect;
+    }
+
+    public void setOnClientDisconnect(Action<Client> onClientDisconnect) {
+        this.onClientDisconnect = onClientDisconnect;
+    }
+
+    public Console getConsole() {
+        return console;
+    }
+
+    public ArrayList<Client> getClients() {
+        return clients;
+    }
+
     private class ClientListener implements Runnable {
 
         @Override
@@ -96,6 +117,8 @@ public class Server {
         public void run() {
             console.log("Located client at " + client.getSocket().getInetAddress());
 
+            onClientConnect.act(client);
+
             while (!client.getSocket().isClosed()) {
                 try {
                     //should we assume this is an instance of Command?
@@ -105,6 +128,8 @@ public class Server {
                     console.log(e);
                 }
             }
+
+            onClientDisconnect.act(client);
         }
     }
 }
