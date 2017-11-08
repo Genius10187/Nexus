@@ -1,5 +1,8 @@
-package com.meti;
+package com.meti.app;
 
+import com.meti.Console;
+import com.meti.Server;
+import com.meti.Utility;
 import javafx.stage.Stage;
 
 import java.io.File;
@@ -54,7 +57,7 @@ public class ServerBuilder {
 
         creator.setServerBuilder(this);
 
-        //see creator.setOnPortChanged for possible problems
+        //see app.setOnPortChanged for possible problems
         creator.setOnMaxQueueSizeChanged(param -> maxQueueSizeToken = param);
         creator.setOnLocalAddress(param -> localAddressToken = param);
     }
