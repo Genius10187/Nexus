@@ -68,16 +68,24 @@ public class Server {
     }
 
     private class ClientHandler implements Runnable {
-        private final Socket socket;
+        private final Client client;
 
         //consider making a separate object for socket - related things here
-        public ClientHandler(Socket socket) {
-            this.socket = socket;
+        public ClientHandler(Socket socket) throws IOException {
+            this.client = new Client(socket);
         }
 
         @Override
         public void run() {
-            //TODO: handle commands here
+            while (!client.getSocket().isClosed()) {
+                try {
+                    //should we assume this is an instance of Command?
+                    Command command = client.read();
+                    client.run(command);
+                } catch (IOException | ClassNotFoundException e) {
+                    console.log(e);
+                }
+            }
         }
     }
 }
