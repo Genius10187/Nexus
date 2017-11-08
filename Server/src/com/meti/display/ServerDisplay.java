@@ -1,7 +1,7 @@
 package com.meti.display;
 
 import com.meti.Server;
-import com.meti.Utility;
+import com.meti.util.Utility;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;

@@ -1,4 +1,4 @@
-package com.meti;
+package com.meti.io;
 
 public class Command {
     private final String name;

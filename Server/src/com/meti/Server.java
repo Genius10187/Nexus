@@ -1,5 +1,12 @@
 package com.meti;
 
+import com.meti.asset.AssetManager;
+import com.meti.io.Client;
+import com.meti.io.Command;
+import com.meti.util.Action;
+import com.meti.util.Console;
+
+import java.io.File;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
@@ -9,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.logging.Level;
 
 /**
  * @author SirMathhman
@@ -19,26 +27,35 @@ public class Server {
     private static final long TIME_FOR_INSTANT_SHUTDOWN = 5000;
 
     private final ExecutorService service = Executors.newCachedThreadPool();
+    private final AssetManager assetManager;
     private final ServerSocket serverSocket;
     private final Console console;
 
-    private Action<Client> onClientConnect;
+    private ArrayList<Client> clients = new ArrayList<>();
     private Action<Client> onClientDisconnect;
-    private ArrayList<Client> clients;
+    private Action<Client> onClientConnect;
 
     /*
     maxQueueSize and backlog are the same thing
     it specifies how many sockets can connect to
     the server at once, i.e. user limit
     */
-    public Server(int port, int maxQueueSize, InetAddress address, Console console) throws IOException {
-        this.serverSocket = new ServerSocket(port, maxQueueSize, address);
+    public Server(int port, int maxQueueSize, InetAddress address, Console console) throws IOException, ClassNotFoundException {
+        if (address != null) {
+            this.serverSocket = new ServerSocket(port, maxQueueSize, address);
+        } else {
+            this.serverSocket = new ServerSocket(port, maxQueueSize);
+        }
+
+        File directory = new File("Nexus");
+        this.assetManager = new AssetManager(console);
+        this.assetManager.read(directory);
+
         this.console = console;
     }
 
-    public Server(int port, int maxQueueSize, Console console) throws IOException {
-        this.serverSocket = new ServerSocket(port, maxQueueSize);
-        this.console = console;
+    public Server(int port, int maxQueueSize, Console console) throws IOException, ClassNotFoundException {
+        this(port, maxQueueSize, null, console);
     }
 
     public ServerSocket getServerSocket() {
@@ -50,6 +67,15 @@ public class Server {
     }
 
     public void stop() throws IOException, InterruptedException {
+        console.log("Disconnecting clients");
+        clients.forEach(client -> {
+            try {
+                client.getSocket().close();
+            } catch (IOException e) {
+                console.log(Level.SEVERE, e);
+            }
+        });
+
         console.log("Shutting down thread service");
         service.shutdown();
 

@@ -1,6 +1,7 @@
 package com.meti;
 
 import com.meti.app.ServerBuilder;
+import com.meti.util.Console;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.stage.Stage;

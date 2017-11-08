@@ -1,7 +1,7 @@
 package com.meti.display;
 
-import com.meti.Client;
 import com.meti.Server;
+import com.meti.io.Client;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 
