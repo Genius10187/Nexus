@@ -1,4 +1,4 @@
-package com.meti;
+package com.meti.util;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;

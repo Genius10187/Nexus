@@ -1,9 +1,9 @@
 package com.meti.app;
 
-import com.meti.Console;
 import com.meti.Server;
-import com.meti.Utility;
 import com.meti.display.ServerDisplay;
+import com.meti.util.Console;
+import com.meti.util.Utility;
 import javafx.stage.Stage;
 
 import java.io.File;
