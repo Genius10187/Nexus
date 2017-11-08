@@ -3,6 +3,7 @@ package com.meti.app;
 import com.meti.Console;
 import com.meti.Server;
 import com.meti.Utility;
+import com.meti.display.ServerDisplay;
 import javafx.stage.Stage;
 
 import java.io.File;
@@ -68,6 +69,9 @@ public class ServerBuilder {
         }
 
         server.host();
+
+        ServerDisplay display = Utility.buildFXML(new File("assets\\fxml\\ServerDisplay.fxml"), null);
+        display.setServer(server);
     }
 
     private void buildServer() throws IOException {
