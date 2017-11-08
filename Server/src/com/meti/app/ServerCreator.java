@@ -1,5 +1,6 @@
-package com.meti;
+package com.meti.app;
 
+import com.meti.Action;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 

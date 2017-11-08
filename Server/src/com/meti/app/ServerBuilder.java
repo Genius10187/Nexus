@@ -1,5 +1,9 @@
-package com.meti;
+package com.meti.app;
 
+import com.meti.Console;
+import com.meti.Server;
+import com.meti.Utility;
+import com.meti.display.ServerDisplay;
 import javafx.stage.Stage;
 
 import java.io.File;
@@ -54,7 +58,7 @@ public class ServerBuilder {
 
         creator.setServerBuilder(this);
 
-        //see creator.setOnPortChanged for possible problems
+        //see app.setOnPortChanged for possible problems
         creator.setOnMaxQueueSizeChanged(param -> maxQueueSizeToken = param);
         creator.setOnLocalAddress(param -> localAddressToken = param);
     }
@@ -64,7 +68,14 @@ public class ServerBuilder {
             buildServer();
         }
 
+        //helpful information
+        console.log("Hosting the server at " + server.getServerSocket().getInetAddress());
+
+
         server.host();
+
+        ServerDisplay display = Utility.buildFXML(new File("Server\\assets\\fxml\\ServerDisplay.fxml"), null);
+        display.setServer(server);
     }
 
     private void buildServer() throws IOException {

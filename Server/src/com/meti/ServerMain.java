@@ -1,5 +1,6 @@
 package com.meti;
 
+import com.meti.app.ServerBuilder;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.stage.Stage;
@@ -32,6 +33,8 @@ public class ServerMain extends Application {
 
     @Override
     public void stop() {
+        console.log("Stopping application");
+
         try {
             builder.getServer().stop();
             Platform.exit();
