@@ -21,6 +21,14 @@ public class Utility {
     private Utility() {
     }
 
+    public static <T> T castIfOfInstance(Object obj, Class<T> c) {
+        if (c.isAssignableFrom(obj.getClass())) {
+            return c.cast(obj);
+        } else {
+            return null;
+        }
+    }
+
     public static List<File> search(File directory, String... extensions) {
         ArrayList<File> files = new ArrayList<>();
         search(directory, files, extensions);

@@ -50,7 +50,7 @@ public class ServerCreator {
 
         try {
             serverBuilder.host();
-        } catch (IOException e) {
+        } catch (Exception e) {
             //should we give a more detailed report to the user
             //or should we assume the user has an idea
             //on how servers work ¯\_(ツ)_/¯

@@ -63,7 +63,7 @@ public class ServerBuilder {
         creator.setOnLocalAddress(param -> localAddressToken = param);
     }
 
-    public void host() throws IOException {
+    public void host() throws IOException, ClassNotFoundException {
         if (server == null) {
             buildServer();
         }
@@ -78,7 +78,7 @@ public class ServerBuilder {
         display.setServer(server);
     }
 
-    private void buildServer() throws IOException {
+    private void buildServer() throws IOException, ClassNotFoundException {
         int port = Integer.parseInt(portToken);
         int maxQueueSize = Integer.parseInt(maxQueueSizeToken);
         InetAddress localAddress = InetAddress.getByName(localAddressToken);

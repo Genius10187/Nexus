@@ -161,7 +161,7 @@ public class Server {
             while (!client.getSocket().isClosed()) {
                 try {
                     //should we assume this is an instance of Command?
-                    Command command = client.read();
+                    Command command = client.read(Command.class);
                     client.run(command);
                 } catch (IOException | ClassNotFoundException e) {
                     console.log(e);
