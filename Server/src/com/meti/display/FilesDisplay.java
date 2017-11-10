@@ -20,5 +20,7 @@ public class FilesDisplay implements Initializable {
 
     public void setServer(Server server) {
         this.server = server;
+
+
     }
 }
