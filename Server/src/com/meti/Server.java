@@ -125,6 +125,10 @@ public class Server {
         }
     }
 
+    public AssetManager getAssetManager() {
+        return assetManager;
+    }
+
     private class ClientListener implements Runnable {
 
         @Override

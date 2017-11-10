@@ -58,7 +58,6 @@ public class Utility {
         }
     }
 
-    //TODO: test method
     public static boolean ensureExists(File file) throws IOException {
         if (file.isDirectory()) {
             return file.mkdirs();

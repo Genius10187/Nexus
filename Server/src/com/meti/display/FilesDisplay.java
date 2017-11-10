@@ -1,26 +1,58 @@
 package com.meti.display;
 
 import com.meti.Server;
+import com.meti.asset.AssetManager;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
+import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 
-import java.net.URL;
-import java.util.ResourceBundle;
+import java.io.File;
+import java.util.HashMap;
 
-public class FilesDisplay implements Initializable {
+public class FilesDisplay {
     @FXML
     private TreeView<String> filesView;
     private Server server;
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        //TODO: AssetManager
-    }
-
     public void setServer(Server server) {
         this.server = server;
 
-        //TODO: build files from server / assetManager
+        AssetManager manager = server.getAssetManager();
+        Indexer indexer = new Indexer();
+
+        manager.getFiles().forEach(indexer::index);
+
+        filesView.setRoot(indexer.getRoot());
+        filesView.setShowRoot(false);
+    }
+
+    private class Indexer {
+        private final HashMap<File, TreeItem<String>> associations = new HashMap<>();
+        private final TreeItem<String> root = new TreeItem<>();
+
+        private void index(File file) {
+            File parent = file.getParentFile();
+
+            if (parent == null) {
+                TreeItem<String> item = new TreeItem<>(file.getName());
+                root.getChildren().add(item);
+
+                associations.put(file, item);
+            } else if (associations.containsKey(parent)) {
+                TreeItem<String> item = new TreeItem<>(file.getName());
+                associations.get(parent).getChildren().add(item);
+
+                associations.put(file, item);
+            } else {
+
+                //we seriously don't need to do more copy and pasting, do we?
+                index(parent);
+                index(file);
+            }
+        }
+
+        public TreeItem<String> getRoot() {
+            return root;
+        }
     }
 }

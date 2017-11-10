@@ -6,10 +6,10 @@ import com.meti.util.Utility;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.net.MalformedURLException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 public class AssetManager {
     private final HashMap<String, AssetBuilder> builderMap = new HashMap<>();
@@ -20,7 +20,7 @@ public class AssetManager {
         //TODO: build AssetBuilders
     }
 
-    public AssetManager(Console console) throws MalformedURLException, ClassNotFoundException {
+    public AssetManager(Console console) {
         this.console = console;
     }
 
@@ -28,11 +28,21 @@ public class AssetManager {
         List<File> files = Utility.search(directory);
         files.forEach(file -> {
             try {
-                ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(file));
-                assetMap.put(file, builderMap.get(Utility.getExtension(file)).build(inputStream));
+                InputStream inputStream = new FileInputStream(file);
+                String extension = Utility.getExtension(file);
+                AssetBuilder assetBuilder = builderMap.get(extension);
+
+                //might be a directory
+                if (extension != null && assetBuilder != null) {
+                    assetMap.put(file, assetBuilder.build(inputStream));
+                }
             } catch (IOException e) {
                 console.log(e);
             }
         });
+    }
+
+    public Set<File> getFiles() {
+        return assetMap.keySet();
     }
 }

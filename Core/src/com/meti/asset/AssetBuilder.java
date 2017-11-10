@@ -1,8 +1,7 @@
 package com.meti.asset;
 
-import java.io.ObjectInputStream;
+import java.io.InputStream;
 
 public interface AssetBuilder {
-    //not sure if this should be the type of stream to use
-    Asset build(ObjectInputStream inputStream);
+    Asset build(InputStream inputStream);
 }
