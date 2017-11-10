@@ -29,12 +29,14 @@ public class Utility {
         }
     }
 
+    //untestable
     public static List<File> search(File directory, String... extensions) {
         ArrayList<File> files = new ArrayList<>();
         search(directory, files, extensions);
         return files;
     }
 
+    //untestable
     private static void search(File file, ArrayList<File> files, String... extensions) {
         if (file.isDirectory()) {
             File[] fileArray = file.listFiles();
@@ -56,11 +58,23 @@ public class Utility {
         }
     }
 
+    public static boolean ensureExists(File file) throws IOException {
+        if (file.isDirectory()) {
+            return file.mkdirs();
+        } else {
+            File parent = file.getParentFile();
+            ensureExists(parent);
+
+            return file.createNewFile();
+        }
+    }
+
     public static String getExtension(File file) {
         String[] nameArgs = file.getName().split("\\.");
         return nameArgs[nameArgs.length - 1];
     }
 
+    //untestable
     public static Dialog openNewDialog() throws IOException {
         return buildFXML(new File("Core\\assets\\fxml\\Dialog.fxml"), null);
     }
@@ -70,6 +84,7 @@ public class Utility {
         return buildFXML(new FileInputStream(location), preexisting);
     }
 
+    //untestable
     public static <T> T buildFXML(InputStream inputStream, Stage preexisting) throws IOException {
         Stage toSet = (preexisting != null) ? preexisting : new Stage();
 
