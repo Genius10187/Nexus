@@ -49,6 +49,10 @@ public class Server {
         }
 
         File directory = new File("Nexus");
+        if (directory.mkdirs()) {
+            console.log("Created server directory");
+        }
+
         this.assetManager = new AssetManager(console);
         this.assetManager.read(directory);
 
@@ -161,7 +165,7 @@ public class Server {
             while (!client.getSocket().isClosed()) {
                 try {
                     //should we assume this is an instance of Command?
-                    Command command = client.read();
+                    Command command = client.read(Command.class);
                     client.run(command);
                 } catch (IOException | ClassNotFoundException e) {
                     console.log(e);

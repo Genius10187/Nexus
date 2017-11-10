@@ -34,7 +34,7 @@ public class ServerDisplay {
     @FXML
     public void openFiles() {
         try {
-            FilesDisplay filesDisplay = Utility.buildFXML(new File("Server\\assets\\fxml\\Files.fxml"), null);
+            FilesDisplay filesDisplay = Utility.buildFXML(new File("Server\\assets\\fxml\\FilesDisplay.fxml"), null);
             filesDisplay.setServer(server);
         } catch (IOException e) {
             server.getConsole().log(e);
