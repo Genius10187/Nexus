@@ -21,6 +21,6 @@ public class FilesDisplay implements Initializable {
     public void setServer(Server server) {
         this.server = server;
 
-
+        //TODO: build files from server / assetManager
     }
 }
