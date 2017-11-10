@@ -3,7 +3,6 @@ package com.meti;
 import com.meti.app.ServerBuilder;
 import com.meti.util.Console;
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -32,16 +31,16 @@ public class ServerMain extends Application {
         }
     }
 
+    //!!!DON'T CALL PLATFORM.STOP IN THE STOP METHOD!!!
     @Override
     public void stop() {
         console.log("Stopping application");
 
         try {
-        	//random change, bug
-        	if(builder != null && builder.getServer() != null) {
-        		builder.getServer().stop();
-        	}
-            Platform.exit();
+            //random change, bug
+            if(builder != null && builder.getServer() != null) {
+                builder.getServer().stop();
+            }
         } catch (IOException | InterruptedException e) {
             System.exit(-1);
         }

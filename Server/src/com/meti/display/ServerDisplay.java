@@ -3,6 +3,7 @@ package com.meti.display;
 import com.meti.Server;
 import com.meti.io.Command;
 import com.meti.util.Utility;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -29,6 +30,11 @@ public class ServerDisplay {
         } catch (IOException e) {
             server.getConsole().log(e);
         }
+    }
+
+    @FXML
+    public void stop() {
+        Platform.exit();
     }
 
     @FXML
