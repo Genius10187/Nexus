@@ -5,7 +5,6 @@ import com.meti.io.Client;
 import com.meti.io.Command;
 import com.meti.util.Action;
 import com.meti.util.Console;
-import com.meti.util.Utility;
 
 import java.io.File;
 import java.io.IOException;
@@ -50,7 +49,9 @@ public class Server {
         }
 
         File directory = new File("Nexus");
-        Utility.ensureExists(directory);
+        if (directory.mkdirs()) {
+            console.log("Created server directory");
+        }
 
         this.assetManager = new AssetManager(console);
         this.assetManager.read(directory);

@@ -58,12 +58,15 @@ public class Utility {
         }
     }
 
+    //TODO: test method
     public static boolean ensureExists(File file) throws IOException {
         if (file.isDirectory()) {
             return file.mkdirs();
         } else {
             File parent = file.getParentFile();
-            ensureExists(parent);
+            if (parent != null) {
+                ensureExists(parent);
+            }
 
             return file.createNewFile();
         }
