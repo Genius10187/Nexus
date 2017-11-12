@@ -58,6 +58,7 @@ public class ClientsDisplay implements Initializable {
     private class DisconnectTimer extends BufferedTimer<Client> {
         @Override
         public void onRequestFromBuffer(Request<Client> request) {
+            //TODO: NullPointerException here
             InetAddress address = request.request().getSocket().getInetAddress();
             String addressString = address.toString();
             if (!clientsView.getItems().remove(addressString)) {
