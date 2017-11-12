@@ -9,7 +9,7 @@ public class Asset implements Serializable {
     //must be mutable
     private Serializable content;
 
-    public Asset(File location) {
+    protected Asset(File location) {
         this.location = location;
     }
 
