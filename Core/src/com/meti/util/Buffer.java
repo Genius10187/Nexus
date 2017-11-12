@@ -17,7 +17,7 @@ public class Buffer<T extends Serializable> implements Serializable {
 
             if (dims.length > 1) {
                 for (int i = 0; i < values.length; i++) {
-                    values[i] = new Buffer(Arrays.copyOfRange(values, 1, values.length));
+                    values[i] = new Buffer(Arrays.copyOfRange(dims, 1, dims.length));
                 }
             }
         } else {

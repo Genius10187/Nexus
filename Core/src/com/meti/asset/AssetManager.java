@@ -19,7 +19,7 @@ public class AssetManager {
         List<File> classFiles = Utility.search(new File("Core"), "java");
         for (File classFile : classFiles) {
             Class<?> c = Utility.getClassFromFile(new File("Core\\src"), classFile);
-            if (AssetBuilder.class.isAssignableFrom(c)) {
+            if (AssetBuilder.class.isAssignableFrom(c) && !c.getName().equals("com.meti.asset.AssetBuilder")){
                 AssetBuilder instance = (AssetBuilder) c.newInstance();
                 String[] extensions = instance.getExtensions();
                 for (String ext : extensions) {
