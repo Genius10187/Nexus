@@ -1,12 +1,13 @@
 package com.meti.asset;
 
 import java.io.File;
+import java.io.Serializable;
 
-public class Asset {
+public class Asset implements Serializable {
     private final File location;
 
     //must be mutable
-    private Object content;
+    private Serializable content;
 
     public Asset(File location) {
         this.location = location;
@@ -16,11 +17,11 @@ public class Asset {
         return location;
     }
 
-    public Object getContent() {
+    public Serializable getContent() {
         return content;
     }
 
-    public void setContent(Object content) {
+    public void setContent(Serializable content) {
         this.content = content;
     }
 }
