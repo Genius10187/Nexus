@@ -36,12 +36,16 @@ public class Server {
     private Action<Client> onClientDisconnect;
     private Action<Client> onClientConnect;
 
+    public Server(int port, int maxQueueSize, Console console) throws IOException, ClassNotFoundException, IllegalAccessException, InstantiationException {
+        this(port, maxQueueSize, null, console);
+    }
+
     /*
     maxQueueSize and backlog are the same thing
     it specifies how many sockets can connect to
     the server at once, i.e. user limit
     */
-    public Server(int port, int maxQueueSize, InetAddress address, Console console) throws IOException, ClassNotFoundException {
+    public Server(int port, int maxQueueSize, InetAddress address, Console console) throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException {
         if (address != null) {
             this.serverSocket = new ServerSocket(port, maxQueueSize, address);
         } else {
@@ -57,10 +61,6 @@ public class Server {
         this.assetManager.read(directory);
 
         this.console = console;
-    }
-
-    public Server(int port, int maxQueueSize, Console console) throws IOException, ClassNotFoundException {
-        this(port, maxQueueSize, null, console);
     }
 
     public ServerSocket getServerSocket() {

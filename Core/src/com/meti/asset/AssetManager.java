@@ -20,12 +20,17 @@ public class AssetManager {
         for (File classFile : classFiles) {
             Class<?> c = Utility.getClassFromFile(new File("Core\\src"), classFile);
             if (AssetBuilder.class.isAssignableFrom(c)) {
-                AssetBuilder instance = c.newInstance();
+                AssetBuilder instance = (AssetBuilder) c.newInstance();
+                String[] extensions = instance.getExtensions();
+                for (String ext : extensions) {
+                    builderMap.put(ext, instance);
+                }
             }
         }
     }
 
-    public AssetManager(Console console) throws FileNotFoundException, ClassNotFoundException {
+    //this is a lot of exceptions
+    public AssetManager(Console console) throws FileNotFoundException, ClassNotFoundException, IllegalAccessException, InstantiationException {
         this.console = console;
     }
 
