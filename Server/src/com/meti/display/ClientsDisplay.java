@@ -37,13 +37,13 @@ public class ClientsDisplay implements Initializable {
         this.server.setOnClientConnect(param -> {
             Request<Client> connectRequest = () -> param;
 
-            connectTimer.onRequestFromBuffer(connectRequest);
+            connectTimer.onRequest(connectRequest);
         });
 
         this.server.setOnClientDisconnect(param -> {
             Request<Client> disconnectRequest = () -> param;
 
-            disconnectTimer.onRequestFromBuffer(disconnectRequest);
+            disconnectTimer.onRequest(disconnectRequest);
         });
     }
 

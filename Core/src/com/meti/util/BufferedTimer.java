@@ -24,5 +24,5 @@ public abstract class BufferedTimer<T> extends AnimationTimer implements Request
         }
     }
 
-    public abstract void onRequestFromBuffer(Request<T> request);
+    protected abstract void onRequestFromBuffer(Request<T> request);
 }
