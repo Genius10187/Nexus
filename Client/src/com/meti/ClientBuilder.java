@@ -1,5 +1,6 @@
 package com.meti;
 
+import com.meti.io.Client;
 import com.meti.util.Console;
 import com.meti.util.Utility;
 import javafx.stage.Stage;
@@ -9,6 +10,7 @@ import java.io.IOException;
 
 public class ClientBuilder {
     private final Console console;
+    private Client client;
 
     public ClientBuilder(Console console) {
         this.console = console;
@@ -18,7 +20,14 @@ public class ClientBuilder {
         console.log("Opening dialog");
 
         ClientCreator creator = Utility.buildFXML(new File("Client\\assets\\fxml\\ClientCreator.fxml"), primaryStage);
+        creator.setClientBuilder(this);
+    }
 
-        //TODO: custom client loading
+    public Console getConsole() {
+        return console;
+    }
+
+    public void setClient(Client client) {
+        this.client = client;
     }
 }
