@@ -5,10 +5,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,6 +16,27 @@ import java.util.List;
  */
 public class Utility {
     private Utility() {
+    }
+
+    public static Class<?> getClassFromFile(File directory, File file) throws FileNotFoundException, ClassNotFoundException {
+        String extension = getExtension(file);
+        if (extension.equals("java") || extension.equals("class")) {
+            if (search(directory, "class", "java").contains(file)) {
+                String classPath = file.getPath().replace(directory.getPath(), "");
+                classPath = classPath.substring(1, classPath.length());
+                classPath = classPath.replaceAll("\\\\", ".");
+
+                //5 for .java
+                classPath = classPath.substring(0, classPath.length() - 5);
+
+                return Class.forName(classPath);
+            } else {
+                throw new FileNotFoundException("Directory " + directory.getPath() + " does not contain" +
+                        "file " + file.getPath());
+            }
+        } else {
+            throw new IllegalArgumentException("File does not end with class or java");
+        }
     }
 
     public static <T> T castIfOfInstance(Object obj, Class<T> c) {
