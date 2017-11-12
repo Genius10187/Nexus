@@ -17,30 +17,42 @@ public class ClientsDisplay implements Initializable {
 
     @FXML
     private ListView<String> clientsView;
-    private DisconnectTimer timer;
+
+    private ConnectTimer connectTimer;
+    private DisconnectTimer disconnectTimer;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        timer = new DisconnectTimer();
-        timer.start();
+        connectTimer = new ConnectTimer();
+        connectTimer.start();
+
+        disconnectTimer = new DisconnectTimer();
+        disconnectTimer.start();
     }
 
     public void setServer(Server server) {
         this.server = server;
 
-        this.server.setOnClientConnect(this::addClient);
+        //how repetitive?
+        this.server.setOnClientConnect(param -> {
+            Request<Client> connectRequest = () -> param;
+
+            connectTimer.onRequestFromBuffer(connectRequest);
+        });
+
         this.server.setOnClientDisconnect(param -> {
             Request<Client> disconnectRequest = () -> param;
 
-            timer.onRequestFromBuffer(disconnectRequest);
+            disconnectTimer.onRequestFromBuffer(disconnectRequest);
         });
-
-        server.getClients().forEach(this::addClient);
     }
 
-    //feels weird having this method without remove...
-    private void addClient(Client param) {
-        clientsView.getItems().add(param.getSocket().getInetAddress().toString());
+    //do we really need the request class?
+    private class ConnectTimer extends BufferedTimer<Client> {
+        @Override
+        public void onRequestFromBuffer(Request<Client> request) {
+            clientsView.getItems().add(request.request().getSocket().getInetAddress().toString());
+        }
     }
 
     private class DisconnectTimer extends BufferedTimer<Client> {
