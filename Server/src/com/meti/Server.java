@@ -171,6 +171,13 @@ public class Server {
                     //should we assume this is an instance of Command?
                     Command command = client.read(Command.class);
                     client.run(command);
+                } catch (SocketException e) {
+                    try {
+                        console.log("Terminating connection to " + client.getSocket().getInetAddress());
+                        client.getSocket().close();
+                    } catch (IOException e1) {
+                        console.log(e1);
+                    }
                 } catch (IOException | ClassNotFoundException e) {
                     console.log(e);
                 }
