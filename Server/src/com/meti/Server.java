@@ -15,6 +15,7 @@ import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.logging.Level;
@@ -205,8 +206,11 @@ public class Server {
             switch (params[0]) {
                 case "paths":
                     List<String> paths = new ArrayList<>();
-                    //TODO: gather paths
+                    Set<File> files = assetManager.getFiles();
 
+                    for (File file : files) {
+                        paths.add(file.getPath());
+                    }
 
                     client.writeAll(paths);
                     break;

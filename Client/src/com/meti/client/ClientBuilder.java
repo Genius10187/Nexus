@@ -31,7 +31,7 @@ public class ClientBuilder {
         this.client = client;
     }
 
-    public void openDisplayDialog() throws IOException {
+    public void openDisplayDialog() throws IOException, ClassNotFoundException {
         ClientDisplay display = Utility.buildFXML(new File("Client\\assets\\fxml\\ClientDisplay.fxml"), null);
         display.loadFromClientBuilder(this);
     }
