@@ -1,0 +1,21 @@
+package com.meti.client.editor;
+
+import com.meti.client.Editor;
+
+/**
+ * @author SirMathhman
+ * @version 0.0.0
+ * @since 11/14/2017
+ */
+public class ImageEditor implements Editor {
+    @Override
+    public String[] getExtensions() {
+        //there's a whole bunch of them
+        return new String[]{
+                "jpeg",
+                "jpg",
+                "img",
+                "png"
+        };
+    }
+}
