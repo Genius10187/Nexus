@@ -148,6 +148,7 @@ public class ClientDisplay {
                 root.getChildren().add(item);
 
                 associations.put(file, item);
+                //TODO: NullPointerException thrown here hmmm
             } else if (associations.containsKey(parent)) {
                 TreeItem<String> item = new TreeItem<>(file.getName());
                 associations.get(parent).getChildren().add(item);
