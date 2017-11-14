@@ -153,6 +153,7 @@ public class Server {
     }
 
     private class ClientHandler implements Runnable {
+        private final ServerCommander commander = new ServerCommander();
         private final Client client;
 
         //consider making a separate object for socket - related things here
@@ -169,7 +170,7 @@ public class Server {
             while (!client.getSocket().isClosed()) {
                 try {
                     Command command = client.read(Command.class);
-                    client.run(command);
+                    commander.run(command, client);
                 } catch (SocketException e) {
                     try {
                         console.log("Terminating connection to " + client.getSocket().getInetAddress());
@@ -185,6 +186,34 @@ public class Server {
             console.log(Level.FINE, "Client disconnected at " + client.getSocket().getInetAddress());
 
             onClientDisconnect.act(client);
+        }
+    }
+
+    private class ServerCommander implements Commander {
+        public void run(Command command, Client client) throws IOException {
+            switch (command.getName()) {
+                case "list":
+                    list(command.getParams(), client);
+                    break;
+                default:
+                    client.write("Cannot perform command " + command.getName());
+                    break;
+            }
+        }
+
+        public void list(String[] params, Client client) throws IOException {
+            switch (params[0]) {
+                case "paths":
+                    List<String> paths = new ArrayList<>();
+                    //TODO: gather paths
+
+
+                    client.writeAll(paths);
+                    break;
+                default:
+                    client.write(params[0] + " is unlistable.");
+                    break;
+            }
         }
     }
 }
