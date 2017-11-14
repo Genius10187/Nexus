@@ -51,7 +51,7 @@ public class ClientDisplay {
     private Console console;
     private Client client;
 
-    private HashMap<File, TreeItem<String>> associations;
+    private HashMap<File, TreeItem<String>> associations = new HashMap<>();
     private File currentFile;
 
     {
