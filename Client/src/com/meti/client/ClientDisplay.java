@@ -53,6 +53,8 @@ public class ClientDisplay {
     private HashMap<File, TreeItem<String>> associations = new HashMap<>();
     private File currentFile;
 
+    //TODO: create editor files
+
     @FXML
     public void changeFile() {
         try {
