@@ -11,6 +11,9 @@ import javafx.scene.control.TextField;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.logging.Handler;
+import java.util.logging.LogRecord;
+import java.util.logging.SimpleFormatter;
 
 public class ServerDisplay {
     private Server server;
@@ -70,5 +73,27 @@ public class ServerDisplay {
 
     public void setServer(Server server) {
         this.server = server;
+
+        DisplayHandler handler = new DisplayHandler();
+        handler.setFormatter(new SimpleFormatter());
+        this.server.getConsole().addHandler(handler);
+    }
+
+    private class DisplayHandler extends Handler {
+
+        @Override
+        public void publish(LogRecord record) {
+            output.appendText(getFormatter().format(record) + "\n");
+        }
+
+        @Override
+        public void flush() {
+
+        }
+
+        @Override
+        public void close() throws SecurityException {
+
+        }
     }
 }
