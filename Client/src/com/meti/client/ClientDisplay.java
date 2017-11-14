@@ -8,6 +8,8 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Tooltip;
+import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 
@@ -25,7 +27,7 @@ public class ClientDisplay {
     private final HashMap<String, Editor> editorMap = new HashMap<>();
 
     @FXML
-    private ListView<String> fileView;
+    private TreeView<String> fileView;
 
     @FXML
     private Tooltip editToolTip;
@@ -78,9 +80,18 @@ public class ClientDisplay {
         this.client = clientBuilder.getClient();
 
         //occurs after initialization
-        client.write(new Command("list", "filePaths"));
+        client.write(new Command("list", "paths"));
+
+        //might return string here
         List<String> paths = client.readAll(String.class);
-        System.out.println(paths);
+
+        ClientIndexer indexer = new ClientIndexer();
+        for (String path : paths) {
+            indexer.index(new File(path));
+        }
+
+        fileView.setRoot(indexer.getRoot());
+        fileView.setShowRoot(false);
     }
 
     @FXML
@@ -101,5 +112,35 @@ public class ClientDisplay {
     @FXML
     public void openEditors() {
         //TODO: index editors
+    }
+
+    private class ClientIndexer {
+        private final HashMap<File, TreeItem<String>> associations = new HashMap<>();
+        private final TreeItem<String> root = new TreeItem<>();
+
+        private void index(File file) {
+            File parent = file.getParentFile();
+
+            if (parent == null) {
+                TreeItem<String> item = new TreeItem<>(file.getName());
+                root.getChildren().add(item);
+
+                associations.put(file, item);
+            } else if (associations.containsKey(parent)) {
+                TreeItem<String> item = new TreeItem<>(file.getName());
+                associations.get(parent).getChildren().add(item);
+
+                associations.put(file, item);
+            } else {
+
+                //we seriously don't need to do more copy and pasting, do we?
+                index(parent);
+                index(file);
+            }
+        }
+
+        public TreeItem<String> getRoot() {
+            return root;
+        }
     }
 }

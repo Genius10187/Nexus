@@ -95,6 +95,9 @@ public class Client {
             T result = Utility.castIfOfInstance(o, c);
             if (result != null) {
                 obj = result;
+
+                //making sure we remove the object
+                inputBuffer.remove(o);
                 break;
             }
         }

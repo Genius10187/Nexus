@@ -18,15 +18,15 @@ public class FilesDisplay {
         this.server = server;
 
         AssetManager manager = server.getAssetManager();
-        Indexer indexer = new Indexer();
+        ServerIndexer serverIndexer = new ServerIndexer();
 
-        manager.getFiles().forEach(indexer::index);
+        manager.getFiles().forEach(serverIndexer::index);
 
-        filesView.setRoot(indexer.getRoot());
+        filesView.setRoot(serverIndexer.getRoot());
         filesView.setShowRoot(false);
     }
 
-    private class Indexer {
+    private class ServerIndexer {
         private final HashMap<File, TreeItem<String>> associations = new HashMap<>();
         private final TreeItem<String> root = new TreeItem<>();
 
