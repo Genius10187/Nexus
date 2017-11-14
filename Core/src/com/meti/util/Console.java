@@ -2,6 +2,7 @@ package com.meti.util;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -12,6 +13,10 @@ import java.util.logging.Logger;
  */
 public class Console {
     private final Logger logger = Logger.getLogger("Application");
+
+    {
+        logger.setLevel(Level.ALL);
+    }
 
     public Console() {
     }
@@ -34,5 +39,9 @@ public class Console {
         StringWriter writer = new StringWriter();
         e.printStackTrace(new PrintWriter(writer));
         log(level, writer.toString());
+    }
+
+    public void addHandler(Handler handler) {
+        logger.addHandler(handler);
     }
 }
