@@ -35,4 +35,8 @@ public class ClientBuilder {
         ClientDisplay display = Utility.buildFXML(new File("Client\\assets\\fxml\\ClientDisplay.fxml"), null);
         display.setClientBuilder(this);
     }
+
+    public Client getClient() {
+        return client;
+    }
 }

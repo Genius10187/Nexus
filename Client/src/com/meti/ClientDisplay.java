@@ -1,5 +1,6 @@
 package com.meti;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Tooltip;
@@ -36,23 +37,23 @@ public class ClientDisplay {
     private ClientBuilder clientBuilder;
 
     //TODO: flesh out clientDisplay
-
     public void setClientBuilder(ClientBuilder clientBuilder) {
         this.clientBuilder = clientBuilder;
     }
 
     @FXML
     public void openToolTip() {
+
     }
 
     @FXML
     public void sendReport() {
-
+        //TODO: send report
     }
 
     @FXML
     public void close() {
-
+        Platform.exit();
     }
 
     @FXML

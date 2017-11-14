@@ -162,7 +162,7 @@ public class Server {
 
         @Override
         public void run() {
-            console.log("Located client at " + client.getSocket().getInetAddress());
+            console.log(Level.FINE, "Client connected at " + client.getSocket().getInetAddress());
 
             onClientConnect.act(client);
 
@@ -182,6 +182,8 @@ public class Server {
                     console.log(e);
                 }
             }
+
+            console.log(Level.FINE, "Client disconnected at " + client.getSocket().getInetAddress());
 
             onClientDisconnect.act(client);
         }
