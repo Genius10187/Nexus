@@ -54,4 +54,12 @@ public class AssetManager {
     public Set<File> getFiles() {
         return assetMap.keySet();
     }
+
+    public Asset getAsset(File file) {
+        return assetMap.get(file);
+    }
+
+    public long getSize(File file) {
+        return file.length();
+    }
 }

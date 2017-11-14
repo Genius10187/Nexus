@@ -18,7 +18,6 @@ import java.util.PriorityQueue;
 public class Client {
     //should the type be of PriorityQueue?
     private final PriorityQueue<Object> inputBuffer = new PriorityQueue<>();
-    private final Commander commander = new Commander();
     private final ObjectOutputStream outputStream;
     private final ObjectInputStream inputStream;
     private final Socket socket;
@@ -26,8 +25,10 @@ public class Client {
     /**
      * <p>
      * Constructs a new Client specified by the socket parameter.
+     * First, assigns the socket to the client.
      * Then constructs both an ObjectInputStream and ObjectOutputStream
      * </p>
+     *
      *
      * @param socket The socket
      * @throws IOException Thrown during construction of either stream
@@ -35,9 +36,10 @@ public class Client {
      * @see ObjectOutputStream
      */
     public Client(Socket socket) throws IOException {
+        this.socket = socket;
+
         this.outputStream = new ObjectOutputStream(socket.getOutputStream());
         this.inputStream = new ObjectInputStream(socket.getInputStream());
-        this.socket = socket;
     }
 
     /**
@@ -93,6 +95,9 @@ public class Client {
             T result = Utility.castIfOfInstance(o, c);
             if (result != null) {
                 obj = result;
+
+                //making sure we remove the object
+                inputBuffer.remove(o);
                 break;
             }
         }
@@ -158,21 +163,5 @@ public class Client {
      */
     public Socket getSocket() {
         return socket;
-    }
-
-    /**
-     * {@link Commander#run(Command)}
-     *
-     * @param command The command
-     */
-    public void run(Command command) {
-        commander.run(command);
-    }
-
-    //TODO: write commander
-    private class Commander {
-        public void run(Command command) {
-
-        }
     }
 }
