@@ -1,4 +1,4 @@
-package com.meti;
+package com.meti.client;
 
 import com.meti.io.Client;
 import com.meti.util.Console;
@@ -33,6 +33,10 @@ public class ClientBuilder {
 
     public void openDisplayDialog() throws IOException {
         ClientDisplay display = Utility.buildFXML(new File("Client\\assets\\fxml\\ClientDisplay.fxml"), null);
-        display.setClientBuilder(this);
+        display.loadFromClientBuilder(this);
+    }
+
+    public Client getClient() {
+        return client;
     }
 }

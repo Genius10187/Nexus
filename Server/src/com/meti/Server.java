@@ -162,13 +162,12 @@ public class Server {
 
         @Override
         public void run() {
-            console.log("Located client at " + client.getSocket().getInetAddress());
+            console.log(Level.FINE, "Client connected at " + client.getSocket().getInetAddress());
 
             onClientConnect.act(client);
 
             while (!client.getSocket().isClosed()) {
                 try {
-                    //should we assume this is an instance of Command?
                     Command command = client.read(Command.class);
                     client.run(command);
                 } catch (SocketException e) {
@@ -182,6 +181,8 @@ public class Server {
                     console.log(e);
                 }
             }
+
+            console.log(Level.FINE, "Client disconnected at " + client.getSocket().getInetAddress());
 
             onClientDisconnect.act(client);
         }
