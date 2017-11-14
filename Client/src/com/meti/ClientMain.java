@@ -14,6 +14,6 @@ public class ClientMain extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         ClientBuilder builder = new ClientBuilder(console);
-        builder.openDialog(primaryStage);
+        builder.openCreatorDialog(primaryStage);
     }
 }

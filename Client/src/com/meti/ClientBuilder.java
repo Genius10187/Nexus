@@ -16,7 +16,7 @@ public class ClientBuilder {
         this.console = console;
     }
 
-    public void openDialog(Stage primaryStage) throws IOException {
+    public void openCreatorDialog(Stage primaryStage) throws IOException {
         console.log("Opening dialog");
 
         ClientCreator creator = Utility.buildFXML(new File("Client\\assets\\fxml\\ClientCreator.fxml"), primaryStage);
@@ -29,5 +29,10 @@ public class ClientBuilder {
 
     public void setClient(Client client) {
         this.client = client;
+    }
+
+    public void openDisplayDialog() throws IOException {
+        ClientDisplay display = Utility.buildFXML(new File("Client\\assets\\fxml\\ClientDisplay.fxml"), null);
+        display.setClientBuilder(this);
     }
 }
