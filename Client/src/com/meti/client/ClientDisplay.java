@@ -51,6 +51,9 @@ public class ClientDisplay {
     private Console console;
     private Client client;
 
+    private HashMap<File, TreeItem<String>> associations;
+    private File currentFile;
+
     {
         try {
             List<File> classFiles = Utility.search(new File("Core"), "java");
@@ -73,6 +76,26 @@ public class ClientDisplay {
         }
     }
 
+    @FXML
+    public void changeFile() {
+        try {
+            TreeItem<String> pathItem = fileView.getSelectionModel().getSelectedItems().get(0);
+            File file = null;
+
+            for (File f : associations.keySet()) {
+                if (associations.get(f).equals(pathItem)) {
+                    file = f;
+                    break;
+                }
+            }
+
+            if (file != null) {
+                client.write(new Command("get", "size", file.getPath()));
+            }
+        } catch (IOException e) {
+            console.log(e);
+        }
+    }
 
     public void loadFromClientBuilder(ClientBuilder clientBuilder) throws IOException, ClassNotFoundException {
         this.clientBuilder = clientBuilder;
@@ -115,7 +138,6 @@ public class ClientDisplay {
     }
 
     private class ClientIndexer {
-        private final HashMap<File, TreeItem<String>> associations = new HashMap<>();
         private final TreeItem<String> root = new TreeItem<>();
 
         private void index(File file) {

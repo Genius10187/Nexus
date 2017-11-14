@@ -205,9 +205,24 @@ public class Server {
                 case "list":
                     list(command.getParams(), client);
                     break;
+                case "get":
+                    get(command.getParams(), client);
                 default:
                     client.write("Cannot perform command " + command.getName());
                     break;
+            }
+        }
+
+        public void get(String[] params, Client client) throws IOException {
+            switch (params[0]) {
+                case "asset":
+                    client.write(assetManager.getAsset(new File(params[1])));
+                    break;
+                case "size":
+                    client.write(assetManager.getSize(new File(params[1])));
+                    break;
+                default:
+                    client.write(params[0] + " is unretrievable.");
             }
         }
 
