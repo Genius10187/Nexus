@@ -3,7 +3,6 @@ package com.meti.client;
 import com.meti.io.Client;
 import com.meti.io.Command;
 import com.meti.util.Console;
-import com.meti.util.Utility;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
@@ -53,28 +52,6 @@ public class ClientDisplay {
 
     private HashMap<File, TreeItem<String>> associations = new HashMap<>();
     private File currentFile;
-
-    {
-        try {
-            List<File> classFiles = Utility.search(new File("Core"), "java");
-            for (File classFile : classFiles) {
-                Class<?> c = Utility.getClassFromFile(new File("Core\\src"), classFile);
-                if (Editor.class.isAssignableFrom(c) && !c.getName().equals("com.meti.client.Editor")) {
-                    Editor instance = (Editor) c.newInstance();
-                    String[] extensions = instance.getExtensions();
-                    for (String ext : extensions) {
-                        editorMap.put(ext, instance);
-                    }
-                }
-            }
-        } catch (Exception e) {
-            if (console != null) {
-                console.log(e);
-            } else {
-                e.printStackTrace();
-            }
-        }
-    }
 
     @FXML
     public void changeFile() {
@@ -134,7 +111,6 @@ public class ClientDisplay {
 
     @FXML
     public void openEditors() {
-        //TODO: index editors
     }
 
     private class ClientIndexer {
@@ -148,7 +124,6 @@ public class ClientDisplay {
                 root.getChildren().add(item);
 
                 associations.put(file, item);
-                //TODO: NullPointerException thrown here hmmm
             } else if (associations.containsKey(parent)) {
                 TreeItem<String> item = new TreeItem<>(file.getName());
                 associations.get(parent).getChildren().add(item);
