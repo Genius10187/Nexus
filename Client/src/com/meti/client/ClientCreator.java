@@ -28,7 +28,7 @@ public class ClientCreator {
             Client client = new Client(socket);
             clientBuilder.setClient(client);
             clientBuilder.openDisplayDialog();
-        } catch (IOException e) {
+        } catch (Exception e) {
             try {
                 Dialog dialog = Utility.buildFXML(new File("Core\\assets\\fxml\\Dialog.fxml"), null);
                 dialog.setMessageTextAndException("Failed to connect to server", e);

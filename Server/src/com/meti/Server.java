@@ -6,6 +6,7 @@ import com.meti.io.Command;
 import com.meti.util.Action;
 import com.meti.util.Console;
 
+import java.io.EOFException;
 import java.io.File;
 import java.io.IOException;
 import java.net.InetAddress;
@@ -15,6 +16,7 @@ import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.logging.Level;
@@ -163,29 +165,37 @@ public class Server {
 
         @Override
         public void run() {
-            console.log(Level.FINE, "Client connected at " + client.getSocket().getInetAddress());
+            try {
+                console.log(Level.FINE, "Client connected at " + client.getSocket().getInetAddress());
 
-            onClientConnect.act(client);
-
-            while (!client.getSocket().isClosed()) {
-                try {
-                    Command command = client.read(Command.class);
-                    commander.run(command, client);
-                } catch (SocketException e) {
-                    try {
-                        console.log("Terminating connection to " + client.getSocket().getInetAddress());
-                        client.getSocket().close();
-                    } catch (IOException e1) {
-                        console.log(e1);
-                    }
-                } catch (IOException | ClassNotFoundException e) {
-                    console.log(e);
+                if (onClientConnect != null) {
+                    onClientConnect.act(client);
                 }
+
+                while (!client.getSocket().isClosed()) {
+                    try {
+                        Command command = client.read(Command.class);
+                        commander.run(command, client);
+                    } catch (SocketException | EOFException e) {
+                        try {
+                            console.log("Terminating connection to " + client.getSocket().getInetAddress());
+                            client.getSocket().close();
+                        } catch (IOException e1) {
+                            console.log(e1);
+                        }
+                    } catch (IOException | ClassNotFoundException e) {
+                        console.log(e);
+                    }
+                }
+
+                console.log(Level.FINE, "Client disconnected at " + client.getSocket().getInetAddress());
+
+                if (onClientDisconnect != null) {
+                    onClientDisconnect.act(client);
+                }
+            } catch (Exception e) {
+                console.log(e);
             }
-
-            console.log(Level.FINE, "Client disconnected at " + client.getSocket().getInetAddress());
-
-            onClientDisconnect.act(client);
         }
     }
 
@@ -205,8 +215,11 @@ public class Server {
             switch (params[0]) {
                 case "paths":
                     List<String> paths = new ArrayList<>();
-                    //TODO: gather paths
+                    Set<File> files = assetManager.getFiles();
 
+                    for (File file : files) {
+                        paths.add(file.getPath());
+                    }
 
                     client.writeAll(paths);
                     break;

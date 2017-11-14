@@ -33,22 +33,6 @@
                     </menus>
                 </MenuBar>
             </top>
-            <left>
-                <ListView fx:id="fileView" onMouseClicked="#openToolTip" prefHeight="200.0" prefWidth="200.0"
-                          BorderPane.alignment="CENTER">
-                    <tooltip>
-                        <Tooltip fx:id="editToolTip">
-                            <graphic>
-                                <ScrollPane>
-                                    <content>
-                                        <ListView fx:id="editorOptions" prefHeight="200.0" prefWidth="200.0"/>
-                                    </content>
-                                </ScrollPane>
-                            </graphic>
-                        </Tooltip>
-                    </tooltip>
-                </ListView>
-            </left>
             <center>
                 <GridPane fx:id="fileDataPane" BorderPane.alignment="CENTER">
                     <columnConstraints>
@@ -78,6 +62,13 @@
                     </children>
                 </GridPane>
             </center>
+            <left>
+                <ScrollPane fitToHeight="true" fitToWidth="true" prefViewportHeight="368.0" prefViewportWidth="200.0">
+                    <content>
+                        <TreeView fx:id="fileView" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER"/>
+                    </content>
+                </ScrollPane>
+            </left>
         </BorderPane>
     </children>
 </AnchorPane>
