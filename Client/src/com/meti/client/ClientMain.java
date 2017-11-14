@@ -1,4 +1,4 @@
-package com.meti;
+package com.meti.client;
 
 import com.meti.util.Console;
 import javafx.application.Application;

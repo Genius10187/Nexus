@@ -1,4 +1,4 @@
-package com.meti;
+package com.meti.client;
 
 import com.meti.io.Client;
 import com.meti.util.Dialog;
