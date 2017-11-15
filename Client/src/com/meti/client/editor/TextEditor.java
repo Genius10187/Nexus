@@ -2,6 +2,8 @@ package com.meti.client.editor;
 
 import com.meti.client.Editor;
 
+import java.io.File;
+
 /**
  * @author SirMathhman
  * @version 0.0.0
@@ -13,5 +15,10 @@ public class TextEditor implements Editor {
         return new String[]{
                 "txt"
         };
+    }
+
+    @Override
+    public File getLocation() {
+        return new File("Client\\assets\\fxml\\editor\\TextEditor.fxml");
     }
 }
