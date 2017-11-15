@@ -96,6 +96,7 @@ public class ClientDisplay {
         fileView.setShowRoot(false);
     }
     //A CHANGE
+    //SOMETIMES WE NEED A REBASE GIT SCREWED UP AGAIN CURSE YOU WORLD
 
     @FXML
     public void openToolTip() {
