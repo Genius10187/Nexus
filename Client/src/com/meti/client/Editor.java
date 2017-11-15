@@ -1,5 +1,7 @@
 package com.meti.client;
 
+import java.io.File;
+
 /**
  * @author SirMathhman
  * @version 0.0.0
@@ -7,4 +9,5 @@ package com.meti.client;
  */
 public interface Editor {
     String[] getExtensions();
+    File getLocation();
 }
