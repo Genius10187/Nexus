@@ -95,6 +95,7 @@ public class ClientDisplay {
         fileView.setRoot(indexer.getRoot());
         fileView.setShowRoot(false);
     }
+    //A CHANGE
 
     @FXML
     public void openToolTip() {
