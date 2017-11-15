@@ -1,8 +1,10 @@
 package com.meti.client;
 
+import com.meti.asset.AssetBuilder;
 import com.meti.io.Client;
 import com.meti.io.Command;
 import com.meti.util.Console;
+import com.meti.util.Utility;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
@@ -13,6 +15,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -52,6 +55,25 @@ public class ClientDisplay {
 
     private HashMap<File, TreeItem<String>> associations = new HashMap<>();
     private File currentFile;
+
+    {
+        try {
+            List<File> classFiles = Utility.search(new File("Client"), "java");
+            for (File classFile : classFiles) {
+                Class<?> c = Utility.getClassFromFile(new File("Client\\src"), classFile);
+                if (Editor.class.isAssignableFrom(c) && !c.getName().equals("com.meti.client.Editor")){
+                    Editor instance = (Editor) c.newInstance();
+                    String[] extensions = instance.getExtensions();
+                    for (String ext : extensions) {
+                        editorMap.put(ext, instance);
+                    }
+                }
+            }
+        } catch (FileNotFoundException | ClassNotFoundException | IllegalAccessException | InstantiationException e) {
+            console.log(e);
+        }
+    }
+
 
     @FXML
     public void changeFile() {
