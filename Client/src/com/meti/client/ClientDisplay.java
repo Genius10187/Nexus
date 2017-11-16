@@ -3,6 +3,7 @@ package com.meti.client;
 import com.meti.io.Client;
 import com.meti.io.Command;
 import com.meti.util.Console;
+import com.meti.util.Utility;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
@@ -53,7 +54,28 @@ public class ClientDisplay {
     private HashMap<File, TreeItem<String>> associations = new HashMap<>();
     private File currentFile;
 
-    //TODO: create editor files
+    {
+        try {
+            List<File> classFiles = Utility.search(new File("Client"), "java");
+            for (File classFile : classFiles) {
+                Class<?> c = Utility.getClassFromFile(new File("Client\\src"), classFile);
+                if (Editor.class.isAssignableFrom(c) && !c.getName().equals("com.meti.client.Editor")) {
+                    Editor instance = (Editor) c.newInstance();
+                    String[] extensions = instance.getExtensions();
+                    for (String ext : extensions) {
+                        editorMap.put(ext, instance);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            if (console != null) {
+                console.log(e);
+            } else {
+                e.printStackTrace();
+            }
+        }
+    }
+
 
     @FXML
     public void changeFile() {
@@ -69,9 +91,15 @@ public class ClientDisplay {
             }
 
             if (file != null) {
+                client.write(new Command("get", "path", file.getPath()));
+                name.setText(client.readCommandAndCast(String.class));
+
                 client.write(new Command("get", "size", file.getPath()));
+                size.setText(String.valueOf(client.readCommandAndCast(Long.class)));
+
+                supported.setText(String.valueOf(editorMap.containsKey(Utility.getExtension(file))));
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             console.log(e);
         }
     }

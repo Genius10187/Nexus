@@ -1,5 +1,6 @@
 package com.meti;
 
+import com.meti.asset.Asset;
 import com.meti.asset.AssetManager;
 import com.meti.io.Client;
 import com.meti.io.Command;
@@ -20,6 +21,8 @@ import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.logging.Level;
+
+import static com.meti.util.Utility.castIfOfInstance;
 
 /**
  * @author SirMathhman
@@ -183,8 +186,8 @@ public class Server {
                         } catch (IOException e1) {
                             console.log(e1);
                         }
-                    } catch (IOException | ClassNotFoundException e) {
-                        console.log(e);
+                    } catch (Exception e) {
+                        client.write(e);
                     }
                 }
 
@@ -201,25 +204,31 @@ public class Server {
 
     private class ServerCommander implements Commander {
         public void run(Command command, Client client) throws IOException {
+            //make sure to put break!
             switch (command.getName()) {
                 case "list":
                     list(command.getParams(), client);
                     break;
                 case "get":
                     get(command.getParams(), client);
+                    break;
                 default:
-                    client.write("Cannot perform command " + command.getName());
+                    client.write(new CommandException("Cannot perform command " + command.getName()));
                     break;
             }
         }
 
         public void get(String[] params, Client client) throws IOException {
+            File file = new File(params[1]);
             switch (params[0]) {
                 case "asset":
-                    client.write(assetManager.getAsset(new File(params[1])));
+                    client.write(castIfOfInstance(assetManager.getProperty(file, AssetManager.ASSET_VALUE), Asset.class));
+                    break;
+                case "path":
+                    client.write(castIfOfInstance(assetManager.getProperty(file, AssetManager.ASSET_NAME), String.class));
                     break;
                 case "size":
-                    client.write(assetManager.getSize(new File(params[1])));
+                    client.write(castIfOfInstance(assetManager.getProperty(file, AssetManager.ASSET_SIZE), Long.class));
                     break;
                 default:
                     client.write(params[0] + " is unretrievable.");

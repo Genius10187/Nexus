@@ -29,7 +29,6 @@ public class Client {
      * Then constructs both an ObjectInputStream and ObjectOutputStream
      * </p>
      *
-     *
      * @param socket The socket
      * @throws IOException Thrown during construction of either stream
      * @see ObjectInputStream
@@ -42,29 +41,39 @@ public class Client {
         this.inputStream = new ObjectInputStream(socket.getInputStream());
     }
 
+    public void writeCommand(Command command) throws IOException {
+        write(command);
+    }
+
     /**
      * <p>
-     * Reads a defined number of objects specified by an incoming integer, which represents the size.
-     * Then returns an ArrayList composed of all objects read of type T.
-     * Uses {@link #read(Class)}
+     * Writes an object through the socket.
+     * The object must implement serializable,
+     * such that serialization can occur.
+     * The stream is then flushed.
+     * <p>
+     * See also {@link java.io.ObjectOutputStream#writeUnshared(Object)}
      * </p>
      *
-     * @param c   The class with type T
-     * @param <T> The type of the object to receive
-     * @return The objects read of type T
-     * @throws IOException            See {@link #read(Class)}
-     * @throws ClassNotFoundException See {@link #read(Class)}
+     * @param serializable The object
+     * @throws IOException If an error occurred
      */
-    public <T extends Serializable> List<T> readAll(Class<T> c) throws IOException, ClassNotFoundException {
-        int size = read(Integer.class);
-        List<T> objects = new ArrayList<>();
+    public void write(Serializable serializable) throws IOException {
+        outputStream.writeUnshared(serializable);
+        outputStream.flush();
+    }
 
-        for (int i = 0; i < size; i++) {
-            T serializable = read(c);
-            objects.add(serializable);
+    public <T> T readCommandAndCast(Class<T> c) throws Exception {
+        return Utility.castIfOfInstance(readCommand(), c);
+    }
+
+    public Object readCommand() throws Exception {
+        Object obj = read(Object.class);
+        if (Exception.class.isAssignableFrom(obj.getClass())) {
+            throw Exception.class.cast(obj);
+        } else {
+            return obj;
         }
-
-        return objects;
     }
 
     /**
@@ -117,6 +126,31 @@ public class Client {
 
     /**
      * <p>
+     * Reads a defined number of objects specified by an incoming integer, which represents the size.
+     * Then returns an ArrayList composed of all objects read of type T.
+     * Uses {@link #read(Class)}
+     * </p>
+     *
+     * @param c   The class with type T
+     * @param <T> The type of the object to receive
+     * @return The objects read of type T
+     * @throws IOException            See {@link #read(Class)}
+     * @throws ClassNotFoundException See {@link #read(Class)}
+     */
+    public <T extends Serializable> List<T> readAll(Class<T> c) throws IOException, ClassNotFoundException {
+        int size = read(Integer.class);
+        List<T> objects = new ArrayList<>();
+
+        for (int i = 0; i < size; i++) {
+            T serializable = read(c);
+            objects.add(serializable);
+        }
+
+        return objects;
+    }
+
+    /**
+     * <p>
      * Writes all objects specified by the parameters.
      * First, the size of the objects is written.
      * Next, each object is written.
@@ -135,24 +169,6 @@ public class Client {
             outputStream.writeUnshared(serializable);
         }
 
-        outputStream.flush();
-    }
-
-    /**
-     * <p>
-     * Writes an object through the socket.
-     * The object must implement serializable,
-     * such that serialization can occur.
-     * The stream is then flushed.
-     * <p>
-     * See also {@link java.io.ObjectOutputStream#writeUnshared(Object)}
-     * </p>
-     *
-     * @param serializable The object
-     * @throws IOException If an error occurred
-     */
-    public void write(Serializable serializable) throws IOException {
-        outputStream.writeUnshared(serializable);
         outputStream.flush();
     }
 
