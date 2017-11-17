@@ -9,9 +9,10 @@ import java.io.IOException;
 import java.io.Serializable;
 
 public class GetCommand extends Command {
-    public static final int GET_VALUE = 0;
-    public static final int GET_SIZE = 1;
-    public static final int GET_SUPPORTED = 2;
+    public static final int TYPE_VALUE = 0;
+    public static final int TYPE_PATH = 1;
+    public static final int TYPE_SIZE = 2;
+    public static final int TYPE_SUPPORTED = 3;
 
     private final int type;
     private final File file;
@@ -25,16 +26,23 @@ public class GetCommand extends Command {
     public void handle(Client client, Server server) throws IOException {
         AssetManager manager = server.getAssetManager();
 
-        Serializable obj = null;
+        Serializable obj;
+
         switch (type) {
-            case GET_VALUE:
+            case TYPE_VALUE:
                 obj = manager.getValue(file);
                 break;
-            case GET_SIZE:
+            case TYPE_PATH:
+                obj = file.getPath();
+                break;
+            case TYPE_SIZE:
                 obj = file.length();
                 break;
-            case GET_SUPPORTED:
+            case TYPE_SUPPORTED:
                 obj = manager.isSupported(file);
+                break;
+            default:
+                obj = new IllegalArgumentException("Type " + type + " does not exist");
                 break;
         }
 

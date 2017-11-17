@@ -11,9 +11,8 @@ import java.util.List;
 import java.util.Set;
 
 public class AssetManager {
-    public static final int ASSET_VALUE = 0;
-    public static final int ASSET_NAME = 1;
-    public static final int ASSET_SIZE = 2;
+    //consider a property method, not enough properties to really make one at the moment, no need
+    //but for future reference, a property method and constant fields could help lookup
 
     private final HashMap<String, AssetBuilder> builderMap = new HashMap<>();
     private final HashMap<File, Asset> assetMap = new HashMap<>();
@@ -61,23 +60,6 @@ public class AssetManager {
 
     public Asset getValue(File file) {
         return assetMap.get(file);
-    }
-
-    public long getSize(File file) {
-        return file.length();
-    }
-
-    public Object getProperty(File file, int property) {
-        switch (property) {
-            case ASSET_VALUE:
-                return assetMap.get(file);
-            case ASSET_NAME:
-                return file.getPath();
-            case ASSET_SIZE:
-                return file.length();
-            default:
-                return null;
-        }
     }
 
     public boolean isSupported(File file) {

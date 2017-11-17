@@ -202,13 +202,13 @@ public class Server {
             File file = new File(params[1]);
             switch (params[0]) {
                 case "asset":
-                    client.write(castIfOfInstance(assetManager.getProperty(file, AssetManager.ASSET_VALUE), Asset.class));
+                    client.write(castIfOfInstance(assetManager.getProperty(file, AssetManager.PROPERTY_VALUE), Asset.class));
                     break;
                 case "path":
-                    client.write(castIfOfInstance(assetManager.getProperty(file, AssetManager.ASSET_NAME), String.class));
+                    client.write(castIfOfInstance(assetManager.getProperty(file, AssetManager.PROPERTY_PATH), String.class));
                     break;
                 case "size":
-                    client.write(castIfOfInstance(assetManager.getProperty(file, AssetManager.ASSET_SIZE), Long.class));
+                    client.write(castIfOfInstance(assetManager.getProperty(file, AssetManager.PROPERTY_SIZE), Long.class));
                     break;
                 default:
                     client.write(params[0] + " is unretrievable.");
