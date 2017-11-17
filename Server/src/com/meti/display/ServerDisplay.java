@@ -1,7 +1,8 @@
 package com.meti.display;
 
 import com.meti.Server;
-import com.meti.io.Command;
+import com.meti.io.command.Command;
+import com.meti.io.command.StringCommand;
 import com.meti.util.Utility;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -60,15 +61,19 @@ public class ServerDisplay {
 
     @FXML
     public void nextInput() {
-        String line = input.getText();
+        try {
+            String line = input.getText();
 
-        //reset the input token
-        input.setText("");
+            //reset the input token
+            input.setText("");
 
-        String[] args = line.split(" ");
+            String[] args = line.split(" ");
 
-        Command command = new Command(args[0], Arrays.copyOfRange(args, 1, args.length));
-        server.runCommand(command);
+            Command command = new StringCommand(args[0], Arrays.copyOfRange(args, 1, args.length));
+            command.handle(null, server);
+        } catch (IOException e) {
+            server.getConsole().log(e);
+        }
     }
 
     public void setServer(Server server) {

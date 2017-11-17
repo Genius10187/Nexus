@@ -1,7 +1,7 @@
 package com.meti.client;
 
 import com.meti.io.Client;
-import com.meti.io.Command;
+import com.meti.io.command.Command;
 import com.meti.util.Console;
 import com.meti.util.Utility;
 import javafx.application.Platform;
