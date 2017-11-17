@@ -5,6 +5,7 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.Socket;
 
 public class ClientMain extends Application {
     private final Console console = new Console();
@@ -23,7 +24,10 @@ public class ClientMain extends Application {
     @Override
     public void stop() {
         try {
-            builder.getClient().getSocket().close();
+            Socket socket = builder.getClient().getSocket();
+            if (socket != null) {
+                socket.close();
+            }
         } catch (IOException e) {
             System.exit(-1);
         }
