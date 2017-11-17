@@ -14,6 +14,8 @@ import java.io.IOException;
  * @version 0.0.0
  * @since 11/11/2017
  */
+
+//TODO: handle images
 public class ImageBuilder implements AssetBuilder {
     @Override
     public String[] getExtensions() {
@@ -30,8 +32,10 @@ public class ImageBuilder implements AssetBuilder {
         //should work
         Buffer<Buffer<Integer>> content = new Buffer<>(image.getWidth(), image.getHeight());
         for (int x = 0; x < content.size(); x++) {
+            //and here too!
             for (int y = 0; y < content.get(x).size(); y++) {
-                content.get(x).put(y, image.getRGB(x, y));
+                //TODO: handle generics here
+                content.get(x, c).put(y, image.getRGB(x, y), Buffer.class);
             }
         }
 

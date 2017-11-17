@@ -76,19 +76,6 @@ public class Utility {
         }
     }
 
-    public static boolean ensureExists(File file) throws IOException {
-        if (file.isDirectory()) {
-            return file.mkdirs();
-        } else {
-            File parent = file.getParentFile();
-            if (parent != null) {
-                ensureExists(parent);
-            }
-
-            return file.createNewFile();
-        }
-    }
-
     public static String getExtension(File file) {
         String[] nameArgs = file.getName().split("\\.");
         return nameArgs[nameArgs.length - 1];
@@ -105,7 +92,7 @@ public class Utility {
     }
 
     //untestable
-    public static <T> T buildFXML(InputStream inputStream, Stage preexisting) throws IOException {
+    private static <T> T buildFXML(InputStream inputStream, Stage preexisting) throws IOException {
         Stage toSet = (preexisting != null) ? preexisting : new Stage();
 
         FXMLLoader loader = new FXMLLoader();

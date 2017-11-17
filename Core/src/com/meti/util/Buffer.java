@@ -25,20 +25,12 @@ public class Buffer<T extends Serializable> implements Serializable {
         }
     }
 
-    public Buffer(int size) {
-        this.values = new Serializable[size];
-    }
-
-    public Buffer(Serializable[] values) {
-        this.values = values;
-    }
-
     public void put(int index, T obj) {
         values[index] = obj;
     }
 
-    public T get(int index) {
-        return (T) values[index];
+    public T get(int index, Class<T> c) {
+        return Utility.castIfOfInstance(values[index], c);
     }
 
     public int size() {

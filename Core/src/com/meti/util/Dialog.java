@@ -15,19 +15,10 @@ public class Dialog {
     @FXML
     private TextArea messageArea;
 
-    public void setMessageException(Exception e) {
-        StringWriter writer = new StringWriter();
-        e.printStackTrace(new PrintWriter(writer));
-        setMessageText(writer.toString());
-    }
-
     //making sure this method isn't called until messageArea has been initialized
-    public boolean setMessageText(String messageText) {
+    private void setMessageText(String messageText) {
         if (messageArea != null) {
             this.messageArea.setText(messageText);
-            return true;
-        } else {
-            return false;
         }
     }
 

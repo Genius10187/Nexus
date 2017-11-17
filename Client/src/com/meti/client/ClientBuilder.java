@@ -8,7 +8,7 @@ import javafx.stage.Stage;
 import java.io.File;
 import java.io.IOException;
 
-public class ClientBuilder {
+class ClientBuilder {
     private final Console console;
     private Client client;
 

@@ -32,7 +32,7 @@ public class Server {
     private final ServerSocket serverSocket;
     private final Console console;
 
-    private ArrayList<Client> clients = new ArrayList<>();
+    private final ArrayList<Client> clients = new ArrayList<>();
     private Action<Client> onClientDisconnect;
     private Action<Client> onClientConnect;
 
@@ -140,8 +140,10 @@ public class Server {
         private final Client client;
 
         //consider making a separate object for socket - related things here
-        public ClientHandler(Socket socket) throws IOException {
+        ClientHandler(Socket socket) throws IOException {
             this.client = new Client(socket);
+
+            clients.add(client);
         }
 
         @Override

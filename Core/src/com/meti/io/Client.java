@@ -42,7 +42,7 @@ public class Client {
         this.inputStream = new ObjectInputStream(socket.getInputStream());
     }
 
-    public void writeCommand(Command command) throws IOException {
+    private void writeCommand(Command command) throws IOException {
         write(command);
     }
 
@@ -64,11 +64,11 @@ public class Client {
         outputStream.flush();
     }
 
-    public <T> T readCommandAndCast(Class<T> c) throws Exception {
+    private <T> T readCommandAndCast(Class<T> c) throws Exception {
         return Utility.castIfOfInstance(readCommand(), c);
     }
 
-    public Object readCommand() throws Exception {
+    private Object readCommand() throws Exception {
         Object obj = read(Object.class);
         if (Exception.class.isAssignableFrom(obj.getClass())) {
             throw Exception.class.cast(obj);
