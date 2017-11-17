@@ -91,11 +91,8 @@ public class ClientDisplay {
             }
 
             if (file != null) {
-                client.write(new Command("get", "path", file.getPath()));
-                name.setText(client.readCommandAndCast(String.class));
-
-                client.write(new Command("get", "size", file.getPath()));
-                size.setText(String.valueOf(client.readCommandAndCast(Long.class)));
+                name.setText(client.requestCommand(new Command("get", "path", file.getPath()), String.class));
+                size.setText(String.valueOf(client.requestCommand(new Command("get", "size", file.getPath()), Long.class)));
 
                 supported.setText(String.valueOf(editorMap.containsKey(Utility.getExtension(file))));
             }

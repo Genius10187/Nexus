@@ -76,6 +76,11 @@ public class Client {
         }
     }
 
+    public <T> T requestCommand(Command command, Class<T> c) throws Exception {
+        writeCommand(command);
+        return readCommandAndCast(c);
+    }
+
     /**
      * <p>
      * Reads a single object specified by T.

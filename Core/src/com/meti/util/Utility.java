@@ -43,7 +43,7 @@ public class Utility {
         if (c.isAssignableFrom(obj.getClass())) {
             return c.cast(obj);
         } else {
-            return null;
+            throw new ClassCastException("Type " + obj.getClass().getName() + " does not extend or equal to class " + c.getName());
         }
     }
 
