@@ -1,7 +1,7 @@
 package com.meti;
 
 import com.meti.io.Client;
-import com.meti.io.Command;
+import com.meti.io.command.Command;
 
 import java.io.IOException;
 

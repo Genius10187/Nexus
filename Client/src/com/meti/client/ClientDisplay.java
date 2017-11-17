@@ -1,7 +1,8 @@
 package com.meti.client;
 
 import com.meti.io.Client;
-import com.meti.io.Command;
+import com.meti.io.command.GetCommand;
+import com.meti.io.command.ListCommand;
 import com.meti.util.Console;
 import com.meti.util.Utility;
 import javafx.application.Platform;
@@ -91,8 +92,11 @@ public class ClientDisplay {
             }
 
             if (file != null) {
-                name.setText(client.requestCommand(new Command("get", "path", file.getPath()), String.class));
-                size.setText(String.valueOf(client.requestCommand(new Command("get", "size", file.getPath()), Long.class)));
+                String name = client.requestCommand(new GetCommand(file, GetCommand.TYPE_PATH), String.class);
+                this.name.setText(name);
+
+                long size = client.requestCommand(new GetCommand(file, GetCommand.TYPE_SIZE), Long.class);
+                this.size.setText(String.valueOf(size));
 
                 supported.setText(String.valueOf(editorMap.containsKey(Utility.getExtension(file))));
             }
@@ -107,7 +111,7 @@ public class ClientDisplay {
         this.client = clientBuilder.getClient();
 
         //occurs after initialization
-        client.write(new Command("list", "paths"));
+        client.write(new ListCommand(ListCommand.TYPE_PATHS));
 
         //might return string here
         List<String> paths = client.readAll(String.class);

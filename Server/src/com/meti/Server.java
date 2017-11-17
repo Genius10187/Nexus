@@ -1,9 +1,8 @@
 package com.meti;
 
-import com.meti.asset.Asset;
 import com.meti.asset.AssetManager;
 import com.meti.io.Client;
-import com.meti.io.Command;
+import com.meti.io.command.Command;
 import com.meti.util.Action;
 import com.meti.util.Console;
 
@@ -15,14 +14,10 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.logging.Level;
-
-import static com.meti.util.Utility.castIfOfInstance;
 
 /**
  * @author SirMathhman
@@ -114,22 +109,6 @@ public class Server {
         return console;
     }
 
-    public ArrayList<Client> getClients() {
-        return clients;
-    }
-
-    public void runCommand(Command command) {
-        switch (command.getName().toLowerCase()) {
-            case "say":
-                String[] params = command.getParams();
-                String line = (params.length == 1) ? params[0] : Arrays.toString(params);
-                console.log(line);
-                break;
-            default:
-                console.log("Unknown command!");
-        }
-    }
-
     public AssetManager getAssetManager() {
         return assetManager;
     }
@@ -158,7 +137,6 @@ public class Server {
     }
 
     private class ClientHandler implements Runnable {
-        private final ServerCommander commander = new ServerCommander();
         private final Client client;
 
         //consider making a separate object for socket - related things here
@@ -178,7 +156,7 @@ public class Server {
                 while (!client.getSocket().isClosed()) {
                     try {
                         Command command = client.read(Command.class);
-                        commander.run(command, client);
+                        command.handle(client, Server.this);
                     } catch (SocketException | EOFException e) {
                         try {
                             console.log("Terminating connection to " + client.getSocket().getInetAddress());
@@ -202,10 +180,10 @@ public class Server {
         }
     }
 
-    private class ServerCommander implements Commander {
+   /* private class ServerCommander implements Commander {
         public void run(Command command, Client client) throws IOException {
             //make sure to put break!
-            switch (command.getName()) {
+    *//*        switch (command.getName()) {
                 case "list":
                     list(command.getParams(), client);
                     break;
@@ -215,20 +193,22 @@ public class Server {
                 default:
                     client.write(new CommandException("Cannot perform command " + command.getName()));
                     break;
-            }
+            }*//*
+
+    command.handle(client, this);
         }
 
         public void get(String[] params, Client client) throws IOException {
             File file = new File(params[1]);
             switch (params[0]) {
                 case "asset":
-                    client.write(castIfOfInstance(assetManager.getProperty(file, AssetManager.ASSET_VALUE), Asset.class));
+                    client.write(castIfOfInstance(assetManager.getProperty(file, AssetManager.PROPERTY_VALUE), Asset.class));
                     break;
                 case "path":
-                    client.write(castIfOfInstance(assetManager.getProperty(file, AssetManager.ASSET_NAME), String.class));
+                    client.write(castIfOfInstance(assetManager.getProperty(file, AssetManager.PROPERTY_PATH), String.class));
                     break;
                 case "size":
-                    client.write(castIfOfInstance(assetManager.getProperty(file, AssetManager.ASSET_SIZE), Long.class));
+                    client.write(castIfOfInstance(assetManager.getProperty(file, AssetManager.PROPERTY_SIZE), Long.class));
                     break;
                 default:
                     client.write(params[0] + " is unretrievable.");
@@ -252,5 +232,5 @@ public class Server {
                     break;
             }
         }
-    }
+    }*/
 }
