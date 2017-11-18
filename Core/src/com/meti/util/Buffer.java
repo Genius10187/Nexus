@@ -33,6 +33,18 @@ public class Buffer<T extends Serializable> implements Serializable {
         return Utility.castIfOfInstance(values[index], c);
     }
 
+    public Buffer get(int index) {
+        //assume generic of type buffer, no good way to check
+        //could use reflection...
+
+        if (values.length == 0 ||
+                Buffer.class.isAssignableFrom(values[0].getClass())) {
+            return Utility.castIfOfInstance(index, Buffer.class);
+        } else {
+            return null;
+        }
+    }
+
     public int size() {
         return values.length;
     }
