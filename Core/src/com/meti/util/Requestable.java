@@ -5,6 +5,6 @@ package com.meti.util;
  * @version 0.0.0
  * @since 11/12/2017
  */
-public interface Requestable<T> {
+interface Requestable<T> {
     void onRequest(Request<T> request);
 }

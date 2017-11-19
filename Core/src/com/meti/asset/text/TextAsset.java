@@ -9,7 +9,7 @@ import java.io.File;
  * @version 0.0.0
  * @since 11/11/2017
  */
-public class TextAsset extends Asset {
+class TextAsset extends Asset {
     public TextAsset(File location) {
         super(location);
     }

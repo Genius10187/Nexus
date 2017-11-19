@@ -56,8 +56,6 @@ public class ServerBuilder {
                 null
         );
 
-        creator.setServerBuilder(this);
-
         //see app.setOnPortChanged for possible problems
         creator.setOnMaxQueueSizeChanged(param -> maxQueueSizeToken = param);
         creator.setOnLocalAddress(param -> localAddressToken = param);

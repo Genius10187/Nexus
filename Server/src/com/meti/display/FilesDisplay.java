@@ -12,11 +12,8 @@ import java.util.HashMap;
 public class FilesDisplay {
     @FXML
     private TreeView<String> filesView;
-    private Server server;
 
     public void setServer(Server server) {
-        this.server = server;
-
         AssetManager manager = server.getAssetManager();
         ServerIndexer serverIndexer = new ServerIndexer();
 
@@ -51,7 +48,7 @@ public class FilesDisplay {
             }
         }
 
-        public TreeItem<String> getRoot() {
+        TreeItem<String> getRoot() {
             return root;
         }
     }

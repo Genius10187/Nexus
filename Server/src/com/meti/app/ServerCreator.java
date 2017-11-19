@@ -12,6 +12,7 @@ import java.net.ServerSocket;
  * @version 0.0.0
  * @since 11/7/2017
  */
+//fxml must be public
 public class ServerCreator {
     @FXML
     private TextField portField;

@@ -48,11 +48,10 @@ public class ClientDisplay {
     @FXML
     private Text supported;
 
-    private ClientBuilder clientBuilder;
     private Console console;
     private Client client;
 
-    private HashMap<File, TreeItem<String>> associations = new HashMap<>();
+    private final HashMap<File, TreeItem<String>> associations = new HashMap<>();
     private File currentFile;
 
     {
@@ -106,7 +105,6 @@ public class ClientDisplay {
     }
 
     public void loadFromClientBuilder(ClientBuilder clientBuilder) throws IOException, ClassNotFoundException {
-        this.clientBuilder = clientBuilder;
         this.console = clientBuilder.getConsole();
         this.client = clientBuilder.getClient();
 
@@ -129,7 +127,7 @@ public class ClientDisplay {
 
     @FXML
     public void openToolTip() {
-        //do something here
+        //TODO: handle tool tip
     }
 
     @FXML
@@ -144,6 +142,7 @@ public class ClientDisplay {
 
     @FXML
     public void openEditors() {
+        //TODO: handle editors
     }
 
     private class ClientIndexer {
@@ -170,7 +169,7 @@ public class ClientDisplay {
             }
         }
 
-        public TreeItem<String> getRoot() {
+        TreeItem<String> getRoot() {
             return root;
         }
     }

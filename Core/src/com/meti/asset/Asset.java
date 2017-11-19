@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.Serializable;
 
 public class Asset implements Serializable {
+    //TODO: handle assets from editors
+
     private final File location;
 
     //must be mutable

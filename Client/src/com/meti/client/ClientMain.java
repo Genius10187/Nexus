@@ -1,5 +1,6 @@
 package com.meti.client;
 
+import com.meti.io.Client;
 import com.meti.util.Console;
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -24,9 +25,12 @@ public class ClientMain extends Application {
     @Override
     public void stop() {
         try {
-            Socket socket = builder.getClient().getSocket();
-            if (socket != null) {
-                socket.close();
+            Client client = builder.getClient();
+            if (client != null) {
+                Socket socket = client.getSocket();
+                if (socket != null) {
+                    socket.close();
+                }
             }
         } catch (IOException e) {
             System.exit(-1);

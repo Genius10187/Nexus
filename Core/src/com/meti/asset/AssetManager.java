@@ -44,9 +44,13 @@ public class AssetManager {
             AssetBuilder assetBuilder = builderMap.get(extension);
 
             //might be a directory
-            if (extension != null && assetBuilder != null) {
+            if (extension != null) {
                 try {
-                    assetMap.put(file, assetBuilder.build(file));
+                    Asset asset = null;
+                    if (assetBuilder != null) {
+                        asset = assetBuilder.build(file);
+                    }
+                    assetMap.put(file, asset);
                 } catch (IOException e) {
                     console.log(e);
                 }
@@ -60,6 +64,23 @@ public class AssetManager {
 
     public Asset getValue(File file) {
         return assetMap.get(file);
+    }
+
+    public long getSize(File file) {
+        if (file.isDirectory()) {
+            File[] subFiles = file.listFiles();
+            if (subFiles != null && subFiles.length != 0) {
+                long sum = 0;
+                for (File subFile : subFiles) {
+                    sum += getSize(subFile);
+                }
+                return sum;
+            } else {
+                return 0;
+            }
+        } else {
+            return file.length();
+        }
     }
 
     public boolean isSupported(File file) {

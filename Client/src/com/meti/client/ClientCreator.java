@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
 
+//should be public, fxml must be accessible
 public class ClientCreator {
     @FXML
     private TextField addressField;

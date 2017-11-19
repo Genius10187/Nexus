@@ -9,10 +9,10 @@ import java.io.IOException;
 import java.io.Serializable;
 
 public class GetCommand extends Command {
-    public static final int TYPE_VALUE = 0;
     public static final int TYPE_PATH = 1;
     public static final int TYPE_SIZE = 2;
-    public static final int TYPE_SUPPORTED = 3;
+    private static final int TYPE_VALUE = 0;
+    private static final int TYPE_SUPPORTED = 3;
 
     private final int type;
     private final File file;
@@ -36,7 +36,7 @@ public class GetCommand extends Command {
                 obj = file.getPath();
                 break;
             case TYPE_SIZE:
-                obj = file.length();
+                obj = manager.getSize(file);
                 break;
             case TYPE_SUPPORTED:
                 obj = manager.isSupported(file);
