@@ -2,7 +2,6 @@ package com.meti.asset.image;
 
 import com.meti.asset.Asset;
 import com.meti.asset.AssetBuilder;
-import com.meti.util.Buffer;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -15,7 +14,6 @@ import java.io.IOException;
  * @since 11/11/2017
  */
 
-//TODO: handle images
 public class ImageBuilder implements AssetBuilder {
     @Override
     public String[] getExtensions() {
@@ -30,16 +28,10 @@ public class ImageBuilder implements AssetBuilder {
         BufferedImage image = ImageIO.read(file);
 
         //should work
-        Buffer<Buffer<Integer>> content = new Buffer<>(image.getWidth(), image.getHeight());
-        for (int x = 0; x < content.size(); x++) {
-            //and here too!
-            Buffer genBuffer = content.get(x);
-
-            //TODO: handle generic test here
-            Buffer<Integer> subBuffer = (Buffer<Integer>) genBuffer;
-            for (int y = 0; y < subBuffer.size(); y++) {
-                //TODO: handle generics here
-                subBuffer.put(y, image.getRGB(x, y));
+        int[][] content = new int[image.getWidth()][image.getHeight()];
+        for (int x = 0; x < image.getWidth(); x++) {
+            for (int y = 0; y < image.getHeight(); y++) {
+                content[x][y] = image.getRGB(x, y);
             }
         }
 
