@@ -18,6 +18,7 @@ public class ClientCreator {
 
     @FXML
     private TextField portField;
+
     private ClientBuilder clientBuilder;
 
     @FXML

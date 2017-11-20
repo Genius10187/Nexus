@@ -17,6 +17,8 @@ import java.util.PriorityQueue;
  * A Client object specifies a unique handling to transfer information across sockets.
  */
 public class Client {
+    //TODO: put splitObjectInputStream here
+
     //should the type be of PriorityQueue?
     private final PriorityQueue<Object> inputBuffer = new PriorityQueue<>();
     private final ObjectOutputStream outputStream;

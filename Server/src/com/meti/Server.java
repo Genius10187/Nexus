@@ -3,12 +3,14 @@ package com.meti;
 import com.meti.asset.AssetManager;
 import com.meti.io.Client;
 import com.meti.io.command.Command;
+import com.meti.io.split.SplitObjectInputStream;
 import com.meti.util.Action;
 import com.meti.util.Console;
 
 import java.io.EOFException;
 import java.io.File;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -137,11 +139,13 @@ public class Server {
     }
 
     private class ClientHandler implements Runnable {
+        private final SplitObjectInputStream inputStream;
         private final Client client;
 
         //consider making a separate object for socket - related things here
         ClientHandler(Socket socket) throws IOException {
             this.client = new Client(socket);
+            this.inputStream = new SplitObjectInputStream(new ObjectInputStream(socket.getInputStream()));
 
             clients.add(client);
         }
@@ -155,8 +159,12 @@ public class Server {
                     onClientConnect.act(client);
                 }
 
+                inputStream.listen();
+
                 while (!client.getSocket().isClosed()) {
                     try {
+                        ObjectInputStream commandStream = inputStream.forClass(Command.class);
+
                         Command command = client.read(Command.class);
                         command.handle(client, Server.this);
                     } catch (SocketException | EOFException e) {
