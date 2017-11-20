@@ -1,14 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.text.*?>
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TreeView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Text?>
 
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8"
-            fx:controller="com.meti.client.ClientDisplay">
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="400.0" prefWidth="600.0"
+            xmlns="http://javafx.com/javafx/8.0.121" fx:controller="com.meti.client.ClientDisplay">
     <BorderPane prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
                 AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <top>
@@ -47,8 +53,8 @@
                       GridPane.halignment="CENTER" GridPane.rowIndex="1"/>
                 <Text fx:id="supported" strokeType="OUTSIDE" strokeWidth="0.0" GridPane.columnIndex="1"
                       GridPane.halignment="CENTER" GridPane.rowIndex="2"/>
-                <Button mnemonicParsing="false" onAction="#openEditors" text="Open Editor"
-                        GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="3"/>
+                <Button mnemonicParsing="false" onAction="#openEditors" text="Open Editor" GridPane.columnSpan="2"
+                        GridPane.halignment="CENTER" GridPane.rowIndex="3"/>
             </GridPane>
         </center>
         <left>

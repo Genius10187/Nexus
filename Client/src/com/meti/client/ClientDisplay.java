@@ -1,5 +1,6 @@
 package com.meti.client;
 
+import com.meti.asset.Asset;
 import com.meti.io.Client;
 import com.meti.io.command.GetCommand;
 import com.meti.io.command.ListCommand;
@@ -7,79 +8,47 @@ import com.meti.util.Console;
 import com.meti.util.Utility;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.scene.control.ListView;
-import javafx.scene.control.Tooltip;
+import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
-import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
+import java.util.ResourceBundle;
 
 /**
  * @author SirMathhman
  * @version 0.0.0
  * @since 11/12/2017
  */
-public class ClientDisplay {
+public class ClientDisplay implements Initializable {
     private final HashMap<String, Editor> editorMap = new HashMap<>();
-
+    private final HashMap<String, Stage> editorStageMap = new HashMap<>();
+    private final HashMap<File, TreeItem<String>> associations = new HashMap<>();
     @FXML
     private TreeView<String> fileView;
-
-    @FXML
-    private Tooltip editToolTip;
-
-    @FXML
-    private ListView<String> editorOptions;
-
-    @FXML
-    private GridPane fileDataPane;
-
     @FXML
     private Text name;
-
     @FXML
     private Text size;
-
     @FXML
     private Text supported;
-
     private Console console;
     private Client client;
-
-    private final HashMap<File, TreeItem<String>> associations = new HashMap<>();
     private File currentFile;
-
-    {
-        try {
-            List<File> classFiles = Utility.search(new File("Client"), "java");
-            for (File classFile : classFiles) {
-                Class<?> c = Utility.getClassFromFile(new File("Client\\src"), classFile);
-                if (Editor.class.isAssignableFrom(c) && !c.getName().equals("com.meti.client.Editor")) {
-                    Editor instance = (Editor) c.newInstance();
-                    String[] extensions = instance.getExtensions();
-                    for (String ext : extensions) {
-                        editorMap.put(ext, instance);
-                    }
-                }
-            }
-        } catch (Exception e) {
-            if (console != null) {
-                console.log(e);
-            } else {
-                e.printStackTrace();
-            }
-        }
-    }
-
 
     @FXML
     public void changeFile() {
         try {
+            //TODO: multi file capability
             TreeItem<String> pathItem = fileView.getSelectionModel().getSelectedItems().get(0);
             File file = null;
 
@@ -98,6 +67,8 @@ public class ClientDisplay {
                 this.size.setText(String.valueOf(size));
 
                 supported.setText(String.valueOf(editorMap.containsKey(Utility.getExtension(file))));
+
+                currentFile = file;
             }
         } catch (Exception e) {
             console.log(e);
@@ -122,14 +93,9 @@ public class ClientDisplay {
         fileView.setRoot(indexer.getRoot());
         fileView.setShowRoot(false);
     }
+
     //A CHANGE
     //SOMETIMES WE NEED A REBASE GIT SCREWED UP AGAIN CURSE YOU WORLD
-
-    @FXML
-    public void openToolTip() {
-        //TODO: handle tool tip
-    }
-
     @FXML
     public void sendReport() {
         //TODO: send report
@@ -142,7 +108,48 @@ public class ClientDisplay {
 
     @FXML
     public void openEditors() {
-        //TODO: handle editors
+        try {
+            String ext = Utility.getExtension(currentFile);
+
+            Editor editor = editorMap.get(ext);
+            editor.load(client.requestCommand(new GetCommand(currentFile, GetCommand.TYPE_VALUE), Asset.class));
+            editorStageMap.get(ext).show();
+        } catch (Exception e) {
+            console.log(e);
+        }
+    }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        try {
+            List<File> classFiles = Utility.search(new File("Client\\assets\\fxml\\editor"), "fxml");
+            for (File classFile : classFiles) {
+                FXMLLoader loader = new FXMLLoader(classFile.toURI().toURL());
+
+                Parent parent = loader.load();
+                Object controller = loader.getController();
+                if (controller instanceof Editor) {
+                    Editor editor = (Editor) controller;
+
+                    Scene scene = new Scene(parent);
+                    Stage stage = new Stage();
+
+                    stage.setScene(scene);
+                    editor.setStage(stage);
+
+                    for (String ext : editor.getExtensions()) {
+                        editorMap.put(ext, editor);
+                        editorStageMap.put(ext, stage);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            if (console != null) {
+                console.log(e);
+            } else {
+                e.printStackTrace();
+            }
+        }
     }
 
     private class ClientIndexer {

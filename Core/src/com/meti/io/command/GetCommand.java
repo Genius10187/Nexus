@@ -11,7 +11,7 @@ import java.io.Serializable;
 public class GetCommand extends Command {
     public static final int TYPE_PATH = 1;
     public static final int TYPE_SIZE = 2;
-    private static final int TYPE_VALUE = 0;
+    public static final int TYPE_VALUE = 0;
     private static final int TYPE_SUPPORTED = 3;
 
     private final int type;

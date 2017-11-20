@@ -114,7 +114,6 @@ public class Server {
     }
 
     private class ClientListener implements Runnable {
-
         @Override
         public void run() {
             console.log("Listening for clients");
@@ -125,6 +124,7 @@ public class Server {
                         Socket socket = serverSocket.accept();
                         service.submit(new ClientHandler(socket));
                     } catch (SocketException e) {
+                        //probably should handle this
                         break;
                     } catch (IOException e) {
                         console.log(e);
@@ -181,58 +181,4 @@ public class Server {
             }
         }
     }
-
-   /* private class ServerCommander implements Commander {
-        public void run(Command command, Client client) throws IOException {
-            //make sure to put break!
-    *//*        switch (command.getName()) {
-                case "list":
-                    list(command.getParams(), client);
-                    break;
-                case "get":
-                    get(command.getParams(), client);
-                    break;
-                default:
-                    client.write(new CommandException("Cannot perform command " + command.getName()));
-                    break;
-            }*//*
-
-    command.handle(client, this);
-        }
-
-        public void get(String[] params, Client client) throws IOException {
-            File file = new File(params[1]);
-            switch (params[0]) {
-                case "asset":
-                    client.write(castIfOfInstance(assetManager.getProperty(file, AssetManager.PROPERTY_VALUE), Asset.class));
-                    break;
-                case "path":
-                    client.write(castIfOfInstance(assetManager.getProperty(file, AssetManager.PROPERTY_PATH), String.class));
-                    break;
-                case "size":
-                    client.write(castIfOfInstance(assetManager.getProperty(file, AssetManager.PROPERTY_SIZE), Long.class));
-                    break;
-                default:
-                    client.write(params[0] + " is unretrievable.");
-            }
-        }
-
-        public void list(String[] params, Client client) throws IOException {
-            switch (params[0]) {
-                case "paths":
-                    List<String> paths = new ArrayList<>();
-                    Set<File> files = assetManager.getFiles();
-
-                    for (File file : files) {
-                        paths.add(file.getPath());
-                    }
-
-                    client.writeAll(paths);
-                    break;
-                default:
-                    client.write(params[0] + " is unlistable.");
-                    break;
-            }
-        }
-    }*/
 }
