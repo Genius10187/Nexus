@@ -1,6 +1,10 @@
 package com.meti.io.split;
 
-import java.io.*;
+import com.meti.io.PipedStream;
+
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.HashMap;
 
 public class SplitObjectInputStream {
@@ -8,8 +12,7 @@ public class SplitObjectInputStream {
 
     private ObjectInputStream inputStream;
 
-    private HashMap<Class, ObjectInputStream> objectInputStreamHashMap = new HashMap<>();
-    private HashMap<Class, ObjectOutputStream> objectOutputStreamHashMap = new HashMap<>();
+    private HashMap<Class, PipedStream> channelMap = new HashMap<>();
 
     public SplitObjectInputStream(ObjectInputStream inputStream) {
         this.inputStream = inputStream;
@@ -23,28 +26,22 @@ public class SplitObjectInputStream {
         return runnable;
     }
 
-    public void createPipe(Class<?> c) throws IOException {
+    private void createPipe(Class<?> c) throws IOException {
         //possible bug here, not sure if I understand this correctly
-        PipedInputStream pipedInputStream = new PipedInputStream();
-        PipedOutputStream pipedOutputStream = new PipedOutputStream(pipedInputStream);
-
-        ObjectInputStream pipedObjectInputStream = new ObjectInputStream(pipedInputStream);
-        ObjectOutputStream pipedObjectOutputStream = new ObjectOutputStream(pipedOutputStream);
-
-        objectInputStreamHashMap.put(c, pipedObjectInputStream);
-        objectOutputStreamHashMap.put(c, pipedObjectOutputStream);
+        //easy method
+        channelMap.put(c, new PipedStream());
     }
 
     public ObjectInputStream forClass(Class<?> c) {
         if (listening) {
-            return objectInputStreamHashMap.get(c);
+            //should we really consider returning the channel object instead?
+            return channelMap.get(c).getObjectInputStream();
         } else {
             throw new IllegalStateException("Stream is not listening yet!");
         }
     }
 
     //consider listen method, if application doesn't have runnable
-
     public void setListening(boolean listening) {
         this.listening = listening;
     }
@@ -61,15 +58,16 @@ public class SplitObjectInputStream {
 
                     ObjectOutputStream outputStream;
 
-                    if (objectOutputStreamHashMap.containsKey(c)) {
-                        outputStream = objectOutputStreamHashMap.get(c);
+                    if (channelMap.containsKey(c)) {
+                        outputStream = channelMap.get(c).getObjectOutputStream();
                     } else {
                         createPipe(c);
-                        outputStream = objectOutputStreamHashMap.get(c);
+                        outputStream = channelMap.get(c).getObjectOutputStream();
                     }
 
                     outputStream.writeObject(obj);
                 } catch (IOException | ClassNotFoundException e) {
+                    //TODO: exception callback
                     e.printStackTrace();
                 }
             }

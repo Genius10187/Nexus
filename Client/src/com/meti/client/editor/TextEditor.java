@@ -1,11 +1,13 @@
 package com.meti.client.editor;
 
 import com.meti.asset.Asset;
+import com.meti.asset.text.TextChange;
 import com.meti.client.Editor;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -32,8 +34,7 @@ public class TextEditor extends Editor {
     @Override
     public void load(Asset asset) {
         ArrayList content = (ArrayList) asset.getContent();
-        for (int i = 0; i < content.size(); i++) {
-            Object obj = content.get(i);
+        for (Object obj : content) {
             if (obj instanceof String) {
                 output.appendText(obj + "\n");
             }
@@ -44,5 +45,11 @@ public class TextEditor extends Editor {
     @Override
     public void change() {
         //TODO: text change
+        try {
+            TextChange change = new TextChange();
+            client.write(change);
+        } catch (IOException e) {
+            console.log(e);
+        }
     }
 }

@@ -140,14 +140,13 @@ public class Server {
     }
 
     private class ClientHandler implements Runnable {
-        private final SplitObjectInputStream parentInputStream;
         private final Client client;
 
         //consider making a separate object for socket - related things here
-        ClientHandler(Socket socket) throws IOException {
+        public ClientHandler(Socket socket) throws IOException {
             this.client = new Client(socket);
-            this.parentInputStream = new SplitObjectInputStream(new ObjectInputStream(socket.getInputStream()));
 
+            //no "this" keyword, would refer to inner class
             clients.add(client);
         }
 
@@ -160,6 +159,7 @@ public class Server {
                     onClientConnect.act(client);
                 }
 
+                SplitObjectInputStream parentInputStream = client.getParentInputStream();
                 service.submit(parentInputStream.getRunnable());
 
 
@@ -168,7 +168,8 @@ public class Server {
                         //handle commands here
                         ObjectInputStream commandStream = parentInputStream.forClass(Command.class);
 
-                        Command command = client.read(Command.class);
+                        //TODO: implement better format for this action
+                        Command command = (Command) commandStream.readObject();
                         command.handle(client, Server.this);
                     } catch (SocketException | EOFException e) {
                         try {
@@ -178,7 +179,9 @@ public class Server {
                             console.log(e1);
                         }
                     } catch (Exception e) {
-                        client.write(e);
+                        //THIS IS WAYYYY TOO MANY NESTED CALLS
+                        //TODO: handle nested calls
+                        client.getParentOutputStream().getDefaultChannel().getObjectOutputStream().write(e);
                     }
                 }
 
@@ -206,7 +209,7 @@ public class Server {
                 Object obj = changeStream.readObject();
                 if (AssetChange.class.isAssignableFrom(obj.getClass())) {
                     AssetChange change = AssetChange.class.cast(obj);
-
+                    System.out.println(change);
                 } else {
                     console.log("Object of type " + obj.getClass() + " is not valid in asset change stream!");
                 }

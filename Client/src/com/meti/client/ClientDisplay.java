@@ -18,7 +18,6 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.io.File;
-import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
@@ -44,6 +43,41 @@ public class ClientDisplay implements Initializable {
     private Console console;
     private Client client;
     private File currentFile;
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        try {
+            List<File> classFiles = Utility.search(new File("Client\\assets\\fxml\\editor"), "fxml");
+            for (File classFile : classFiles) {
+                FXMLLoader loader = new FXMLLoader(classFile.toURI().toURL());
+
+                Parent parent = loader.load();
+                Object controller = loader.getController();
+                if (controller instanceof Editor) {
+                    Editor editor = (Editor) controller;
+                    editor.setClient(client);
+                    editor.setConsole(console);
+
+                    Scene scene = new Scene(parent);
+                    Stage stage = new Stage();
+
+                    stage.setScene(scene);
+                    editor.setStage(stage);
+
+                    for (String ext : editor.getExtensions()) {
+                        editorMap.put(ext, editor);
+                        editorStageMap.put(ext, stage);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            if (console != null) {
+                console.log(e);
+            } else {
+                e.printStackTrace();
+            }
+        }
+    }
 
     @FXML
     public void changeFile() {
@@ -75,7 +109,7 @@ public class ClientDisplay implements Initializable {
         }
     }
 
-    public void loadFromClientBuilder(ClientBuilder clientBuilder) throws IOException, ClassNotFoundException {
+    public void loadFromClientBuilder(ClientBuilder clientBuilder) {
         this.console = clientBuilder.getConsole();
         this.client = clientBuilder.getClient();
 
@@ -94,8 +128,6 @@ public class ClientDisplay implements Initializable {
         fileView.setShowRoot(false);
     }
 
-    //A CHANGE
-    //SOMETIMES WE NEED A REBASE GIT SCREWED UP AGAIN CURSE YOU WORLD
     @FXML
     public void sendReport() {
         //TODO: send report
@@ -116,39 +148,6 @@ public class ClientDisplay implements Initializable {
             editorStageMap.get(ext).show();
         } catch (Exception e) {
             console.log(e);
-        }
-    }
-
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        try {
-            List<File> classFiles = Utility.search(new File("Client\\assets\\fxml\\editor"), "fxml");
-            for (File classFile : classFiles) {
-                FXMLLoader loader = new FXMLLoader(classFile.toURI().toURL());
-
-                Parent parent = loader.load();
-                Object controller = loader.getController();
-                if (controller instanceof Editor) {
-                    Editor editor = (Editor) controller;
-
-                    Scene scene = new Scene(parent);
-                    Stage stage = new Stage();
-
-                    stage.setScene(scene);
-                    editor.setStage(stage);
-
-                    for (String ext : editor.getExtensions()) {
-                        editorMap.put(ext, editor);
-                        editorStageMap.put(ext, stage);
-                    }
-                }
-            }
-        } catch (Exception e) {
-            if (console != null) {
-                console.log(e);
-            } else {
-                e.printStackTrace();
-            }
         }
     }
 

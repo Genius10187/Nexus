@@ -1,31 +1,26 @@
 package com.meti.io;
 
-import com.meti.io.command.Command;
+import com.meti.io.channel.Channel;
+import com.meti.io.channel.InputChannelImplFactory;
 import com.meti.io.split.SplitObjectInputStream;
-import com.meti.util.Utility;
+import com.meti.io.split.SplitObjectOutputStream;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.PriorityQueue;
 
 /**
  * A Client object specifies a unique handling to transfer information across sockets.
  */
-public class Client {
-    //TODO: put splitObjectInputStream here
-    private SplitObjectInputStream parentInputStream;
-
-    //should the type be of PriorityQueue?
-    private final PriorityQueue<Object> inputBuffer = new PriorityQueue<>();
-    private final ObjectOutputStream outputStream;
-    private final ObjectInputStream inputStream;
+public class Client implements Channel {
     private final Socket socket;
+    //TODO: put splitObjectInputStream here
+    private final SplitObjectInputStream parentInputStream;
+    private final SplitObjectOutputStream parentOutputStream;
+
+    private final InputChannelImplFactory.InputChannelImpl inputChannelImpl;
 
     /**
      * <p>
@@ -42,14 +37,22 @@ public class Client {
     public Client(Socket socket) throws IOException {
         this.socket = socket;
 
-        this.outputStream = new ObjectOutputStream(socket.getOutputStream());
-        this.inputStream = new ObjectInputStream(socket.getInputStream());
+        //10 / 10 should work
+        this.parentInputStream = new SplitObjectInputStream(new ObjectInputStream(socket.getInputStream()));
+        this.parentOutputStream = new SplitObjectOutputStream(new ObjectOutputStream(socket.getOutputStream()));
 
-        this.parentInputStream = new SplitObjectInputStream(inputStream);
+        //TODO: handle channel creation here
+        this.inputChannelImpl = InputChannelImplFactory.create();
     }
 
-    private void writeCommand(Command command) throws IOException {
-        write(command);
+    @Override
+    public <T> T read(Class<T> c) {
+        return null;
+    }
+
+    @Override
+    public Serializable read() {
+        return null;
     }
 
     /**
@@ -65,124 +68,6 @@ public class Client {
      * @param serializable The object
      * @throws IOException If an error occurred
      */
-    public void write(Serializable serializable) throws IOException {
-        outputStream.writeUnshared(serializable);
-        outputStream.flush();
-    }
-
-    private <T> T readCommandAndCast(Class<T> c) throws Exception {
-        return Utility.castIfOfInstance(readCommand(), c);
-    }
-
-    private Object readCommand() throws Exception {
-        Object obj = read(Object.class);
-        if (Exception.class.isAssignableFrom(obj.getClass())) {
-            throw Exception.class.cast(obj);
-        } else {
-            return obj;
-        }
-    }
-
-    public <T> T requestCommand(Command command, Class<T> c) throws Exception {
-        writeCommand(command);
-        return readCommandAndCast(c);
-    }
-
-    /**
-     * <p>
-     * Reads a single object specified by T.
-     * The parameter c must be specified the same as type T.
-     * If the input buffer contains an object of type T,
-     * that object will be returned instead of reading a new one.
-     * If the input buffer does not contain an object of type T,
-     * then the ObjectInputStream will read a new object.
-     * Any other objects not of type T that appear before the object of type T
-     * will be added to the input buffer.
-     * A ClassNotFoundException is thrown when the class specified by the parameter c
-     * does not exist. This exception should never be thrown, unless the class specified
-     * is not accessible in runtime.
-     * </p>
-     *
-     * @param c   The class with type T
-     * @param <T> The type of the object receive
-     * @return The next object of type T
-     * @throws IOException            See {@link ObjectInputStream#readObject()}
-     * @throws ClassNotFoundException If the class specified by T does not exist
-     */
-    public <T> T read(Class<T> c) throws IOException, ClassNotFoundException {
-        T obj = null;
-
-        for (Object o : inputBuffer) {
-            T result = Utility.castIfOfInstance(o, c);
-            if (result != null) {
-                obj = result;
-
-                //making sure we remove the object
-                inputBuffer.remove(o);
-                break;
-            }
-        }
-
-        while (obj == null) {
-            Object nextToken = inputStream.readObject();
-            T result = Utility.castIfOfInstance(nextToken, c);
-            if (result != null) {
-                obj = result;
-                break;
-            } else {
-                inputBuffer.add(nextToken);
-            }
-        }
-        return obj;
-    }
-
-    /**
-     * <p>
-     * Reads a defined number of objects specified by an incoming integer, which represents the size.
-     * Then returns an ArrayList composed of all objects read of type T.
-     * Uses {@link #read(Class)}
-     * </p>
-     *
-     * @param c   The class with type T
-     * @param <T> The type of the object to receive
-     * @return The objects read of type T
-     * @throws IOException            See {@link #read(Class)}
-     * @throws ClassNotFoundException See {@link #read(Class)}
-     */
-    public <T extends Serializable> List<T> readAll(Class<T> c) throws IOException, ClassNotFoundException {
-        int size = read(Integer.class);
-        List<T> objects = new ArrayList<>();
-
-        for (int i = 0; i < size; i++) {
-            T serializable = read(c);
-            objects.add(serializable);
-        }
-
-        return objects;
-    }
-
-    /**
-     * <p>
-     * Writes all objects specified by the parameters.
-     * First, the size of the objects is written.
-     * Next, each object is written.
-     * Then the stream is flushed.
-     * Should be used in conjunction with {@link #readAll(Class)}.
-     * </p>
-     *
-     * @param objects The objects to be written.
-     * @throws IOException {@link java.io.ObjectOutputStream#writeUnshared(Object)}
-     */
-    public void writeAll(Collection<? extends Serializable> objects) throws IOException {
-        int size = objects.size();
-
-        outputStream.writeUnshared(size);
-        for (Serializable serializable : objects) {
-            outputStream.writeUnshared(serializable);
-        }
-
-        outputStream.flush();
-    }
 
     /**
      * Returns the socket
@@ -191,5 +76,28 @@ public class Client {
      */
     public Socket getSocket() {
         return socket;
+    }
+
+    @Override
+    public Serializable[] readAll() {
+        return new Serializable[0];
+    }
+
+    @Override
+    public void write(Serializable serializable) {
+
+    }
+
+    @Override
+    public void write(Serializable... serializables) {
+
+    }
+
+    public SplitObjectInputStream getParentInputStream() {
+        return parentInputStream;
+    }
+
+    public SplitObjectOutputStream getParentOutputStream() {
+        return parentOutputStream;
     }
 }
