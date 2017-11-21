@@ -1,5 +1,6 @@
 package com.meti;
 
+import com.meti.asset.AssetChange;
 import com.meti.asset.AssetManager;
 import com.meti.io.Client;
 import com.meti.io.command.Command;
@@ -139,13 +140,13 @@ public class Server {
     }
 
     private class ClientHandler implements Runnable {
-        private final SplitObjectInputStream inputStream;
+        private final SplitObjectInputStream parentInputStream;
         private final Client client;
 
         //consider making a separate object for socket - related things here
         ClientHandler(Socket socket) throws IOException {
             this.client = new Client(socket);
-            this.inputStream = new SplitObjectInputStream(new ObjectInputStream(socket.getInputStream()));
+            this.parentInputStream = new SplitObjectInputStream(new ObjectInputStream(socket.getInputStream()));
 
             clients.add(client);
         }
@@ -159,11 +160,13 @@ public class Server {
                     onClientConnect.act(client);
                 }
 
-                inputStream.listen();
+                service.submit(parentInputStream.getRunnable());
+
 
                 while (!client.getSocket().isClosed()) {
                     try {
-                        ObjectInputStream commandStream = inputStream.forClass(Command.class);
+                        //handle commands here
+                        ObjectInputStream commandStream = parentInputStream.forClass(Command.class);
 
                         Command command = client.read(Command.class);
                         command.handle(client, Server.this);
@@ -185,6 +188,29 @@ public class Server {
                     onClientDisconnect.act(client);
                 }
             } catch (Exception e) {
+                console.log(e);
+            }
+        }
+    }
+
+    private class ChangeListener implements Runnable {
+        private final ObjectInputStream changeStream;
+
+        public ChangeListener(ObjectInputStream changeStream) {
+            this.changeStream = changeStream;
+        }
+
+        @Override
+        public void run() {
+            try {
+                Object obj = changeStream.readObject();
+                if (AssetChange.class.isAssignableFrom(obj.getClass())) {
+                    AssetChange change = AssetChange.class.cast(obj);
+
+                } else {
+                    console.log("Object of type " + obj.getClass() + " is not valid in asset change stream!");
+                }
+            } catch (IOException | ClassNotFoundException e) {
                 console.log(e);
             }
         }

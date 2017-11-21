@@ -39,4 +39,10 @@ public class TextEditor extends Editor {
             }
         }
     }
+
+    @FXML
+    @Override
+    public void change() {
+        //TODO: text change
+    }
 }

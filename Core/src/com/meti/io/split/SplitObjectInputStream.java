@@ -15,7 +15,7 @@ public class SplitObjectInputStream {
         this.inputStream = inputStream;
     }
 
-    public Runnable listen() {
+    public Runnable getRunnable() {
         listening = true;
 
         ListenRunnable runnable = new ListenRunnable();
@@ -43,25 +43,35 @@ public class SplitObjectInputStream {
         }
     }
 
+    //consider listen method, if application doesn't have runnable
+
+    public void setListening(boolean listening) {
+        this.listening = listening;
+    }
+
     private class ListenRunnable implements Runnable {
         @Override
         public void run() {
-            try {
-                Object obj = inputStream.readObject();
-                Class<?> c = obj.getClass();
+            listening = true;
 
-                ObjectOutputStream outputStream;
+            while (listening) {
+                try {
+                    Object obj = inputStream.readObject();
+                    Class<?> c = obj.getClass();
 
-                if (objectOutputStreamHashMap.containsKey(c)) {
-                    outputStream = objectOutputStreamHashMap.get(c);
-                } else {
-                    createPipe(c);
-                    outputStream = objectOutputStreamHashMap.get(c);
+                    ObjectOutputStream outputStream;
+
+                    if (objectOutputStreamHashMap.containsKey(c)) {
+                        outputStream = objectOutputStreamHashMap.get(c);
+                    } else {
+                        createPipe(c);
+                        outputStream = objectOutputStreamHashMap.get(c);
+                    }
+
+                    outputStream.writeObject(obj);
+                } catch (IOException | ClassNotFoundException e) {
+                    e.printStackTrace();
                 }
-
-                outputStream.writeObject(obj);
-            } catch (IOException | ClassNotFoundException e) {
-                e.printStackTrace();
             }
         }
     }

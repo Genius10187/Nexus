@@ -1,6 +1,7 @@
 package com.meti.io;
 
 import com.meti.io.command.Command;
+import com.meti.io.split.SplitObjectInputStream;
 import com.meti.util.Utility;
 
 import java.io.IOException;
@@ -18,6 +19,7 @@ import java.util.PriorityQueue;
  */
 public class Client {
     //TODO: put splitObjectInputStream here
+    private SplitObjectInputStream parentInputStream;
 
     //should the type be of PriorityQueue?
     private final PriorityQueue<Object> inputBuffer = new PriorityQueue<>();
@@ -42,6 +44,8 @@ public class Client {
 
         this.outputStream = new ObjectOutputStream(socket.getOutputStream());
         this.inputStream = new ObjectInputStream(socket.getInputStream());
+
+        this.parentInputStream = new SplitObjectInputStream(inputStream);
     }
 
     private void writeCommand(Command command) throws IOException {

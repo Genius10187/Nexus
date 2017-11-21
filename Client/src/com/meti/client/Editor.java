@@ -4,7 +4,6 @@ import com.meti.asset.Asset;
 import javafx.stage.Stage;
 
 import java.io.File;
-import java.io.IOException;
 
 /**
  * @author SirMathhman
@@ -14,7 +13,7 @@ import java.io.IOException;
 public abstract class Editor {
     private Stage stage;
 
-    public void loadFXML() throws IOException {
+    public void loadFXML() {
 
     }
 
@@ -23,6 +22,8 @@ public abstract class Editor {
     public abstract String[] getExtensions();
 
     public abstract void load(Asset asset);
+
+    public abstract void change();
 
     public void setStage(Stage stage) {
         this.stage = stage;

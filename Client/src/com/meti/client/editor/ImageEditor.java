@@ -50,4 +50,10 @@ public class ImageEditor extends Editor {
 
         imageView.setImage(image);
     }
+
+    @FXML
+    @Override
+    public void change() {
+
+    }
 }

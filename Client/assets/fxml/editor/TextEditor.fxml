@@ -1,16 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="400.0" prefWidth="600.0"
-            xmlns="http://javafx.com/javafx/8.0.111" fx:controller="com.meti.client.editor.TextEditor">
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8"
+            fx:controller="com.meti.client.editor.TextEditor">
     <children>
         <ScrollPane fitToHeight="true" fitToWidth="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
                     AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <content>
-                <TextArea fx:id="output" prefHeight="400.0" prefWidth="600.0"/>
+                <TextArea fx:id="output" onKeyPressed="#change" prefHeight="400.0" prefWidth="600.0"/>
             </content>
         </ScrollPane>
     </children>
