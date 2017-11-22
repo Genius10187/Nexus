@@ -47,7 +47,7 @@ public class TextEditor extends Editor {
         //TODO: text change
         try {
             TextChange change = new TextChange();
-            client.write(change);
+            client.writeAll(change);
         } catch (IOException e) {
             console.log(e);
         }

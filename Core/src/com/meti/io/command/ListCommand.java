@@ -32,7 +32,7 @@ public class ListCommand extends Command {
                 client.writeAll(paths);
                 break;
             default:
-                client.write(new IllegalArgumentException("Type " + type + " does not exist "));
+                client.writeAll(new IllegalArgumentException("Type " + type + " does not exist "));
                 break;
         }
     }

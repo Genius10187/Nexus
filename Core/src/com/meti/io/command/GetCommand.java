@@ -46,6 +46,6 @@ public class GetCommand extends Command {
                 break;
         }
 
-        client.write(obj);
+        client.writeAll(obj);
     }
 }

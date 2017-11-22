@@ -114,7 +114,7 @@ public class ClientDisplay implements Initializable {
         this.client = clientBuilder.getClient();
 
         //occurs after initialization
-        client.write(new ListCommand(ListCommand.TYPE_PATHS));
+        client.writeAll(new ListCommand(ListCommand.TYPE_PATHS));
 
         //might return string here
         List<String> paths = client.readAll(String.class);

@@ -1,7 +1,10 @@
 package com.meti.io;
 
 import com.meti.io.channel.Channel;
-import com.meti.io.channel.InputChannelImplFactory;
+import com.meti.io.channel.in.InputChannelImplFactory;
+import com.meti.io.channel.in.InputChannelImplFactory.InputChannelImpl;
+import com.meti.io.channel.out.OutputChannelImplFactory;
+import com.meti.io.channel.out.OutputChannelImplFactory.OutputChannelImpl;
 import com.meti.io.split.SplitObjectInputStream;
 import com.meti.io.split.SplitObjectOutputStream;
 
@@ -20,7 +23,8 @@ public class Client implements Channel {
     private final SplitObjectInputStream parentInputStream;
     private final SplitObjectOutputStream parentOutputStream;
 
-    private final InputChannelImplFactory.InputChannelImpl inputChannelImpl;
+    private final InputChannelImpl inputChannelImpl;
+    private final OutputChannelImpl outputChannelImpl;
 
     /**
      * <p>
@@ -41,56 +45,37 @@ public class Client implements Channel {
         this.parentInputStream = new SplitObjectInputStream(new ObjectInputStream(socket.getInputStream()));
         this.parentOutputStream = new SplitObjectOutputStream(new ObjectOutputStream(socket.getOutputStream()));
 
-        //TODO: handle channel creation here
-        this.inputChannelImpl = InputChannelImplFactory.create();
+        this.inputChannelImpl = InputChannelImplFactory.create(parentOutputStream.getDefaultChannel());
+        this.outputChannelImpl = OutputChannelImplFactory.create(parentOutputStream.getDefaultChannel());
     }
 
     @Override
-    public <T> T read(Class<T> c) {
-        return null;
+    public <T> T read(Class<T> c) throws IOException, ClassNotFoundException {
+        return inputChannelImpl.read(c);
     }
 
     @Override
-    public Serializable read() {
-        return null;
+    public Serializable read() throws IOException, ClassNotFoundException {
+        return inputChannelImpl.read();
     }
 
-    /**
-     * <p>
-     * Writes an object through the socket.
-     * The object must implement serializable,
-     * such that serialization can occur.
-     * The stream is then flushed.
-     * <p>
-     * See also {@link java.io.ObjectOutputStream#writeUnshared(Object)}
-     * </p>
-     *
-     * @param serializable The object
-     * @throws IOException If an error occurred
-     */
+    @Override
+    public Serializable[] readAll() throws IOException, ClassNotFoundException {
+        return inputChannelImpl.readAll();
+    }
 
-    /**
-     * Returns the socket
-     *
-     * @return The socket
-     */
+    @Override
+    public void write(Serializable serializable) throws IOException {
+        outputChannelImpl.write(serializable);
+    }
+
+    @Override
+    public void writeAll(Serializable... serializables) throws IOException {
+        outputChannelImpl.writeAll(serializables);
+    }
+
     public Socket getSocket() {
         return socket;
-    }
-
-    @Override
-    public Serializable[] readAll() {
-        return new Serializable[0];
-    }
-
-    @Override
-    public void write(Serializable serializable) {
-
-    }
-
-    @Override
-    public void write(Serializable... serializables) {
-
     }
 
     public SplitObjectInputStream getParentInputStream() {
