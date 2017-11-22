@@ -42,10 +42,6 @@ public class SplitObjectInputStream {
     }
 
     //consider listen method, if application doesn't have runnable
-    public void setListening(boolean listening) {
-        this.listening = listening;
-    }
-
     private class ListenRunnable implements Runnable {
         @Override
         public void run() {

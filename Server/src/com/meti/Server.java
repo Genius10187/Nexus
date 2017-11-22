@@ -125,7 +125,13 @@ public class Server {
                 if (!serverSocket.isClosed()) {
                     try {
                         Socket socket = serverSocket.accept();
-                        service.submit(new ClientHandler(socket));
+                        Client client = new Client(socket);
+                        client.listen(service);
+
+                        ObjectInputStream changeStream = client.getParentInputStream().forClass(AssetChange.class);
+
+                        service.submit(new ClientHandler(client));
+                        service.submit(new ChangeListener(changeStream));
                     } catch (SocketException e) {
                         //probably should handle this
                         break;
@@ -143,8 +149,8 @@ public class Server {
         private final Client client;
 
         //consider making a separate object for socket - related things here
-        public ClientHandler(Socket socket) throws IOException {
-            this.client = new Client(socket);
+        public ClientHandler(Client client) throws IOException {
+            this.client = client;
 
             //no "this" keyword, would refer to inner class
             clients.add(client);

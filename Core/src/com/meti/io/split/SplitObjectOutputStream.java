@@ -59,7 +59,7 @@ public class SplitObjectOutputStream {
                     //Method should never be thrown, class should always be present
                     //however, the output stream might throw an exception
 
-                    //TODO: console callback listenrunnable soos
+                    //TODO: console callback listenRunnable soos
                     e.printStackTrace();
                 }
             }

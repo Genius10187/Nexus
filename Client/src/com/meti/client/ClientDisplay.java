@@ -18,6 +18,8 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.Serializable;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
@@ -109,7 +111,7 @@ public class ClientDisplay implements Initializable {
         }
     }
 
-    public void loadFromClientBuilder(ClientBuilder clientBuilder) {
+    public void loadFromClientBuilder(ClientBuilder clientBuilder) throws IOException, ClassNotFoundException {
         this.console = clientBuilder.getConsole();
         this.client = clientBuilder.getClient();
 
@@ -117,11 +119,11 @@ public class ClientDisplay implements Initializable {
         client.writeAll(new ListCommand(ListCommand.TYPE_PATHS));
 
         //might return string here
-        List<String> paths = client.readAll(String.class);
+        Serializable[] paths = client.readAll();
 
         ClientIndexer indexer = new ClientIndexer();
-        for (String path : paths) {
-            indexer.index(new File(path));
+        for (Serializable path : paths) {
+            indexer.index(new File((String) path));
         }
 
         fileView.setRoot(indexer.getRoot());

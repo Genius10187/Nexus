@@ -5,6 +5,7 @@ import com.meti.io.channel.in.InputChannelImplFactory;
 import com.meti.io.channel.in.InputChannelImplFactory.InputChannelImpl;
 import com.meti.io.channel.out.OutputChannelImplFactory;
 import com.meti.io.channel.out.OutputChannelImplFactory.OutputChannelImpl;
+import com.meti.io.command.Command;
 import com.meti.io.split.SplitObjectInputStream;
 import com.meti.io.split.SplitObjectOutputStream;
 
@@ -13,6 +14,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.net.Socket;
+import java.util.concurrent.ExecutorService;
 
 /**
  * A Client object specifies a unique handling to transfer information across sockets.
@@ -84,5 +86,14 @@ public class Client implements Channel {
 
     public SplitObjectOutputStream getParentOutputStream() {
         return parentOutputStream;
+    }
+
+    public void listen(ExecutorService executor) {
+        executor.submit(parentInputStream.getRunnable());
+    }
+
+    public <T> T requestCommand(Command command, Class<T> assetClass) throws IOException, ClassNotFoundException {
+        write(command);
+        return read(assetClass);
     }
 }
