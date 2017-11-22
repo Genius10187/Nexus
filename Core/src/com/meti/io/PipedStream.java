@@ -18,8 +18,8 @@ public class PipedStream {
         inputStream = new PipedInputStream();
         outputStream = new PipedOutputStream(inputStream);
 
-        objectInputStream = new ObjectInputStream(inputStream);
         objectOutputStream = new ObjectOutputStream(outputStream);
+        objectInputStream = new ObjectInputStream(inputStream);
     }
 
     public ObjectInputStream getObjectInputStream() {

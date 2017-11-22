@@ -44,8 +44,8 @@ public class Client implements Channel {
         this.socket = socket;
 
         //10 / 10 should work
-        this.parentInputStream = new SplitObjectInputStream(new ObjectInputStream(socket.getInputStream()));
         this.parentOutputStream = new SplitObjectOutputStream(new ObjectOutputStream(socket.getOutputStream()));
+        this.parentInputStream = new SplitObjectInputStream(new ObjectInputStream(socket.getInputStream()));
 
         this.inputChannelImpl = InputChannelImplFactory.create(parentOutputStream.getDefaultChannel());
         this.outputChannelImpl = OutputChannelImplFactory.create(parentOutputStream.getDefaultChannel());
