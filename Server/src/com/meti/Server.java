@@ -179,9 +179,7 @@ public class Server {
                             console.log(e1);
                         }
                     } catch (Exception e) {
-                        //THIS IS WAYYYY TOO MANY NESTED CALLS
-                        //TODO: handle nested calls
-                        client.getParentOutputStream().getDefaultChannel().getObjectOutputStream().write(e);
+                        client.write(e);
                     }
                 }
 

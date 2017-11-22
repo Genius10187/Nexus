@@ -29,7 +29,7 @@ public class ListCommand extends Command {
                     paths.add(file.getPath());
                 }
 
-                client.writeAll(paths);
+                client.writeAll(paths.toArray());
                 break;
             default:
                 client.writeAll(new IllegalArgumentException("Type " + type + " does not exist "));
