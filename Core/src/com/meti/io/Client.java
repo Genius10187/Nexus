@@ -1,6 +1,7 @@
 package com.meti.io;
 
 import com.meti.io.channel.Channel;
+import com.meti.io.channel.ChannelFactory;
 import com.meti.io.channel.in.InputChannelImplFactory;
 import com.meti.io.channel.in.InputChannelImplFactory.InputChannelImpl;
 import com.meti.io.channel.out.OutputChannelImplFactory;
@@ -12,21 +13,21 @@ import com.meti.io.split.SplitObjectOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.Serializable;
 import java.net.Socket;
+import java.util.HashMap;
 import java.util.concurrent.ExecutorService;
 
 /**
  * A Client object specifies a unique handling to transfer information across sockets.
  */
-public class Client implements Channel {
+public class Client {
     private final Socket socket;
     //TODO: put splitObjectInputStream here
     private final SplitObjectInputStream parentInputStream;
     private final SplitObjectOutputStream parentOutputStream;
 
-    private final InputChannelImpl inputChannelImpl;
-    private final OutputChannelImpl outputChannelImpl;
+    private final HashMap<Class<?>, Channel> channelHashMap = new HashMap<>();
+    private final ExecutorService executorService;
 
     /**
      * <p>
@@ -35,45 +36,20 @@ public class Client implements Channel {
      * Then constructs both an ObjectInputStream and ObjectOutputStream
      * </p>
      *
-     * @param socket The socket
+     * @param socket          The socket
+     * @param executorService
      * @throws IOException Thrown during construction of either stream
      * @see ObjectInputStream
      * @see ObjectOutputStream
      */
-    public Client(Socket socket) throws IOException {
+    public Client(Socket socket, ExecutorService executorService) throws IOException {
         this.socket = socket;
 
         //10 / 10 should work
         this.parentOutputStream = new SplitObjectOutputStream(new ObjectOutputStream(socket.getOutputStream()));
         this.parentInputStream = new SplitObjectInputStream(new ObjectInputStream(socket.getInputStream()));
 
-        this.inputChannelImpl = InputChannelImplFactory.create(parentOutputStream.getDefaultChannel());
-        this.outputChannelImpl = OutputChannelImplFactory.create(parentOutputStream.getDefaultChannel());
-    }
-
-    @Override
-    public <T> T read(Class<T> c) throws IOException, ClassNotFoundException {
-        return inputChannelImpl.read(c);
-    }
-
-    @Override
-    public Serializable read() throws IOException, ClassNotFoundException {
-        return inputChannelImpl.read();
-    }
-
-    @Override
-    public Serializable[] readAll() throws IOException, ClassNotFoundException {
-        return inputChannelImpl.readAll();
-    }
-
-    @Override
-    public void write(Serializable serializable) throws IOException {
-        outputChannelImpl.write(serializable);
-    }
-
-    @Override
-    public void writeAll(Serializable... serializables) throws IOException {
-        outputChannelImpl.writeAll(serializables);
+        this.executorService = executorService;
     }
 
     public Socket getSocket() {
@@ -88,12 +64,28 @@ public class Client implements Channel {
         return parentOutputStream;
     }
 
-    public void listen(ExecutorService executor) {
-        executor.submit(parentInputStream.getRunnable());
+    public void listen() {
+        executorService.submit(parentInputStream.getRunnable());
     }
 
     public <T> T requestCommand(Command command, Class<T> assetClass) throws IOException, ClassNotFoundException {
-        write(command);
-        return read(assetClass);
+        Channel commandChannel = getChannel(Command.class);
+
+        commandChannel.write(command);
+        return commandChannel.read(assetClass);
+    }
+
+    public Channel getChannel(Class<?> c) throws IOException {
+        if (channelHashMap.containsKey(c)) {
+            return channelHashMap.get(c);
+        } else {
+            InputChannelImpl inputChannel = InputChannelImplFactory.create(parentInputStream.forClass(c));
+            OutputChannelImpl outputChannel = OutputChannelImplFactory.create(parentOutputStream.forClass(c, executorService));
+
+            Channel channel = ChannelFactory.createChannel(inputChannel, outputChannel);
+            channelHashMap.put(c, channel);
+
+            return channel;
+        }
     }
 }

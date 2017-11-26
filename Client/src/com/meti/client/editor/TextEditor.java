@@ -1,6 +1,7 @@
 package com.meti.client.editor;
 
 import com.meti.asset.Asset;
+import com.meti.asset.AssetChange;
 import com.meti.asset.text.TextChange;
 import com.meti.client.Editor;
 import javafx.fxml.FXML;
@@ -47,7 +48,7 @@ public class TextEditor extends Editor {
         //TODO: text change
         try {
             TextChange change = new TextChange();
-            client.writeAll(change);
+            client.getChannel(AssetChange.class).writeAll(change);
         } catch (IOException e) {
             console.log(e);
         }

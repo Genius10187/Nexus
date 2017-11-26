@@ -3,15 +3,14 @@ package com.meti;
 import com.meti.asset.AssetChange;
 import com.meti.asset.AssetManager;
 import com.meti.io.Client;
+import com.meti.io.channel.Channel;
 import com.meti.io.command.Command;
-import com.meti.io.split.SplitObjectInputStream;
 import com.meti.util.Action;
 import com.meti.util.Console;
 
 import java.io.EOFException;
 import java.io.File;
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -30,7 +29,7 @@ import java.util.logging.Level;
 public class Server {
     private static final long TIME_FOR_INSTANT_SHUTDOWN = 5000;
 
-    private final ExecutorService service = Executors.newCachedThreadPool();
+    private final ExecutorService executorService = Executors.newCachedThreadPool();
     private final AssetManager assetManager;
     private final ServerSocket serverSocket;
     private final Console console;
@@ -71,7 +70,7 @@ public class Server {
     }
 
     public void host() {
-        service.submit(new ClientListener());
+        executorService.submit(new ClientListener());
     }
 
     public void stop() throws IOException, InterruptedException {
@@ -84,19 +83,19 @@ public class Server {
             }
         });
 
-        console.log("Shutting down thread service");
-        service.shutdown();
+        console.log("Shutting down thread executorService");
+        executorService.shutdown();
 
         console.log("Shutting down server socket");
         serverSocket.close();
 
-        if (!service.isTerminated()) {
-            console.log("Thread service failed to shut down, forcing shutdown!");
+        if (!executorService.isTerminated()) {
+            console.log("Thread executorService failed to shut down, forcing shutdown!");
 
             Thread.sleep(TIME_FOR_INSTANT_SHUTDOWN);
-            List<Runnable> stillRunning = service.shutdownNow();
+            List<Runnable> stillRunning = executorService.shutdownNow();
 
-            console.log("Successfully shut down thread service when " + stillRunning.size() + " threads were still running");
+            console.log("Successfully shut down thread executorService when " + stillRunning.size() + " threads were still running");
         }
     }
 
@@ -125,13 +124,13 @@ public class Server {
                 if (!serverSocket.isClosed()) {
                     try {
                         Socket socket = serverSocket.accept();
-                        Client client = new Client(socket);
-                        client.listen(service);
+                        Client client = new Client(socket, executorService);
+                        client.listen();
 
-                        ObjectInputStream changeStream = client.getParentInputStream().forClass(AssetChange.class);
+                        Channel changeStream = client.getChannel(AssetChange.class);
 
-                        service.submit(new ClientHandler(client));
-                        service.submit(new ChangeListener(changeStream));
+                        executorService.submit(new ClientHandler(client));
+                        executorService.submit(new ChangeListener(changeStream));
                     } catch (SocketException e) {
                         //probably should handle this
                         break;
@@ -149,7 +148,7 @@ public class Server {
         private final Client client;
 
         //consider making a separate object for socket - related things here
-        public ClientHandler(Client client) throws IOException {
+        public ClientHandler(Client client) {
             this.client = client;
 
             //no "this" keyword, would refer to inner class
@@ -165,17 +164,13 @@ public class Server {
                     onClientConnect.act(client);
                 }
 
-                SplitObjectInputStream parentInputStream = client.getParentInputStream();
-                service.submit(parentInputStream.getRunnable());
-
-
                 while (!client.getSocket().isClosed()) {
                     try {
                         //handle commands here
-                        ObjectInputStream commandStream = parentInputStream.forClass(Command.class);
+                        Channel channel = client.getChannel(Command.class);
 
-                        //TODO: implement better format for this action
-                        Command command = (Command) commandStream.readObject();
+                        //TODO: implement better format for this action, should method read really need class?
+                        Command command = channel.read(Command.class);
                         command.handle(client, Server.this);
                     } catch (SocketException | EOFException e) {
                         try {
@@ -185,7 +180,7 @@ public class Server {
                             console.log(e1);
                         }
                     } catch (Exception e) {
-                        client.write(e);
+                        client.getChannel(Exception.class).write(e);
                     }
                 }
 
@@ -201,16 +196,16 @@ public class Server {
     }
 
     private class ChangeListener implements Runnable {
-        private final ObjectInputStream changeStream;
+        private final Channel changeStream;
 
-        public ChangeListener(ObjectInputStream changeStream) {
+        public ChangeListener(Channel changeStream) {
             this.changeStream = changeStream;
         }
 
         @Override
         public void run() {
             try {
-                Object obj = changeStream.readObject();
+                Object obj = changeStream.read();
                 if (AssetChange.class.isAssignableFrom(obj.getClass())) {
                     AssetChange change = AssetChange.class.cast(obj);
                     System.out.println(change);

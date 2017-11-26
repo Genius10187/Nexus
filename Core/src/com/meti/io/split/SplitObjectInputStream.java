@@ -5,6 +5,7 @@ import com.meti.io.PipedStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.SocketException;
 import java.util.HashMap;
 
 public class SplitObjectInputStream {
@@ -26,19 +27,24 @@ public class SplitObjectInputStream {
         return runnable;
     }
 
+    public ObjectInputStream forClass(Class<?> c) throws IOException {
+        if (listening) {
+            //should we really consider returning the channel object instead?
+            if (channelMap.containsKey(c)) {
+                return channelMap.get(c).getObjectInputStream();
+            } else {
+                createPipe(c);
+                return channelMap.get(c).getObjectInputStream();
+            }
+        } else {
+            throw new IllegalStateException("Stream is not listening yet!");
+        }
+    }
+
     private void createPipe(Class<?> c) throws IOException {
         //possible bug here, not sure if I understand this correctly
         //easy method
         channelMap.put(c, new PipedStream());
-    }
-
-    public ObjectInputStream forClass(Class<?> c) {
-        if (listening) {
-            //should we really consider returning the channel object instead?
-            return channelMap.get(c).getObjectInputStream();
-        } else {
-            throw new IllegalStateException("Stream is not listening yet!");
-        }
     }
 
     //consider listen method, if application doesn't have runnable
@@ -62,6 +68,10 @@ public class SplitObjectInputStream {
                     }
 
                     outputStream.writeObject(obj);
+                } catch (SocketException e) {
+                    //we exit the loop
+                    e.printStackTrace();
+                    break;
                 } catch (IOException | ClassNotFoundException e) {
                     //TODO: exception callback
                     e.printStackTrace();

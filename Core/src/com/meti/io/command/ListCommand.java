@@ -29,10 +29,10 @@ public class ListCommand extends Command {
                     paths.add(file.getPath());
                 }
 
-                client.writeAll(paths.toArray());
+                client.getChannel(String.class).writeAll(paths.toArray());
                 break;
             default:
-                client.writeAll(new IllegalArgumentException("Type " + type + " does not exist "));
+                client.getChannel(Exception.class).writeAll(new IllegalArgumentException("Type " + type + " does not exist "));
                 break;
         }
     }

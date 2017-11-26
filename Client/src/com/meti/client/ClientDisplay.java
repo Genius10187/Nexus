@@ -2,6 +2,7 @@ package com.meti.client;
 
 import com.meti.asset.Asset;
 import com.meti.io.Client;
+import com.meti.io.command.Command;
 import com.meti.io.command.GetCommand;
 import com.meti.io.command.ListCommand;
 import com.meti.util.Console;
@@ -116,10 +117,11 @@ public class ClientDisplay implements Initializable {
         this.client = clientBuilder.getClient();
 
         //occurs after initialization
-        client.writeAll(new ListCommand(ListCommand.TYPE_PATHS));
+        client.getChannel(Command.class).writeAll(new ListCommand(ListCommand.TYPE_PATHS));
 
         //might return string here
-        Serializable[] paths = client.readAll();
+        //of type string
+        Serializable[] paths = client.getChannel(String.class).readAll();
 
         ClientIndexer indexer = new ClientIndexer();
         for (Serializable path : paths) {

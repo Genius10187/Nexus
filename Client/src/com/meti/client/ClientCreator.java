@@ -27,7 +27,9 @@ public class ClientCreator {
             InetAddress address = InetAddress.getByName(addressField.getText());
             int port = Integer.parseInt(portField.getText());
             Socket socket = new Socket(address, port);
-            Client client = new Client(socket);
+            Client client = new Client(socket, ClientMain.getInstance().getExecutorService());
+            client.listen();
+
             clientBuilder.setClient(client);
             clientBuilder.openDisplayDialog();
         } catch (Exception e) {

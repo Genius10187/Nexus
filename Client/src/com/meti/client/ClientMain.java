@@ -5,19 +5,22 @@ import com.meti.util.Console;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
-import java.io.IOException;
 import java.net.Socket;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class ClientMain extends Application {
-    private final Console console = new Console();
-    private ClientBuilder builder;
+    private static ClientMain instance;
 
-    public static void main(String[] args) {
-        launch(args);
-    }
+    private final Console console = new Console();
+    private final ExecutorService executorService = Executors.newCachedThreadPool();
+
+    private ClientBuilder builder;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+        instance = this;
+
         builder = new ClientBuilder(console);
         builder.openCreatorDialog(primaryStage);
     }
@@ -32,8 +35,28 @@ public class ClientMain extends Application {
                     socket.close();
                 }
             }
-        } catch (IOException e) {
+
+            executorService.shutdown();
+
+            Thread.sleep(5000);
+
+            if (!executorService.isShutdown()) {
+                executorService.shutdownNow();
+            }
+        } catch (Exception e) {
             System.exit(-1);
         }
+    }
+
+    public static void main(String[] args) {
+        launch(args);
+    }
+
+    public static ClientMain getInstance() {
+        return instance;
+    }
+
+    public ExecutorService getExecutorService() {
+        return executorService;
     }
 }
