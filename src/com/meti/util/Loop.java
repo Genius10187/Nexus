@@ -6,7 +6,7 @@ package com.meti.util;
  * @since 11/30/2017
  */
 public abstract class Loop implements Runnable {
-    private final Callback<Exception> exceptionCallback;
+    protected final Callback<Exception> exceptionCallback;
     private Class<? extends Exception> previousExceptionClass = null;
 
     public Loop() {

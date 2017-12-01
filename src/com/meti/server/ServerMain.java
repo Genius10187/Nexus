@@ -11,8 +11,7 @@ import java.net.Socket;
 import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.logging.*;
 
 import static java.lang.System.out;
 
@@ -36,7 +35,15 @@ public class ServerMain {
     }
 
     private static void init() {
-        logger.log(Level.INFO, "Initializing util");
+        logger.setLevel(Level.ALL);
+        logger.setUseParentHandlers(false);
+
+        Handler handler = new LoggerHandler();
+        handler.setFormatter(new SimpleFormatter());
+        handler.setLevel(Level.ALL);
+
+        logger.addHandler(handler);
+        logger.log(Level.INFO, "Initializing application");
 
         try {
             systemScanner = new Scanner(System.in);
@@ -54,7 +61,8 @@ public class ServerMain {
             SocketListener listener = new SocketListener(callback, serverSocket);
             executorService.submit(listener);
         } catch (Exception e) {
-            logger.log(Level.SEVERE, "Error in initializing util");
+            logger.log(Level.SEVERE, "Error in initializing util " + e);
+            System.exit(-1);
         }
     }
 
@@ -64,7 +72,7 @@ public class ServerMain {
     }
 
     private static void run() {
-        logger.log(Level.INFO, "Running util");
+        logger.log(Level.INFO, "Running application");
 
         running = true;
         while (running) {
@@ -80,7 +88,9 @@ public class ServerMain {
     }
 
     private static void stop() {
-        logger.log(Level.INFO, "Stopping util");
+        //TODO handle socket exception here
+
+        logger.log(Level.INFO, "Stopping application");
 
         try {
             serverSocket.close();
@@ -116,6 +126,23 @@ public class ServerMain {
             Socket socket = serverSocket.accept();
             SocketHandler handler = new SocketHandler(executorService, exceptionCallback, socket);
             handler.perform(socket);
+        }
+    }
+
+    private static class LoggerHandler extends Handler {
+        @Override
+        public void publish(LogRecord record) {
+            System.err.println(getFormatter().format(record));
+        }
+
+        @Override
+        public void flush() {
+
+        }
+
+        @Override
+        public void close() throws SecurityException {
+
         }
     }
 }
