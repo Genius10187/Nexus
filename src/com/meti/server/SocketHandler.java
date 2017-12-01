@@ -1,5 +1,6 @@
 package com.meti.server;
 
+import com.meti.command.Command;
 import com.meti.util.*;
 
 import java.io.IOException;
