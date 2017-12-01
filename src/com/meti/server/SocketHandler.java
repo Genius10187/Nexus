@@ -1,7 +1,10 @@
 package com.meti.server;
 
 import com.meti.command.Command;
-import com.meti.util.*;
+import com.meti.util.Callback;
+import com.meti.util.Change;
+import com.meti.util.Handler;
+import com.meti.util.Loop;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -17,6 +20,7 @@ public class SocketHandler implements Handler<Socket> {
 
     private final ObjectInputStream objectInputStream;
     private final ObjectOutputStream objectOutputStream;
+
     private final HashMap<Class<?>, Queue<Object>> queueHashMap = new HashMap<>();
 
     private final Callback<Exception> exceptionCallback;

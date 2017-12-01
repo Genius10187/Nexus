@@ -4,6 +4,7 @@ import com.meti.util.Callback;
 import com.meti.util.LoggerHandler;
 import com.meti.util.Loop;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -62,17 +63,22 @@ public class ServerMain {
                 logger.log(Level.WARNING, writer.toString());
             };
 
+            File directory = new File("Server");
+            if (!directory.exists()) {
+                logger.log(Level.FINE, "Directory status creation: " + directory.mkdirs());
+            }
+
+            System.out.println("Loaded files: ");
+            for (File f : AssetManager.load(directory)) {
+                System.out.println("\n\t" + f.getPath());
+            }
+
             SocketListener listener = new SocketListener(callback, serverSocket);
             executorService.submit(listener);
         } catch (Exception e) {
             logger.log(Level.SEVERE, "Error in initializing util " + e);
             System.exit(-1);
         }
-    }
-
-    public static ServerSocket createSocket(String input) throws IOException {
-        int port = Integer.parseInt(input);
-        return new ServerSocket(port);
     }
 
     private static void run() {
@@ -89,6 +95,11 @@ public class ServerMain {
         }
 
         stop();
+    }
+
+    public static ServerSocket createSocket(String input) throws IOException {
+        int port = Integer.parseInt(input);
+        return new ServerSocket(port);
     }
 
     private static void stop() {
@@ -132,6 +143,4 @@ public class ServerMain {
             handler.perform(socket);
         }
     }
-
-
 }
