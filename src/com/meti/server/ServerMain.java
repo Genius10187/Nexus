@@ -114,7 +114,7 @@ public class ServerMain {
         @Override
         public void loop() throws Exception {
             Socket socket = serverSocket.accept();
-            SocketHandler handler = new SocketHandler(executorService, socket);
+            SocketHandler handler = new SocketHandler(executorService, exceptionCallback, socket);
             handler.perform(socket);
         }
     }
