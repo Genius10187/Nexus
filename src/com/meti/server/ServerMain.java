@@ -1,5 +1,8 @@
 package com.meti.server;
 
+import com.meti.util.Callback;
+import com.meti.util.Loop;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -33,14 +36,14 @@ public class ServerMain {
     }
 
     private static void init() {
-        logger.log(Level.INFO, "Initializing server");
+        logger.log(Level.INFO, "Initializing util");
 
         try {
             systemScanner = new Scanner(System.in);
             out.println("Enter in a port, or 0 for Java to generate one:");
 
             serverSocket = createSocket(systemScanner.nextLine());
-            out.println("Created server on port " + serverSocket.getLocalPort());
+            out.println("Created util on port " + serverSocket.getLocalPort());
 
             Callback<Exception> callback = obj -> {
                 StringWriter writer = new StringWriter();
@@ -51,7 +54,7 @@ public class ServerMain {
             SocketListener listener = new SocketListener(callback, serverSocket);
             executorService.submit(listener);
         } catch (Exception e) {
-            logger.log(Level.SEVERE, "Error in initializing server");
+            logger.log(Level.SEVERE, "Error in initializing util");
         }
     }
 
@@ -61,7 +64,7 @@ public class ServerMain {
     }
 
     private static void run() {
-        logger.log(Level.INFO, "Running server");
+        logger.log(Level.INFO, "Running util");
 
         running = true;
         while (running) {
@@ -77,7 +80,7 @@ public class ServerMain {
     }
 
     private static void stop() {
-        logger.log(Level.INFO, "Stopping server");
+        logger.log(Level.INFO, "Stopping util");
 
         try {
             serverSocket.close();
@@ -111,21 +114,8 @@ public class ServerMain {
         @Override
         public void loop() throws Exception {
             Socket socket = serverSocket.accept();
-            SocketHandler handler = new SocketHandler(socket);
+            SocketHandler handler = new SocketHandler(executorService, socket);
             handler.perform(socket);
-        }
-    }
-
-    private static class SocketHandler implements Handler<Socket> {
-        private final Socket socket;
-
-        public SocketHandler(Socket socket) {
-            this.socket = socket;
-        }
-
-        @Override
-        public void perform(Socket obj) {
-            //TODO: change it such that the field and the socket are not the same object, remove one or the other
         }
     }
 }

@@ -1,5 +1,6 @@
-package com.meti.server;
+package com.meti.util;
 
+import com.meti.server.ServerMain;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertAll;

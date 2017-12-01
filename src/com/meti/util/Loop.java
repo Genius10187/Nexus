@@ -1,4 +1,4 @@
-package com.meti.server;
+package com.meti.util;
 
 /**
  * @author SirMathhman
