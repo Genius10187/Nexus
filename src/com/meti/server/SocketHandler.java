@@ -38,6 +38,9 @@ public class SocketHandler implements Handler<Socket> {
 
         CommandLoop commandLoop = new CommandLoop(exceptionCallback);
         executorService.submit(commandLoop);
+
+        ChangeLoop changeLoop = new ChangeLoop(exceptionCallback);
+        executorService.submit(changeLoop);
     }
 
     private Queue<Object> getQueue(Class<?> c) {

@@ -1,6 +1,7 @@
 package com.meti.server;
 
 import com.meti.util.Callback;
+import com.meti.util.LoggerHandler;
 import com.meti.util.Loop;
 
 import java.io.IOException;
@@ -11,7 +12,10 @@ import java.net.Socket;
 import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.logging.*;
+import java.util.logging.Handler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 
 import static java.lang.System.out;
 
@@ -129,20 +133,5 @@ public class ServerMain {
         }
     }
 
-    private static class LoggerHandler extends Handler {
-        @Override
-        public void publish(LogRecord record) {
-            System.err.println(getFormatter().format(record));
-        }
 
-        @Override
-        public void flush() {
-
-        }
-
-        @Override
-        public void close() throws SecurityException {
-
-        }
-    }
 }
