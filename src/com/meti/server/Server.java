@@ -5,7 +5,6 @@ import com.meti.util.LoggerHandler;
 import com.meti.util.Loop;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.net.ServerSocket;
@@ -29,7 +28,9 @@ public class Server {
     private ServerSocket serverSocket;
     private Logger logger = Logger.getLogger("Server");
 
-    public void init(String line) {
+    public Server(ServerSocket serverSocket) {
+        this.serverSocket = serverSocket;
+
         logger.setLevel(Level.ALL);
         logger.setUseParentHandlers(false);
 
@@ -38,11 +39,12 @@ public class Server {
         handler.setLevel(Level.ALL);
 
         logger.addHandler(handler);
+    }
+
+    public void init() {
         logger.log(Level.INFO, "Initializing application");
 
         try {
-            this.serverSocket = createSocket(line);
-
             Callback<Exception> callback = obj -> {
                 StringWriter writer = new StringWriter();
                 obj.printStackTrace(new PrintWriter(writer));
@@ -65,11 +67,6 @@ public class Server {
             logger.log(Level.SEVERE, "Error in initializing util " + e);
             System.exit(-1);
         }
-    }
-
-    public ServerSocket createSocket(String input) throws IOException {
-        int port = Integer.parseInt(input);
-        return new ServerSocket(port);
     }
 
     public void run() {

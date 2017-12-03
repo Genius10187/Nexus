@@ -1,22 +1,66 @@
 package com.meti.server;
 
-import java.util.Scanner;
+import com.meti.util.LoggerHandler;
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 
-import static java.lang.System.out;
+import java.io.File;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.util.logging.Handler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 
 /**
  * @author SirMathhman
  * @version 0.0.0
  * @since 11/30/2017
  */
-public class ServerMain {
+public class ServerMain extends Application {
+    private static final Logger logger = Logger.getLogger("Application");
+
+    static {
+        logger.setLevel(Level.ALL);
+        logger.setUseParentHandlers(false);
+
+        Handler handler = new LoggerHandler();
+        handler.setFormatter(new SimpleFormatter());
+        handler.setLevel(Level.ALL);
+
+        logger.addHandler(handler);
+    }
+
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+        Parent parent = FXMLLoader.load(new File("assets\\fxml\\ServerCreator.fxml").toURI().toURL());
+        Scene scene = new Scene(parent);
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    }
+
+    public static void log(Level level, Exception e) {
+        StringWriter writer = new StringWriter();
+        e.printStackTrace(new PrintWriter(writer));
+        log(level, writer.toString());
+    }
+
+    public static void log(Level level, String message) {
+        logger.log(level, message);
+    }
+
     public static void main(String[] args) {
-        Server server = new Server();
+       /* Server server = new Server();
 
         Scanner scanner = new Scanner(System.in);
         out.println("Enter in a port, or 0 for Java to generate one:");
 
-        server.init(scanner.nextLine());
-        server.run();
+        server.init(Integer.parseInt(scanner.nextLine()));
+        server.run();*/
+
+        launch(args);
     }
 }
