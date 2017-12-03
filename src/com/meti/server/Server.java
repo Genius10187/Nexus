@@ -10,7 +10,6 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.logging.Handler;
@@ -28,7 +27,6 @@ public class Server {
     private final ExecutorService executorService = Executors.newCachedThreadPool();
     private boolean running = false;
     private ServerSocket serverSocket;
-    private Scanner systemScanner;
     private Logger logger = Logger.getLogger("Server");
 
     public void init(String line) {
@@ -79,12 +77,7 @@ public class Server {
 
         running = true;
         while (running) {
-            String line = systemScanner.nextLine();
-            String lowerCase = line.toLowerCase();
-
-            if (lowerCase.contains("stop")) {
-                running = false;
-            }
+            //TODO: handle running
         }
 
         stop();
