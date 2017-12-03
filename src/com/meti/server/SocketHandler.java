@@ -64,7 +64,7 @@ public class SocketHandler implements Handler<Socket> {
         }
 
         @Override
-        public void loop() throws Exception {
+        public void loop() {
             Queue<Object> changeQueue = getQueue(Change.class);
             if (changeQueue.size() != 0) {
                 Change change = (Change) changeQueue.poll();
@@ -80,7 +80,7 @@ public class SocketHandler implements Handler<Socket> {
         }
 
         @Override
-        public void loop() throws Exception {
+        public void loop() {
             Queue<Object> commandQueue = getQueue(Command.class);
             if (commandQueue.size() != 0) {
                 Command command = (Command) commandQueue.poll();
@@ -100,11 +100,23 @@ public class SocketHandler implements Handler<Socket> {
         }
 
         @Override
-        public void loop() throws Exception {
-            Object obj = objectInputStream.readObject();
-            Class<?> objectClass = obj.getClass();
+        public void loop() {
+            try {
+                Object obj = objectInputStream.readObject();
 
-            getQueue(objectClass).add(obj);
+                Class<?> objectClass = obj.getClass();
+
+                if (obj instanceof Command) {
+                    getQueue(Command.class).add(obj);
+                } else if (obj instanceof Change) {
+                    getQueue(Change.class).add(obj);
+                } else {
+                    getQueue(objectClass).add(obj);
+                }
+
+            } catch (IOException | ClassNotFoundException e) {
+                setRunning(false);
+            }
         }
     }
 }

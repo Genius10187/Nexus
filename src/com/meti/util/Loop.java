@@ -1,5 +1,7 @@
 package com.meti.util;
 
+import java.io.IOException;
+
 /**
  * @author SirMathhman
  * @version 0.0.0
@@ -8,6 +10,8 @@ package com.meti.util;
 public abstract class Loop implements Runnable {
     protected final Callback<Exception> exceptionCallback;
     private Class<? extends Exception> previousExceptionClass = null;
+
+    private boolean running = false;
 
     public Loop() {
         exceptionCallback = Throwable::printStackTrace;
@@ -19,7 +23,9 @@ public abstract class Loop implements Runnable {
 
     @Override
     public void run() {
-        while (!Thread.interrupted()) {
+        running = true;
+
+        while (!Thread.interrupted() && running) {
             try {
                 loop();
             } catch (Exception e) {
@@ -28,10 +34,18 @@ public abstract class Loop implements Runnable {
                 } else {
                     previousExceptionClass = e.getClass();
 
-                    exceptionCallback.perform(e);
+                    try {
+                        exceptionCallback.perform(e);
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    }
                 }
             }
         }
+    }
+
+    public void setRunning(boolean running) {
+        this.running = running;
     }
 
     public abstract void loop() throws Exception;

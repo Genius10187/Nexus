@@ -1,5 +1,7 @@
 package com.meti.command;
 
-public interface Command {
+import java.io.Serializable;
+
+public interface Command extends Serializable {
     void perform();
 }
