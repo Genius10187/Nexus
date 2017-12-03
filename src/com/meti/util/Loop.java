@@ -1,7 +1,5 @@
 package com.meti.util;
 
-import java.io.IOException;
-
 /**
  * @author SirMathhman
  * @version 0.0.0
@@ -36,7 +34,7 @@ public abstract class Loop implements Runnable {
 
                     try {
                         exceptionCallback.perform(e);
-                    } catch (IOException e1) {
+                    } catch (Exception e1) {
                         e1.printStackTrace();
                     }
                 }

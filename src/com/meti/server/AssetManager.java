@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 public class AssetManager {
     private static final HashMap<String, AssetBuilder> builderHashMap = new HashMap<>();
@@ -33,5 +34,13 @@ public class AssetManager {
         }
 
         return files;
+    }
+
+    public static Set<String> getExtensions() {
+        return builderHashMap.keySet();
+    }
+
+    public static Set<File> getFiles() {
+        return assetHashMap.keySet();
     }
 }

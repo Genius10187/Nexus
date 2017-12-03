@@ -2,6 +2,7 @@ package com.meti.client;
 
 import com.meti.command.Command;
 import com.meti.command.ListCommand;
+import com.meti.util.Cargo;
 import com.meti.util.Handler;
 
 import java.io.IOException;
@@ -20,12 +21,26 @@ public class ClientHandler implements Handler<Socket> {
     }
 
     @Override
-    public void perform(Socket obj) throws IOException {
+    public void perform(Socket obj) throws IOException, ClassNotFoundException {
         ObjectOutputStream outputStream = new ObjectOutputStream(obj.getOutputStream());
         ObjectInputStream inputStream = new ObjectInputStream(obj.getInputStream());
 
-        Command command = new ListCommand();
-        outputStream.writeObject(command);
-        outputStream.flush();
+        {
+            Command command = new ListCommand(ListCommand.TYPE_FILES);
+            outputStream.writeObject(command);
+            outputStream.flush();
+
+            Cargo cargo = (Cargo) inputStream.readObject();
+            System.out.println(cargo.getContents());
+        }
+
+        {
+            Command command = new ListCommand(ListCommand.TYPE_EXTENSIONS);
+            outputStream.writeObject(command);
+            outputStream.flush();
+
+            Cargo cargo = (Cargo) inputStream.readObject();
+            System.out.println(cargo.getContents());
+        }
     }
 }

@@ -18,27 +18,29 @@ import java.util.concurrent.ExecutorService;
 public class SocketHandler implements Handler<Socket> {
     private final ExecutorService executorService;
 
-    private final ObjectInputStream objectInputStream;
-    private final ObjectOutputStream objectOutputStream;
+    private final ObjectInputStream inputStream;
+    private final ObjectOutputStream outputStream;
+    private final Server server;
 
     private final HashMap<Class<?>, Queue<Object>> queueHashMap = new HashMap<>();
 
     private final Callback<Exception> exceptionCallback;
     private final Socket socket;
 
-    public SocketHandler(ExecutorService executorService, Callback<Exception> exceptionCallback, Socket socket) throws IOException {
+    public SocketHandler(ExecutorService executorService, Callback<Exception> exceptionCallback, Socket socket, Server server) throws IOException {
         this.executorService = executorService;
         this.exceptionCallback = exceptionCallback;
         this.socket = socket;
 
-        this.objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
-        this.objectInputStream = new ObjectInputStream(socket.getInputStream());
+        this.outputStream = new ObjectOutputStream(socket.getOutputStream());
+        this.inputStream = new ObjectInputStream(socket.getInputStream());
+        this.server = server;
     }
 
     @Override
     public void perform(Socket obj) {
         //TODO: change it such that the field and the socket are not the same object, remove one or the other
-        StreamLoop streamLoop = new StreamLoop(exceptionCallback, objectInputStream);
+        StreamLoop streamLoop = new StreamLoop(exceptionCallback, inputStream);
         executorService.submit(streamLoop);
 
         CommandLoop commandLoop = new CommandLoop(exceptionCallback);
@@ -80,13 +82,11 @@ public class SocketHandler implements Handler<Socket> {
         }
 
         @Override
-        public void loop() {
+        public void loop() throws IOException {
             Queue<Object> commandQueue = getQueue(Command.class);
             if (commandQueue.size() != 0) {
                 Command command = (Command) commandQueue.poll();
-
-                //TODO: handle types of commands here
-                command.perform();
+                command.perform(server, inputStream, outputStream);
             }
         }
     }
