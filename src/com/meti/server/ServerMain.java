@@ -1,5 +1,9 @@
 package com.meti.server;
 
+import java.util.Scanner;
+
+import static java.lang.System.out;
+
 /**
  * @author SirMathhman
  * @version 0.0.0
@@ -8,7 +12,11 @@ package com.meti.server;
 public class ServerMain {
     public static void main(String[] args) {
         Server server = new Server();
-        server.init();
+
+        Scanner scanner = new Scanner(System.in);
+        out.println("Enter in a port, or 0 for Java to generate one:");
+
+        server.init(scanner.nextLine());
         server.run();
     }
 }

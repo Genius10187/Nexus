@@ -9,17 +9,9 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.Scanner;
 
 //called from ClientMain
 public class ClientHandler implements Handler<Socket> {
-    private final Scanner scanner;
-
-    public ClientHandler(Scanner scanner) {
-        //TODO: handle client
-        this.scanner = scanner;
-    }
-
     @Override
     public void perform(Socket obj) throws IOException, ClassNotFoundException {
         ObjectOutputStream outputStream = new ObjectOutputStream(obj.getOutputStream());

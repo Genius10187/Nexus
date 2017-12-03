@@ -18,8 +18,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
-import static java.lang.System.out;
-
 /**
  * @author SirMathhman
  * @version 0.0.0
@@ -33,7 +31,7 @@ public class Server {
     private Scanner systemScanner;
     private Logger logger = Logger.getLogger("Server");
 
-    public void init() {
+    public void init(String line) {
         logger.setLevel(Level.ALL);
         logger.setUseParentHandlers(false);
 
@@ -45,11 +43,7 @@ public class Server {
         logger.log(Level.INFO, "Initializing application");
 
         try {
-            systemScanner = new Scanner(System.in);
-            out.println("Enter in a port, or 0 for Java to generate one:");
-
-            serverSocket = createSocket(systemScanner.nextLine());
-            out.println("Created util on port " + serverSocket.getLocalPort());
+            this.serverSocket = createSocket(line);
 
             Callback<Exception> callback = obj -> {
                 StringWriter writer = new StringWriter();
@@ -75,7 +69,7 @@ public class Server {
         }
     }
 
-    public static ServerSocket createSocket(String input) throws IOException {
+    public ServerSocket createSocket(String input) throws IOException {
         int port = Integer.parseInt(input);
         return new ServerSocket(port);
     }
@@ -97,8 +91,6 @@ public class Server {
     }
 
     private void stop() {
-        //TODO handle socket exception here
-
         logger.log(Level.INFO, "Stopping application");
 
         try {

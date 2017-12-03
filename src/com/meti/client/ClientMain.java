@@ -15,11 +15,17 @@ public class ClientMain {
     private static final Logger logger = Logger.getLogger("Application");
 
     public static void main(String[] args) {
-        init();
+        Scanner scanner = new Scanner(System.in);
+
+        ClientInput clientInput = ClientInput.invoke(new ClientInput(scanner));
+        InetAddress address = clientInput.getAddress();
+        int port = clientInput.getPort();
+
+        init(address, port);
         run();
     }
 
-    public static void init() {
+    public static void init(InetAddress address, int port) {
         logger.setLevel(Level.ALL);
         logger.setUseParentHandlers(false);
 
@@ -31,15 +37,9 @@ public class ClientMain {
         logger.log(Level.INFO, "Initializing application");
 
         try {
-            Scanner scanner = new Scanner(System.in);
-
-            ClientInput clientInput = new ClientInput(scanner).invoke();
-            InetAddress address = clientInput.getAddress();
-            int port = clientInput.getPort();
-
             if(address != null && port != -1) {
                 Socket socket = new Socket(address, port);
-                ClientHandler clientHandler = new ClientHandler(scanner);
+                ClientHandler clientHandler = new ClientHandler();
                 clientHandler.perform(socket);
             }
             else{
@@ -76,15 +76,15 @@ public class ClientMain {
             return port;
         }
 
-        public ClientInput invoke() {
+        public static ClientInput invoke(ClientInput clientInput) {
             System.out.println("Enter in an IP address to connect to:");
 
             boolean addressValid = false;
-            address = null;
+            clientInput.address = null;
             do {
                 try {
-                    String addressString = scanner.nextLine();
-                    address = InetAddress.getByName(addressString);
+                    String addressString = clientInput.scanner.nextLine();
+                    clientInput.address = InetAddress.getByName(addressString);
 
                     addressValid = true;
                 } catch (UnknownHostException e) {
@@ -95,18 +95,18 @@ public class ClientMain {
             System.out.println("Enter in a port to connect to");
 
             boolean portValid = false;
-            port = -1;
+            clientInput.port = -1;
             do {
                 try {
-                    String portString = scanner.nextLine();
-                    port = Integer.parseInt(portString);
+                    String portString = clientInput.scanner.nextLine();
+                    clientInput.port = Integer.parseInt(portString);
 
                     portValid = true;
                 } catch (NumberFormatException e) {
                     System.out.println("Invalid port");
                 }
             } while (!portValid);
-            return this;
+            return clientInput;
         }
     }
 }
