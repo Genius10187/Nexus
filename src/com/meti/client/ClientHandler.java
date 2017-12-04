@@ -12,6 +12,8 @@ import java.net.Socket;
 
 //called from ClientMain
 public class ClientHandler implements Handler<Socket> {
+    ///TODO: hashMap queue system
+
     @Override
     public void perform(Socket obj) throws IOException, ClassNotFoundException {
         ObjectOutputStream outputStream = new ObjectOutputStream(obj.getOutputStream());
