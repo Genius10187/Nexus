@@ -25,7 +25,6 @@ public class ClientMain extends Application {
 
         //10/10 throws an exception
 
-        //TODO: add client creator
         FXMLLoader loader = new FXMLLoader(clientCreatorFXML.toURI().toURL());
         Parent parent = loader.load();
         ClientCreator controller = loader.getController();
@@ -35,8 +34,6 @@ public class ClientMain extends Application {
         Stage stage = new Stage();
         stage.setScene(scene);
         stage.show();
-
-
     }
 
     /*private static class ClientInput {
