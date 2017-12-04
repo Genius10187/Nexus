@@ -26,11 +26,11 @@ import java.util.logging.SimpleFormatter;
  */
 public class Server {
     public static final int SHUTDOWN_TIME = 5000;
+
+    //TODO: executor service creates way too many threads per client, we really should work on memory stufss
     private final ExecutorService executorService = Executors.newCachedThreadPool();
     private final ArrayList<Socket> sockets = new ArrayList<>();
 
-    //TODO: running really necessary?
-    private boolean running = false;
     private ServerSocket serverSocket;
     private Logger logger = Logger.getLogger("Server");
 

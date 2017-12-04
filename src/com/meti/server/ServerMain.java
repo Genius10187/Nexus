@@ -46,14 +46,6 @@ public class ServerMain extends Application {
     }
 
     public static void main(String[] args) {
-       /* Server server = new Server();
-
-        Scanner scanner = new Scanner(System.in);
-        out.println("Enter in a port, or 0 for Java to generate one:");
-
-        server.run(Integer.parseInt(scanner.nextLine()));
-        server.run();*/
-
         launch(args);
     }
 
