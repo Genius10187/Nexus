@@ -5,10 +5,12 @@ import com.meti.util.LoggerHandler;
 import com.meti.util.Loop;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -45,7 +47,7 @@ public class Server {
         logger.addHandler(handler);
     }
 
-    public void init() {
+    public void run() {
         logger.log(Level.INFO, "Initializing application");
 
         try {
@@ -71,17 +73,6 @@ public class Server {
             logger.log(Level.SEVERE, "Error in initializing util " + e);
             System.exit(-1);
         }
-    }
-
-    public void run() {
-        logger.log(Level.INFO, "Running application");
-
-        running = true;
-        while (running) {
-            //TODO: handle running
-        }
-
-        stop();
     }
 
     public void stop() {
@@ -135,12 +126,20 @@ public class Server {
         }
 
         @Override
-        public void loop() throws Exception {
-            Socket socket = serverSocket.accept();
+        public void loop() throws IOException {
+            try {
+                Socket socket = serverSocket.accept();
 
-            sockets.add(socket);
-            SocketHandler handler = new SocketHandler(executorService, exceptionCallback, socket, server);
-            handler.perform(socket);
+                sockets.add(socket);
+                SocketHandler handler = new SocketHandler(executorService, exceptionCallback, socket, server);
+                handler.perform(socket);
+            } catch (SocketException e) {
+                if (!serverSocket.isClosed()) {
+                    serverSocket.close();
+                }
+
+                setRunning(false);
+            }
         }
     }
 }

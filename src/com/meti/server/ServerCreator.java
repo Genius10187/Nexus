@@ -93,7 +93,6 @@ public class ServerCreator {
 
         @Override
         public void run() {
-            server.init();
             server.run();
         }
     }

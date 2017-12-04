@@ -51,7 +51,7 @@ public class ServerMain extends Application {
         Scanner scanner = new Scanner(System.in);
         out.println("Enter in a port, or 0 for Java to generate one:");
 
-        server.init(Integer.parseInt(scanner.nextLine()));
+        server.run(Integer.parseInt(scanner.nextLine()));
         server.run();*/
 
         launch(args);

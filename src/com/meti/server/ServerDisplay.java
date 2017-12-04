@@ -28,8 +28,10 @@ public class ServerDisplay {
 
     @FXML
     public void close() {
-        Platform.exit();
         server.stop();
+
+        Platform.exit();
+        System.exit(0);
     }
 
     public void buildListeners() {
