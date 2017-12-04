@@ -2,8 +2,13 @@ package com.meti.server;
 
 import com.meti.util.Dialog;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.logging.Level;
@@ -14,6 +19,8 @@ import java.util.logging.Level;
  * @since 12/3/2017
  */
 public class ServerCreator {
+    private static final File serverDisplayFXMLLocation = new File("assets\\fxml\\ServerDisplay.fxml");
+
     @FXML
     private TextField portField;
 
@@ -26,9 +33,22 @@ public class ServerCreator {
                 serverSocket = new ServerSocket(Integer.parseInt(portField.getText()));
             }
 
+            FXMLLoader loader = new FXMLLoader(serverDisplayFXMLLocation.toURI().toURL());
+            Parent parent = loader.load();
+            ServerDisplay display = loader.getController();
+
+            Scene scene = new Scene(parent);
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.show();
+
             Server server = new Server(serverSocket);
-            server.init();
-            server.run();
+
+            display.setServer(server);
+            display.buildListeners();
+
+            ServerThread serverThread = new ServerThread(server);
+            server.getExecutorService().submit(serverThread);
         } catch (NumberFormatException e) {
             try {
                 Dialog.loadDialog().setMessage("Invalid port!");
@@ -48,6 +68,8 @@ public class ServerCreator {
     public void generateLocalPort() {
         try {
             this.serverSocket = new ServerSocket(0);
+
+            portField.setText(String.valueOf(serverSocket.getLocalPort()));
         } catch (IOException e) {
             try {
                 Dialog.loadDialog().setException(e);
@@ -60,5 +82,19 @@ public class ServerCreator {
     @FXML
     public void openAdvancedSettings() {
         //TODO: advanced settings
+    }
+
+    private class ServerThread implements Runnable {
+        private final Server server;
+
+        public ServerThread(Server server) {
+            this.server = server;
+        }
+
+        @Override
+        public void run() {
+            server.init();
+            server.run();
+        }
     }
 }

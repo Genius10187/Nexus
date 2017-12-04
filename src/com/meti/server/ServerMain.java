@@ -22,6 +22,7 @@ import java.util.logging.SimpleFormatter;
  */
 public class ServerMain extends Application {
     private static final Logger logger = Logger.getLogger("Application");
+    private static File serverCreatorFXMLLocation = new File("assets\\fxml\\ServerCreator.fxml");
 
     static {
         logger.setLevel(Level.ALL);
@@ -32,14 +33,6 @@ public class ServerMain extends Application {
         handler.setLevel(Level.ALL);
 
         logger.addHandler(handler);
-    }
-
-    @Override
-    public void start(Stage primaryStage) throws Exception {
-        Parent parent = FXMLLoader.load(new File("assets\\fxml\\ServerCreator.fxml").toURI().toURL());
-        Scene scene = new Scene(parent);
-        primaryStage.setScene(scene);
-        primaryStage.show();
     }
 
     public static void log(Level level, Exception e) {
@@ -62,5 +55,13 @@ public class ServerMain extends Application {
         server.run();*/
 
         launch(args);
+    }
+
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+        Parent parent = FXMLLoader.load(serverCreatorFXMLLocation.toURI().toURL());
+        Scene scene = new Scene(parent);
+        primaryStage.setScene(scene);
+        primaryStage.show();
     }
 }

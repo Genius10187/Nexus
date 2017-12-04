@@ -9,6 +9,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.logging.Handler;
@@ -24,6 +25,9 @@ import java.util.logging.SimpleFormatter;
 public class Server {
     public static final int SHUTDOWN_TIME = 5000;
     private final ExecutorService executorService = Executors.newCachedThreadPool();
+    private final ArrayList<Socket> sockets = new ArrayList<>();
+
+    //TODO: running really necessary?
     private boolean running = false;
     private ServerSocket serverSocket;
     private Logger logger = Logger.getLogger("Server");
@@ -80,7 +84,7 @@ public class Server {
         stop();
     }
 
-    private void stop() {
+    public void stop() {
         logger.log(Level.INFO, "Stopping application");
 
         try {
@@ -104,6 +108,22 @@ public class Server {
         }
     }
 
+    public ServerSocket getServerSocket() {
+        return serverSocket;
+    }
+
+    public Logger getLogger() {
+        return logger;
+    }
+
+    public ArrayList<Socket> getSockets() {
+        return sockets;
+    }
+
+    public ExecutorService getExecutorService() {
+        return executorService;
+    }
+
     private class SocketListener extends Loop {
         private final ServerSocket serverSocket;
         private final Server server;
@@ -117,6 +137,8 @@ public class Server {
         @Override
         public void loop() throws Exception {
             Socket socket = serverSocket.accept();
+
+            sockets.add(socket);
             SocketHandler handler = new SocketHandler(executorService, exceptionCallback, socket, server);
             handler.perform(socket);
         }
