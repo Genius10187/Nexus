@@ -9,10 +9,13 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.HashMap;
+import java.util.Queue;
 
 //called from ClientMain
 public class ClientHandler implements Handler<Socket> {
     ///TODO: hashMap queue system
+    private final HashMap<Class<?>, Queue>
 
     @Override
     public void perform(Socket obj) throws IOException, ClassNotFoundException {
