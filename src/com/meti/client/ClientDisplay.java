@@ -7,11 +7,10 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
+import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
-import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
@@ -57,8 +56,6 @@ public class ClientDisplay implements Initializable {
         for (TreeItem<String> item : fileTreeView.getSelectionModel().getSelectedItems()) {
             File location = filePathsReversed.get(item);
             String ext = Utility.getExtension(location);
-            System.out.println(ext);
-
             //TODO: add editor
             try {
                 File editorFile = editorFileMap.get(ext);
@@ -69,10 +66,9 @@ public class ClientDisplay implements Initializable {
                 Editor editor = loader.getController();
                 editor.load(location);
 
-                Scene scene = new Scene(parent);
-                Stage stage = new Stage();
-                stage.setScene(scene);
-                stage.show();
+                Tab tab = new Tab(location.getName());
+                tab.setContent(parent);
+                editorTabPane.getTabs().add(tab);
             } catch (IOException e) {
                 handler.getLogger().log(Level.WARNING, "Error occured when creating editor: " + e.toString());
             }
@@ -142,7 +138,10 @@ public class ClientDisplay implements Initializable {
                     throw new RuntimeException("Parent cannot be null in an fxml file!");
                 }
             } catch (Exception e) {
-                handler.getLogger().log(Level.WARNING, e.toString());
+                //logger is null...
+
+                //TODO: handle null logger problem
+                e.printStackTrace();
             }
         }
     }
