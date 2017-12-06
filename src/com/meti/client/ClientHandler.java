@@ -6,10 +6,13 @@ import com.meti.util.Cargo;
 import com.meti.util.Handler;
 import com.meti.util.Queuer;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -21,11 +24,22 @@ public class ClientHandler implements Handler<Socket> {
     private final Queuer queuer;
     private final Logger logger;
 
+    private List<File> filePaths;
+    private List<File> extensions;
+
     public ClientHandler(Logger logger, ExecutorService service, Socket socket) throws IOException {
         this.queuer = new Queuer(new ObjectInputStream(socket.getInputStream()));
         this.logger = logger;
 
         service.submit(queuer);
+    }
+
+    public List<File> getFilePaths() {
+        return filePaths;
+    }
+
+    public List<File> getExtensions() {
+        return extensions;
     }
 
     @Override
@@ -42,7 +56,9 @@ public class ClientHandler implements Handler<Socket> {
 
             //cargo not being received
             Cargo cargo = queuer.poll(Cargo.class);
-            System.out.println(cargo.getContents());
+
+            filePaths = new ArrayList<>();
+            cargo.getContents().forEach(o -> filePaths.add((File) o));
         }
 
         {
@@ -51,7 +67,9 @@ public class ClientHandler implements Handler<Socket> {
             outputStream.flush();
 
             Cargo cargo = queuer.poll(Cargo.class);
-            System.out.println(cargo.getContents());
+
+            extensions = new ArrayList<>();
+            cargo.getContents().forEach(o -> extensions.add((File) o));
         }
 
         logger.log(Level.FINE, "Successfully received initialization cargo");

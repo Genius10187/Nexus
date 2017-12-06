@@ -6,9 +6,9 @@
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TreeView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
-
 
 <AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="768.0" prefWidth="1280.0"
             xmlns="http://javafx.com/javafx/8.0.111" fx:controller="com.meti.client.ClientDisplay">
@@ -39,7 +39,8 @@
             <left>
                 <ScrollPane fitToHeight="true" fitToWidth="true" BorderPane.alignment="CENTER">
                     <content>
-                        <ListView fx:id="fileListView" prefHeight="200.0" prefWidth="200.0"/>
+                        <TreeView fx:id="fileTreeView" onMouseClicked="#addEditor" prefHeight="200.0"
+                                  prefWidth="200.0"/>
                     </content>
                 </ScrollPane>
             </left>

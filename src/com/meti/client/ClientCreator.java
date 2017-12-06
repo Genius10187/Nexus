@@ -71,6 +71,8 @@ public class ClientCreator {
             //consider creating client class
             display.setSocket(socket);
             display.setHandler(clientHandler);
+
+            display.init();
         } catch (Exception e) {
             try {
                 Dialog.loadDialog().setException(e);
