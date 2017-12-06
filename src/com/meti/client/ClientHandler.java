@@ -16,6 +16,8 @@ import java.util.logging.Logger;
 
 //called from ClientMain
 public class ClientHandler implements Handler<Socket> {
+    //edits for the master branch!
+
     private final Queuer queuer;
     private final Logger logger;
 
