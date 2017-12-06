@@ -1,25 +1,37 @@
 package com.meti.client;
 
+import com.meti.client.editor.Editor;
 import com.meti.util.Utility;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
+import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.Socket;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
+import java.util.ResourceBundle;
+import java.util.logging.Level;
 
-public class ClientDisplay {
+public class ClientDisplay implements Initializable {
+    private final HashMap<String, File> editorFileMap = new HashMap<>();
+
     //TODO: convert to string
     private final HashMap<File, TreeItem<String>> filePaths = new HashMap<>();
     private final HashMap<TreeItem<String>, File> filePathsReversed = new HashMap<>();
 
     @FXML
     private TabPane editorTabPane;
+
     @FXML
     private TreeView<String> fileTreeView;
     private Socket socket;
@@ -43,11 +55,27 @@ public class ClientDisplay {
     @FXML
     public void addEditor() {
         for (TreeItem<String> item : fileTreeView.getSelectionModel().getSelectedItems()) {
-            File file = filePathsReversed.get(item);
-            String ext = Utility.getExtension(file);
+            File location = filePathsReversed.get(item);
+            String ext = Utility.getExtension(location);
             System.out.println(ext);
 
             //TODO: add editor
+            try {
+                File editorFile = editorFileMap.get(ext);
+                FXMLLoader loader = new FXMLLoader(editorFile.toURI().toURL());
+                Parent parent = loader.load();
+
+                //careful here
+                Editor editor = loader.getController();
+                editor.load(location);
+
+                Scene scene = new Scene(parent);
+                Stage stage = new Stage();
+                stage.setScene(scene);
+                stage.show();
+            } catch (IOException e) {
+                handler.getLogger().log(Level.WARNING, "Error occured when creating editor: " + e.toString());
+            }
         }
     }
 
@@ -93,5 +121,29 @@ public class ClientDisplay {
 
     public void setHandler(ClientHandler handler) {
         this.handler = handler;
+    }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        File directoryFile = new File("assets\\fxml\\editor");
+        List<File> fileList = Utility.search(directoryFile, "fxml");
+        for (File file : fileList) {
+            try {
+                FXMLLoader loader = new FXMLLoader(file.toURI().toURL());
+                Parent parent = loader.load();
+                Object controller = loader.getController();
+                Editor editor = (Editor) controller;
+
+                if (parent != null) {
+                    for (String ext : editor.getExtensions()) {
+                        editorFileMap.put(ext, file);
+                    }
+                } else {
+                    throw new RuntimeException("Parent cannot be null in an fxml file!");
+                }
+            } catch (Exception e) {
+                handler.getLogger().log(Level.WARNING, e.toString());
+            }
+        }
     }
 }

@@ -42,6 +42,10 @@ public class ClientHandler implements Handler<Socket> {
         return extensions;
     }
 
+    public Logger getLogger() {
+        return logger;
+    }
+
     @Override
     public void perform(Socket obj) throws IOException, ClassNotFoundException {
         ObjectOutputStream outputStream = new ObjectOutputStream(obj.getOutputStream());

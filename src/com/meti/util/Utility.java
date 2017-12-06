@@ -8,13 +8,13 @@ public class Utility {
     private Utility() {
     }
 
-    public static List<File> search(File directory) {
+    public static List<File> search(File directory, String... extensions) {
         List<File> fileList = new ArrayList<>();
-        searchList(directory, fileList);
+        searchList(directory, fileList, extensions);
         return fileList;
     }
 
-    public static void searchList(File file, List<File> list) {
+    private static void searchList(File file, List<File> list, String... extensions) {
         if (!list.contains(file)) {
             if (file.isDirectory()) {
                 File[] files = file.listFiles();
@@ -24,7 +24,15 @@ public class Utility {
                     }
                 }
             } else {
-                list.add(file);
+                if (extensions.length != 0) {
+                    for (String ext : extensions) {
+                        if (getExtension(file).equals(ext)) {
+                            list.add(file);
+                        }
+                    }
+                } else {
+                    list.add(file);
+                }
             }
         }
     }
