@@ -32,7 +32,7 @@ public class ClientHandler implements Handler<Socket> {
     public void perform(Socket obj) throws IOException, ClassNotFoundException {
         ObjectOutputStream outputStream = new ObjectOutputStream(obj.getOutputStream());
 
-        logger.log(Level.INFO, "Writing initialization commands");
+        logger.log(Level.FINE, "Writing initialization commands");
 
         {
             Command command = new ListCommand(ListCommand.TYPE_FILES);
@@ -54,6 +54,6 @@ public class ClientHandler implements Handler<Socket> {
             System.out.println(cargo.getContents());
         }
 
-        logger.log(Level.INFO, "Successfully received initialization cargo");
+        logger.log(Level.FINE, "Successfully received initialization cargo");
     }
 }
