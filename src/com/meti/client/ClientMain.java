@@ -1,65 +1,55 @@
 package com.meti.client;
 
-import com.meti.util.LoggerHandler;
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 
-import java.net.InetAddress;
-import java.net.Socket;
-import java.net.UnknownHostException;
-import java.util.Scanner;
-import java.util.logging.Handler;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.logging.SimpleFormatter;
+import java.io.File;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
-public class ClientMain {
-    private static final Logger logger = Logger.getLogger("Application");
+public class ClientMain extends Application {
+    private static final File clientCreatorFXML = new File("assets\\fxml\\ClientCreator.fxml");
+
+    private final ExecutorService executorService = Executors.newCachedThreadPool();
 
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
+        launch(args);
+    }
+
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+    /*    Scanner scanner = new Scanner(System.in);
 
         ClientInput clientInput = ClientInput.invoke(new ClientInput(scanner));
         InetAddress address = clientInput.getAddress();
-        int port = clientInput.getPort();
+        int port = clientInput.getPort();*/
 
-        init(address, port);
-        run();
+        //10/10 throws an exception
+
+        FXMLLoader loader = new FXMLLoader(clientCreatorFXML.toURI().toURL());
+        Parent parent = loader.load();
+        ClientCreator controller = loader.getController();
+
+        controller.setExecutorService(executorService);
+
+        //TODO: put in utility file
+        Scene scene = new Scene(parent);
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.show();
     }
 
-    public static void init(InetAddress address, int port) {
-        logger.setLevel(Level.ALL);
-        logger.setUseParentHandlers(false);
+    @Override
+    public void stop() throws Exception {
+        executorService.shutdown();
 
-        Handler handler = new LoggerHandler();
-        handler.setFormatter(new SimpleFormatter());
-        handler.setLevel(Level.ALL);
-
-        logger.addHandler(handler);
-        logger.log(Level.INFO, "Initializing application");
-
-        try {
-            if(address != null && port != -1) {
-                Socket socket = new Socket(address, port);
-                ClientHandler clientHandler = new ClientHandler();
-                clientHandler.perform(socket);
-            }
-            else{
-                throw new RuntimeException("Invalid parameters passed into socket");
-            }
-        } catch (Exception e) {
-            logger.log(Level.SEVERE, "Error in initializing util " + e);
-            System.exit(-1);
-        }
+        //TODO: handler service
     }
 
-    public static void run() {
-        logger.log(Level.INFO, "Running application");
-    }
-
-    public static void stop() {
-        //TODO: handle client stop
-    }
-
-    private static class ClientInput {
+    /*private static class ClientInput {
         private Scanner scanner;
         private InetAddress address;
         private int port;
@@ -108,5 +98,5 @@ public class ClientMain {
             } while (!portValid);
             return clientInput;
         }
-    }
+    }*/
 }
