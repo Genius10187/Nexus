@@ -7,9 +7,13 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class ClientMain extends Application {
     private static final File clientCreatorFXML = new File("assets\\fxml\\ClientCreator.fxml");
+
+    private final ExecutorService executorService = Executors.newCachedThreadPool();
 
     public static void main(String[] args) {
         launch(args);
@@ -29,11 +33,20 @@ public class ClientMain extends Application {
         Parent parent = loader.load();
         ClientCreator controller = loader.getController();
 
+        controller.setExecutorService(executorService);
+
         //TODO: put in utility file
         Scene scene = new Scene(parent);
         Stage stage = new Stage();
         stage.setScene(scene);
         stage.show();
+    }
+
+    @Override
+    public void stop() throws Exception {
+        executorService.shutdown();
+
+        //TODO: handler service
     }
 
     /*private static class ClientInput {

@@ -4,30 +4,42 @@ import com.meti.command.Command;
 import com.meti.command.ListCommand;
 import com.meti.util.Cargo;
 import com.meti.util.Handler;
+import com.meti.util.Queuer;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.HashMap;
-import java.util.Queue;
+import java.util.concurrent.ExecutorService;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 //called from ClientMain
 public class ClientHandler implements Handler<Socket> {
-    ///TODO: hashMap queue system
-    private final HashMap<Class<?>, Queue>
+    private final Queuer queuer;
+    private final Logger logger;
+
+    public ClientHandler(Logger logger, ExecutorService service, Socket socket) throws IOException {
+        this.queuer = new Queuer(new ObjectInputStream(socket.getInputStream()));
+        this.logger = logger;
+
+        service.submit(queuer);
+    }
 
     @Override
     public void perform(Socket obj) throws IOException, ClassNotFoundException {
         ObjectOutputStream outputStream = new ObjectOutputStream(obj.getOutputStream());
-        ObjectInputStream inputStream = new ObjectInputStream(obj.getInputStream());
+
+        logger.log(Level.INFO, "Writing initialization commands");
 
         {
             Command command = new ListCommand(ListCommand.TYPE_FILES);
             outputStream.writeObject(command);
             outputStream.flush();
 
-            Cargo cargo = (Cargo) inputStream.readObject();
+
+            //cargo not being received
+            Cargo cargo = queuer.poll(Cargo.class);
             System.out.println(cargo.getContents());
         }
 
@@ -36,8 +48,10 @@ public class ClientHandler implements Handler<Socket> {
             outputStream.writeObject(command);
             outputStream.flush();
 
-            Cargo cargo = (Cargo) inputStream.readObject();
+            Cargo cargo = queuer.poll(Cargo.class);
             System.out.println(cargo.getContents());
         }
+
+        logger.log(Level.INFO, "Successfully received initialization cargo");
     }
 }

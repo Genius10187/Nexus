@@ -1,18 +1,12 @@
 package com.meti.server;
 
 import com.meti.command.Command;
-import com.meti.util.Callback;
-import com.meti.util.Change;
-import com.meti.util.Handler;
-import com.meti.util.Loop;
+import com.meti.util.*;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.HashMap;
-import java.util.PriorityQueue;
-import java.util.Queue;
 import java.util.concurrent.ExecutorService;
 
 public class SocketHandler implements Handler<Socket> {
@@ -22,7 +16,7 @@ public class SocketHandler implements Handler<Socket> {
     private final ObjectOutputStream outputStream;
     private final Server server;
 
-    private final HashMap<Class<?>, Queue<Object>> queueHashMap = new HashMap<>();
+    private final Queuer queuer;
 
     private final Callback<Exception> exceptionCallback;
     private final Socket socket;
@@ -35,29 +29,20 @@ public class SocketHandler implements Handler<Socket> {
         this.outputStream = new ObjectOutputStream(socket.getOutputStream());
         this.inputStream = new ObjectInputStream(socket.getInputStream());
         this.server = server;
+
+        this.queuer = new Queuer(inputStream);
     }
 
     @Override
     public void perform(Socket obj) {
         //TODO: change it such that the field and the socket are not the same object, remove one or the other
-        StreamLoop streamLoop = new StreamLoop(exceptionCallback, inputStream);
-        executorService.submit(streamLoop);
+        executorService.submit(queuer);
 
         CommandLoop commandLoop = new CommandLoop(exceptionCallback);
         executorService.submit(commandLoop);
 
         ChangeLoop changeLoop = new ChangeLoop(exceptionCallback);
         executorService.submit(changeLoop);
-    }
-
-    private Queue<Object> getQueue(Class<?> c) {
-        if (queueHashMap.containsKey(c)) {
-            return queueHashMap.get(c);
-        } else {
-            PriorityQueue<Object> queue = new PriorityQueue<>();
-            queueHashMap.put(c, queue);
-            return queue;
-        }
     }
 
     private class ChangeLoop extends Loop {
@@ -67,12 +52,8 @@ public class SocketHandler implements Handler<Socket> {
 
         @Override
         public void loop() {
-            Queue<Object> changeQueue = getQueue(Change.class);
-            if (changeQueue.size() != 0) {
-                Change change = (Change) changeQueue.poll();
-
-                //TODO: handle changes
-            }
+            //TODO: handle changes
+            queuer.poll(Change.class);
         }
     }
 
@@ -83,40 +64,7 @@ public class SocketHandler implements Handler<Socket> {
 
         @Override
         public void loop() throws IOException {
-            Queue<Object> commandQueue = getQueue(Command.class);
-            if (commandQueue.size() != 0) {
-                Command command = (Command) commandQueue.poll();
-                command.perform(server, inputStream, outputStream);
-            }
-        }
-    }
-
-    private class StreamLoop extends Loop {
-        private final ObjectInputStream objectInputStream;
-
-        public StreamLoop(Callback<Exception> exceptionCallback, ObjectInputStream objectInputStream) {
-            super(exceptionCallback);
-            this.objectInputStream = objectInputStream;
-        }
-
-        @Override
-        public void loop() {
-            try {
-                Object obj = objectInputStream.readObject();
-
-                Class<?> objectClass = obj.getClass();
-
-                if (obj instanceof Command) {
-                    getQueue(Command.class).add(obj);
-                } else if (obj instanceof Change) {
-                    getQueue(Change.class).add(obj);
-                } else {
-                    getQueue(objectClass).add(obj);
-                }
-
-            } catch (IOException | ClassNotFoundException e) {
-                setRunning(false);
-            }
+            queuer.poll(Command.class).perform(server, inputStream, outputStream);
         }
     }
 }

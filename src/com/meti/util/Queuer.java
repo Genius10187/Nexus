@@ -1,5 +1,8 @@
 package com.meti.util;
 
+import com.meti.command.Command;
+
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.HashMap;
 import java.util.PriorityQueue;
@@ -20,6 +23,7 @@ public class Queuer extends Loop {
 
     @Override
     public void loop() throws Exception {
+/*
         Object obj = inputStream.readObject();
         if (!queueHashMap.containsKey(obj.getClass())) {
             buildQueue(obj.getClass());
@@ -27,19 +31,46 @@ public class Queuer extends Loop {
 
         Queue<Object> queue = queueHashMap.get(obj.getClass());
         queue.add(obj);
+*/
+
+        try {
+            Object obj = inputStream.readObject();
+
+            Class objectClass = obj.getClass();
+
+            if (obj instanceof Command) {
+                add(Command.class, obj);
+            } else if (obj instanceof Change) {
+                add(Change.class, obj);
+            } else {
+                //TODO: unchecked cast
+                add(objectClass, obj);
+            }
+
+        } catch (IOException | ClassNotFoundException e) {
+            setRunning(false);
+        }
     }
 
-    public Queue<Object> getQueue(Class<?> c) {
-        if (!queueHashMap.containsKey(c)) {
-            buildQueue(c);
-        }
+    public void add(Class<?> c, Object obj) {
+        buildQueue(c);
 
-        return queueHashMap.get(c);
+        queueHashMap.get(c).add(obj);
     }
 
     private void buildQueue(Class<?> c) {
         if (!queueHashMap.containsKey(c)) {
             queueHashMap.put(c, new PriorityQueue<>());
         }
+    }
+
+    public <T> T poll(Class<T> c) {
+        buildQueue(c);
+
+        while (queueHashMap.get(c).size() == 0) {
+            //we wait?
+        }
+
+        return (T) queueHashMap.get(c).poll();
     }
 }
