@@ -61,11 +61,18 @@ public class ClientCreator {
             //TODO: client display
             FXMLLoader loader = new FXMLLoader(clientDisplayFile.toURI().toURL());
             Parent parent = loader.load();
+            ClientDisplay display = loader.getController();
 
             Scene scene = new Scene(parent);
             Stage stage = new Stage();
             stage.setScene(scene);
             stage.show();
+
+            //consider creating client class
+            display.setSocket(socket);
+            display.setHandler(clientHandler);
+
+            display.init();
         } catch (Exception e) {
             try {
                 Dialog.loadDialog().setException(e);
