@@ -18,7 +18,7 @@ import java.io.StringWriter;
  * @since 12/3/2017
  */
 public class Dialog {
-    private static final File dialogFile = new File("assets\\fxml\\Dialog.fxml");
+    private static final File dialogFile = new File("/fxml/Dialog.fxml");
 
     @FXML
     private TextArea output;

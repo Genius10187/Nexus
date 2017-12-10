@@ -20,7 +20,7 @@ import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
 public class ClientCreator {
-    private static final File clientDisplayFile = new File("assets\\fxml\\ClientDisplay.fxml");
+    private static final File clientDisplayFile = new File("/fxml/ClientDisplay.fxml");
 
     //??????
     private static final Logger logger = Logger.getLogger("Application");

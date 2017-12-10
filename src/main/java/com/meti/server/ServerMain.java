@@ -22,7 +22,7 @@ import java.util.logging.SimpleFormatter;
  */
 public class ServerMain extends Application {
     private static final Logger logger = Logger.getLogger("Application");
-    private static File serverCreatorFXMLLocation = new File("assets\\fxml\\ServerCreator.fxml");
+    private static File serverCreatorFXMLLocation = new File("/fxml/ServerCreator.fxml");
 
     static {
         logger.setLevel(Level.ALL);

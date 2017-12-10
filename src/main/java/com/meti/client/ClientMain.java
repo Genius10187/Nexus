@@ -11,7 +11,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class ClientMain extends Application {
-    private static final File clientCreatorFXML = new File("assets\\fxml\\ClientCreator.fxml");
+    private static final File clientCreatorFXML = new File("/fxml/ClientCreator.fxml");
 
     private final ExecutorService executorService = Executors.newCachedThreadPool();
 

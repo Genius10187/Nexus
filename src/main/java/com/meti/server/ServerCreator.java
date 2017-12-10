@@ -19,7 +19,7 @@ import java.util.logging.Level;
  * @since 12/3/2017
  */
 public class ServerCreator {
-    private static final File serverDisplayFXMLLocation = new File("assets\\fxml\\ServerDisplay.fxml");
+    private static final File serverDisplayFXMLLocation = new File("/fxml/ServerDisplay.fxml");
 
     @FXML
     private TextField portField;
