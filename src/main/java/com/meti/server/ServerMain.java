@@ -1,13 +1,13 @@
 package com.meti.server;
 
 import com.meti.util.LoggerHandler;
+import java.net.URL;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import java.io.File;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.logging.Handler;
@@ -22,7 +22,7 @@ import java.util.logging.SimpleFormatter;
  */
 public class ServerMain extends Application {
     private static final Logger logger = Logger.getLogger("Application");
-    private static File serverCreatorFXMLLocation = new File("/fxml/ServerCreator.fxml");
+    private static URL serverCreatorFXMLLocation = ServerMain.class.getResource("/fxml/ServerCreator.fxml");
 
     static {
         logger.setLevel(Level.ALL);
@@ -51,7 +51,7 @@ public class ServerMain extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Parent parent = FXMLLoader.load(serverCreatorFXMLLocation.toURI().toURL());
+        Parent parent = FXMLLoader.load(serverCreatorFXMLLocation);
         Scene scene = new Scene(parent);
         primaryStage.setScene(scene);
         primaryStage.show();

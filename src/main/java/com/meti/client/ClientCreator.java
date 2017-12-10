@@ -2,6 +2,7 @@ package com.meti.client;
 
 import com.meti.util.Dialog;
 import com.meti.util.LoggerHandler;
+import java.net.URL;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -9,7 +10,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
@@ -20,7 +20,7 @@ import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
 public class ClientCreator {
-    private static final File clientDisplayFile = new File("/fxml/ClientDisplay.fxml");
+    private static final URL clientDisplayFile = ClientCreator.class.getResource("/fxml/ClientDisplay.fxml");
 
     //??????
     private static final Logger logger = Logger.getLogger("Application");
@@ -59,7 +59,7 @@ public class ClientCreator {
             clientHandler.perform(socket);
 
             //TODO: client display
-            FXMLLoader loader = new FXMLLoader(clientDisplayFile.toURI().toURL());
+            FXMLLoader loader = new FXMLLoader(clientDisplayFile);
             Parent parent = loader.load();
             ClientDisplay display = loader.getController();
 

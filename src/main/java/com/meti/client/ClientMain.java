@@ -1,17 +1,17 @@
 package com.meti.client;
 
+import java.net.URL;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import java.io.File;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class ClientMain extends Application {
-    private static final File clientCreatorFXML = new File("/fxml/ClientCreator.fxml");
+    private static final URL clientCreatorFXML = ClientMain.class.getResource("/fxml/ClientCreator.fxml");
 
     private final ExecutorService executorService = Executors.newCachedThreadPool();
 
@@ -29,7 +29,7 @@ public class ClientMain extends Application {
 
         //10/10 throws an exception
 
-        FXMLLoader loader = new FXMLLoader(clientCreatorFXML.toURI().toURL());
+        FXMLLoader loader = new FXMLLoader(clientCreatorFXML);
         Parent parent = loader.load();
         ClientCreator controller = loader.getController();
 

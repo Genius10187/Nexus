@@ -121,7 +121,8 @@ public class ClientDisplay implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        File directoryFile = new File("/fxml/editor");
+        URL fxmlEditorDirectory = getClass().getResource("/fxml/editor");
+        File directoryFile = new File(fxmlEditorDirectory.toExternalForm());
         List<File> fileList = Utility.search(directoryFile, "fxml");
         for (File file : fileList) {
             try {
