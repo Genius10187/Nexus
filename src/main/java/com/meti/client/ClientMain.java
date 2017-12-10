@@ -1,53 +1,54 @@
 package com.meti.client;
 
 import java.net.URL;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
 public class ClientMain extends Application {
-    private static final URL clientCreatorFXML = ClientMain.class.getResource("/fxml/ClientCreator.fxml");
 
-    private final ExecutorService executorService = Executors.newCachedThreadPool();
+  private static final URL clientCreatorFXML = ClientMain.class
+      .getResource("/fxml/ClientCreator.fxml");
 
-    public static void main(String[] args) {
-        launch(args);
-    }
+  private final ExecutorService executorService = Executors.newCachedThreadPool();
 
-    @Override
-    public void start(Stage primaryStage) throws Exception {
+  public static void main(String[] args) {
+    launch(args);
+  }
+
+  @Override
+  public void start(Stage primaryStage) throws Exception {
     /*    Scanner scanner = new Scanner(System.in);
 
         ClientInput clientInput = ClientInput.invoke(new ClientInput(scanner));
         InetAddress address = clientInput.getAddress();
         int port = clientInput.getPort();*/
 
-        //10/10 throws an exception
+    //10/10 throws an exception
 
-        FXMLLoader loader = new FXMLLoader(clientCreatorFXML);
-        Parent parent = loader.load();
-        ClientCreator controller = loader.getController();
+    FXMLLoader loader = new FXMLLoader(clientCreatorFXML);
+    Parent parent = loader.load();
+    ClientCreator controller = loader.getController();
 
-        controller.setExecutorService(executorService);
+    controller.setExecutorService(executorService);
 
-        //TODO: put in utility file
-        Scene scene = new Scene(parent);
-        Stage stage = new Stage();
-        stage.setScene(scene);
-        stage.show();
-    }
+    //TODO: put in utility file
+    Scene scene = new Scene(parent);
+    Stage stage = new Stage();
+    stage.setScene(scene);
+    stage.show();
+  }
 
-    @Override
-    public void stop() throws Exception {
-        executorService.shutdown();
+  @Override
+  public void stop() throws Exception {
+    executorService.shutdown();
 
-        //TODO: handler service
-    }
+    //TODO: handler service
+  }
 
     /*private static class ClientInput {
         private Scanner scanner;

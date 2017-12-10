@@ -9,48 +9,49 @@
 <?import javafx.scene.control.TreeView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
-
 <AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="768.0" prefWidth="1280.0"
-            xmlns="http://javafx.com/javafx/8.0.111" fx:controller="com.meti.client.ClientDisplay">
-    <children>
-        <BorderPane prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
-                    AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-            <top>
-                <MenuBar BorderPane.alignment="CENTER">
-                    <menus>
-                        <Menu mnemonicParsing="false" text="File">
-                            <items>
-                                <MenuItem mnemonicParsing="false" onAction="#close" text="Close"/>
-                            </items>
-                        </Menu>
-                        <Menu mnemonicParsing="false" text="Edit">
-                            <items>
-                                <MenuItem mnemonicParsing="false" text="Delete"/>
-                            </items>
-                        </Menu>
-                        <Menu mnemonicParsing="false" text="Help">
-                            <items>
-                                <MenuItem mnemonicParsing="false" text="About"/>
-                            </items>
-                        </Menu>
-                    </menus>
-                </MenuBar>
-            </top>
-            <left>
-                <ScrollPane fitToHeight="true" fitToWidth="true" BorderPane.alignment="CENTER">
-                    <content>
-                        <TreeView fx:id="fileTreeView" onMouseClicked="#addEditor" prefHeight="200.0"
-                                  prefWidth="200.0"/>
-                    </content>
-                </ScrollPane>
-            </left>
-            <right>
-                <ListView prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER"/>
-            </right>
-            <center>
-                <TabPane fx:id="editorTabPane" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE"
-                         BorderPane.alignment="CENTER"/>
-            </center>
-        </BorderPane>
-    </children>
+  xmlns="http://javafx.com/javafx/8.0.111" fx:controller="com.meti.client.ClientDisplay">
+  <children>
+    <BorderPane prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0"
+      AnchorPane.leftAnchor="0.0"
+      AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <top>
+        <MenuBar BorderPane.alignment="CENTER">
+          <menus>
+            <Menu mnemonicParsing="false" text="File">
+              <items>
+                <MenuItem mnemonicParsing="false" onAction="#close" text="Close"/>
+              </items>
+            </Menu>
+            <Menu mnemonicParsing="false" text="Edit">
+              <items>
+                <MenuItem mnemonicParsing="false" text="Delete"/>
+              </items>
+            </Menu>
+            <Menu mnemonicParsing="false" text="Help">
+              <items>
+                <MenuItem mnemonicParsing="false" text="About"/>
+              </items>
+            </Menu>
+          </menus>
+        </MenuBar>
+      </top>
+      <left>
+        <ScrollPane fitToHeight="true" fitToWidth="true" BorderPane.alignment="CENTER">
+          <content>
+            <TreeView fx:id="fileTreeView" onMouseClicked="#addEditor" prefHeight="200.0"
+              prefWidth="200.0"/>
+          </content>
+        </ScrollPane>
+      </left>
+      <right>
+        <ListView prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER"/>
+      </right>
+      <center>
+        <TabPane fx:id="editorTabPane" prefHeight="200.0" prefWidth="200.0"
+          tabClosingPolicy="UNAVAILABLE"
+          BorderPane.alignment="CENTER"/>
+      </center>
+    </BorderPane>
+  </children>
 </AnchorPane>

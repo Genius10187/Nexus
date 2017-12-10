@@ -12,24 +12,25 @@ import java.util.List;
  * @since 12/3/2017
  */
 public class Cargo implements Serializable {
-    private final List<Object> contents;
 
-    public Cargo(Collection<?> contents) {
-        this();
+  private final List<Object> contents;
 
-        this.contents.addAll(contents);
-    }
+  public Cargo(Collection<?> contents) {
+    this();
 
-    public Cargo() {
-        this.contents = new ArrayList<>();
-    }
+    this.contents.addAll(contents);
+  }
 
-    public Cargo(Object... contents) {
-        this();
-        this.contents.addAll(Arrays.asList(contents));
-    }
+  public Cargo() {
+    this.contents = new ArrayList<>();
+  }
 
-    public List<Object> getContents() {
-        return contents;
-    }
+  public Cargo(Object... contents) {
+    this();
+    this.contents.addAll(Arrays.asList(contents));
+  }
+
+  public List<Object> getContents() {
+    return contents;
+  }
 }

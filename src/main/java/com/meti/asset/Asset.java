@@ -3,20 +3,21 @@ package com.meti.asset;
 import java.io.Serializable;
 
 public class Asset implements Serializable {
-    private Object content;
 
-    public Asset() {
-    }
+  private Object content;
 
-    public Asset(Object content) {
-        this.content = content;
-    }
+  public Asset() {
+  }
 
-    public Object getContent() {
-        return content;
-    }
+  public Asset(Object content) {
+    this.content = content;
+  }
 
-    public void setContent(Object content) {
-        this.content = content;
-    }
+  public Object getContent() {
+    return content;
+  }
+
+  public void setContent(Object content) {
+    this.content = content;
+  }
 }

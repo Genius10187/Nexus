@@ -6,45 +6,46 @@ package com.meti.util;
  * @since 11/30/2017
  */
 public abstract class Loop implements Runnable {
-    protected final Callback<Exception> exceptionCallback;
-    private Class<? extends Exception> previousExceptionClass = null;
 
-    private boolean running = false;
+  protected final Callback<Exception> exceptionCallback;
+  private Class<? extends Exception> previousExceptionClass = null;
 
-    public Loop() {
-        exceptionCallback = Throwable::printStackTrace;
-    }
+  private boolean running = false;
 
-    public Loop(Callback<Exception> exceptionCallback) {
-        this.exceptionCallback = exceptionCallback;
-    }
+  public Loop() {
+    exceptionCallback = Throwable::printStackTrace;
+  }
 
-    @Override
-    public void run() {
-        running = true;
+  public Loop(Callback<Exception> exceptionCallback) {
+    this.exceptionCallback = exceptionCallback;
+  }
 
-        while (!Thread.interrupted() && running) {
-            try {
-                loop();
-            } catch (Exception e) {
-                if (previousExceptionClass != null && previousExceptionClass.equals(e.getClass())) {
-                    return;
-                } else {
-                    previousExceptionClass = e.getClass();
+  @Override
+  public void run() {
+    running = true;
 
-                    try {
-                        exceptionCallback.perform(e);
-                    } catch (Exception e1) {
-                        e1.printStackTrace();
-                    }
-                }
-            }
+    while (!Thread.interrupted() && running) {
+      try {
+        loop();
+      } catch (Exception e) {
+        if (previousExceptionClass != null && previousExceptionClass.equals(e.getClass())) {
+          return;
+        } else {
+          previousExceptionClass = e.getClass();
+
+          try {
+            exceptionCallback.perform(e);
+          } catch (Exception e1) {
+            e1.printStackTrace();
+          }
         }
+      }
     }
+  }
 
-    public void setRunning(boolean running) {
-        this.running = running;
-    }
+  public void setRunning(boolean running) {
+    this.running = running;
+  }
 
-    public abstract void loop() throws Exception;
+  public abstract void loop() throws Exception;
 }
