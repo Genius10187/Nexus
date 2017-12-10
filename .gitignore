@@ -4,6 +4,7 @@
 build/**
 .idea/**
 *.iml
+.gradle/**
 
 #
 # JAVA .GITIGNORE
