@@ -1,5 +1,14 @@
 # Nexus
-**Nexus** is a programming, 3D modelling, and music production software. The goal of this project is to create an application that can work with multiple editor types, for example, a DAW, IDE, et cetera, and have that functionality in real-time. Additionally, another goal is for it to be tested in the application, and then pushed to production then and there.
+**Nexus** is a programming, 3D modelling, and music production software.
+
+**Goals**: 
+An application that can work with multiple editor types, for example, a DAW, IDE, et cetera, and have that functionality in real-time.
+In-real time code testing.
+Immediate push to production, no middleman.
+
+**Current Projects**
+1.0 - All basic, fundamental, features requested that will be implemented before release 1.0. Once the project implements all the features, then Phase 2 will begin with bug fixes, etc.
+Music - This is a long term project to implement music editing.
 
 ## Usage
 ### Requirements
