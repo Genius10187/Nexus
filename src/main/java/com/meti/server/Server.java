@@ -3,6 +3,7 @@ package com.meti.server;
 import com.meti.util.Callback;
 import com.meti.util.LoggerHandler;
 import com.meti.util.Loop;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -27,7 +28,7 @@ public class Server {
 
   public static final int SHUTDOWN_TIME = 5000;
 
-  //TODO: executor service creates way too many threads per client, we really should work on memory stufss
+  //TODO: executor service creates way too many threads per client, we really should work on memory stuffs
   private final ExecutorService executorService = Executors.newCachedThreadPool();
   private final ArrayList<Socket> sockets = new ArrayList<>();
 

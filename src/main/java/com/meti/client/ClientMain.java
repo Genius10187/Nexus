@@ -1,13 +1,14 @@
 package com.meti.client;
 
-import java.net.URL;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import com.meti.util.Utility;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
+
+import java.net.URL;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class ClientMain extends Application {
 
@@ -37,10 +38,7 @@ public class ClientMain extends Application {
     controller.setExecutorService(executorService);
 
     //TODO: put in utility file
-    Scene scene = new Scene(parent);
-    Stage stage = new Stage();
-    stage.setScene(scene);
-    stage.show();
+    Utility.buildStage(parent);
   }
 
   @Override
