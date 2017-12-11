@@ -1,4 +1,11 @@
 # Nexus
-An in - real - time program for software development, 3D modeling, and music creation. Maybe more, we don't know.
+**Nexus** is a programming, 3D modelling, and music production software.
 
-Probably should make this README more informative. TODO
+## Usage
+### Requirements
+- Gradle, version 4.3
+- IntelliJ IDEA, Eclipse, or any other IDE that builds Gradle projects
+### Cloning
+```
+$ git clone https://github.com/Meticuli-Technologies/Nexus.git
+```
