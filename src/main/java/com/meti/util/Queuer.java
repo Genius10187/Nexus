@@ -1,6 +1,7 @@
 package com.meti.util;
 
 import com.meti.command.Command;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.HashMap;
@@ -43,7 +44,6 @@ public class Queuer extends Loop {
       } else if (obj instanceof Change) {
         add(Change.class, obj);
       } else {
-        //TODO: unchecked cast
         add(objectClass, obj);
       }
 
