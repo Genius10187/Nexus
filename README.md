@@ -6,12 +6,8 @@ An application that can work with multiple editor types, for example, a DAW, IDE
 In-real time code testing.
 Immediate push to production, no middleman.
 
-**Current Projects**
-1.0 - All basic, fundamental, features requested that will be implemented before release 1.0. Once the project implements all the features, then Phase 2 will begin with bug fixes, etc.
-Music - This is a long term project to implement music editing.
-
-**Website**
-If you want to visit the website, click here. -> https://meticuli-technologies.github.io/Nexus/
+**Current Projects***
+If you want to contribute, please read the code of conduct and contributing documents. Also, take a look at the wiki for developer information on the structure of the project.
 
 ## Usage
 ### Requirements
