@@ -10,6 +10,9 @@ Immediate push to production, no middleman.
 1.0 - All basic, fundamental, features requested that will be implemented before release 1.0. Once the project implements all the features, then Phase 2 will begin with bug fixes, etc.
 Music - This is a long term project to implement music editing.
 
+**Website**
+If you want to visit the website, click here. -> https://meticuli-technologies.github.io/Nexus/
+
 ## Usage
 ### Requirements
 - Gradle, version 4.3
