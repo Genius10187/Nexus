@@ -19,6 +19,7 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
+import javafx.stage.Stage;
 
 public class ClientDisplay implements Initializable {
 
@@ -36,8 +37,8 @@ public class ClientDisplay implements Initializable {
   private Socket socket;
   private ClientHandler handler;
   private TreeItem<String> root = new TreeItem<>();
+  private Stage stage;
 
-  @FXML
   public void close() {
     try {
       socket.close();
@@ -49,6 +50,11 @@ public class ClientDisplay implements Initializable {
 
     //concerning exit statement
     System.exit(0);
+  }
+
+  @FXML
+  public void onCloseMenuItemClicked() {
+    stage.close();
   }
 
   @FXML
@@ -118,6 +124,11 @@ public class ClientDisplay implements Initializable {
 
   public void setHandler(ClientHandler handler) {
     this.handler = handler;
+  }
+
+  public void setStage(Stage stage) {
+    this.stage = stage;
+    stage.setOnCloseRequest(event -> close());
   }
 
   @Override
