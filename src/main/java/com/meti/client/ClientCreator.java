@@ -3,12 +3,6 @@ package com.meti.client;
 import com.meti.util.Dialog;
 import com.meti.util.LoggerHandler;
 import com.meti.util.Utility;
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.control.TextField;
-
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
@@ -19,6 +13,12 @@ import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 
 public class ClientCreator implements Initializable {
 
@@ -53,11 +53,11 @@ public class ClientCreator implements Initializable {
             Parent parent = loader.load();
             ClientDisplay display = loader.getController();
 
-            Utility.buildStage(parent);
+            Stage stage = Utility.buildStage(parent);
             //consider creating client class
             display.setSocket(socket);
             display.setHandler(clientHandler);
-
+            display.setStage(stage);
             display.init();
         } catch (Exception e) {
             try {
