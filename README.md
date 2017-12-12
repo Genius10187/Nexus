@@ -13,6 +13,9 @@ Music - This is a long term project to implement music editing.
 **Contributing**:
 If you want to contribute, please read the code of conduct and contributing documents. Also, take a look at the wiki for developer information on the structure of the project.
 
+**Website**
+There is also a project website if you want to contribute to that as well. --> https://meticuli-technologies.github.io/Nexus/
+
 ## Usage
 ### Requirements
 - Gradle, version 4.3
