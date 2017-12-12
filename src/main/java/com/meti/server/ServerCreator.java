@@ -40,6 +40,7 @@ public class ServerCreator {
 
       Scene scene = new Scene(parent);
       Stage stage = new Stage();
+      display.setStage(stage);
       stage.setScene(scene);
       stage.show();
 

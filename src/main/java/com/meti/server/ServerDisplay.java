@@ -9,6 +9,7 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 
 public class ServerDisplay {
 
@@ -25,13 +26,20 @@ public class ServerDisplay {
   private Text portText;
 
   private Server server;
+  private Stage stage;
 
-  @FXML
+  /**
+   * Invoked upon stage close request.
+   */
   public void close() {
     server.stop();
-
     Platform.exit();
     System.exit(0);
+  }
+
+  @FXML
+  public void onCloseMenuItemClicked() {
+    stage.close();
   }
 
   public void buildListeners() {
@@ -49,6 +57,11 @@ public class ServerDisplay {
     this.server = server;
 
     portText.setText(String.valueOf(server.getServerSocket().getLocalPort()));
+  }
+
+  public void setStage(Stage stage) {
+    this.stage = stage;
+    stage.setOnCloseRequest(event -> close());
   }
 
   private class TextAreaHandler extends Handler {
