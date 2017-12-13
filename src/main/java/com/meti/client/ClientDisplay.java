@@ -2,14 +2,6 @@ package com.meti.client;
 
 import com.meti.client.editor.Editor;
 import com.meti.util.Utility;
-import java.io.File;
-import java.io.IOException;
-import java.net.Socket;
-import java.net.URL;
-import java.util.HashMap;
-import java.util.List;
-import java.util.ResourceBundle;
-import java.util.logging.Level;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -20,6 +12,15 @@ import javafx.scene.control.TabPane;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.stage.Stage;
+
+import java.io.File;
+import java.io.IOException;
+import java.net.Socket;
+import java.net.URL;
+import java.util.HashMap;
+import java.util.List;
+import java.util.ResourceBundle;
+import java.util.logging.Level;
 
 public class ClientDisplay implements Initializable {
 
@@ -133,7 +134,7 @@ public class ClientDisplay implements Initializable {
 
   @Override
   public void initialize(URL location, ResourceBundle resources) {
-    URL fxmlEditorDirectory = getClass().getResource("/fxml/editor");
+    URL fxmlEditorDirectory = getClass().getResource("/fxml/client/editor");
     File directoryFile = new File(fxmlEditorDirectory.toExternalForm());
     List<File> fileList = Utility.search(directoryFile, "fxml");
     for (File file : fileList) {

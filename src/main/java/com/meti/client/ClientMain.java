@@ -13,7 +13,7 @@ import java.util.concurrent.Executors;
 public class ClientMain extends Application {
 
   private static final URL clientCreatorFXML = ClientMain.class
-      .getResource("/fxml/ClientCreator.fxml");
+          .getResource("/fxml/client/ClientCreator.fxml");
 
   private final ExecutorService executorService = Executors.newCachedThreadPool();
 

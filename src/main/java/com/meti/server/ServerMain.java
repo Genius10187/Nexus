@@ -1,6 +1,12 @@
 package com.meti.server;
 
 import com.meti.util.LoggerHandler;
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.net.URL;
@@ -8,11 +14,6 @@ import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
-import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
 
 /**
  * @author SirMathhman
@@ -23,7 +24,7 @@ public class ServerMain extends Application {
 
   private static final Logger logger = Logger.getLogger("Application");
   private static URL serverCreatorFXMLLocation = ServerMain.class
-      .getResource("/fxml/ServerCreator.fxml");
+          .getResource("/fxml/server/ServerCreator.fxml");
 
   static {
     logger.setLevel(Level.ALL);

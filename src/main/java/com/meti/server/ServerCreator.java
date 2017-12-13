@@ -1,16 +1,17 @@
 package com.meti.server;
 
 import com.meti.util.Dialog;
-import java.io.IOException;
-import java.net.ServerSocket;
-import java.net.URL;
-import java.util.logging.Level;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.URL;
+import java.util.logging.Level;
 
 /**
  * @author SirMathhman
@@ -20,7 +21,7 @@ import javafx.stage.Stage;
 public class ServerCreator {
 
   private static final URL serverDisplayFXMLLocation = ServerCreator.class
-      .getResource("/fxml/ServerDisplay.fxml");
+          .getResource("/fxml/server/ServerDisplay.fxml");
 
   @FXML
   private TextField portField;
