@@ -11,7 +11,7 @@
 * Music - This is a long term project to implement music editing.
 
 **Contributing**:
-If you want to contribute, please read the code of conduct and contributing documents. Also, take a look at the wiki for developer information on the structure of the project.
+If you want to contribute, please read the code of conduct and contributing documents. Also, take a look at the wiki for developer information on the structure of the project. Any IDE that supports Gradle will work.
 
 **Website**
 There is also a project website if you want to contribute to that as well. 
