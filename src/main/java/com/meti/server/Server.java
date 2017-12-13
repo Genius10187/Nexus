@@ -26,124 +26,124 @@ import java.util.logging.SimpleFormatter;
  */
 public class Server {
 
-  public static final int SHUTDOWN_TIME = 5000;
+    public static final int SHUTDOWN_TIME = 5000;
 
-  //TODO: executor service creates way too many threads per client, we really should work on memory stuffs
-  private final ExecutorService executorService = Executors.newCachedThreadPool();
-  private final ArrayList<Socket> sockets = new ArrayList<>();
+    //TODO: executor service creates way too many threads per client, we really should work on memory stuffs
+    private final ExecutorService executorService = Executors.newCachedThreadPool();
+    private final ArrayList<Socket> sockets = new ArrayList<>();
 
-  private ServerSocket serverSocket;
-  private Logger logger = Logger.getLogger("Server");
+    private ServerSocket serverSocket;
+    private Logger logger = Logger.getLogger("Server");
 
-  public Server(ServerSocket serverSocket) {
-    this.serverSocket = serverSocket;
+    public Server(ServerSocket serverSocket) {
+        this.serverSocket = serverSocket;
 
-    logger.setLevel(Level.ALL);
-    logger.setUseParentHandlers(false);
+        logger.setLevel(Level.ALL);
+        logger.setUseParentHandlers(false);
 
-    Handler handler = new LoggerHandler();
-    handler.setFormatter(new SimpleFormatter());
-    handler.setLevel(Level.ALL);
+        Handler handler = new LoggerHandler();
+        handler.setFormatter(new SimpleFormatter());
+        handler.setLevel(Level.ALL);
 
-    logger.addHandler(handler);
-  }
-
-  public void run() {
-    logger.log(Level.INFO, "Initializing application");
-
-    try {
-      Callback<Exception> callback = obj -> {
-        StringWriter writer = new StringWriter();
-        obj.printStackTrace(new PrintWriter(writer));
-        logger.log(Level.WARNING, writer.toString());
-      };
-
-      File directory = new File("Server");
-      if (!directory.exists()) {
-        logger.log(Level.FINE, "Directory status creation: " + directory.mkdirs());
-      }
-
-      System.out.println("Loaded files: ");
-      for (File f : AssetManager.load(directory)) {
-        System.out.println("\n\t" + f.getPath());
-      }
-
-      SocketListener listener = new SocketListener(callback, serverSocket, this);
-      executorService.submit(listener);
-    } catch (Exception e) {
-      logger.log(Level.SEVERE, "Error in initializing util " + e);
-      System.exit(-1);
-    }
-  }
-
-  public void stop() {
-    logger.log(Level.INFO, "Stopping application");
-
-    try {
-      serverSocket.close();
-
-      logger.log(Level.FINE, "Shutting down executor service");
-
-      executorService.shutdown();
-      Thread.sleep(SHUTDOWN_TIME);
-
-      if (!executorService.isShutdown()) {
-        logger.log(Level.FINE, "Shutting down executor service now");
-
-        executorService.shutdownNow();
-      }
-    } catch (Exception e) {
-      logger.log(Level.SEVERE, "Severe stop!" + "\n\t" + e.toString());
-
-      //this really means stop lol
-      System.exit(-1);
-    }
-  }
-
-  public ServerSocket getServerSocket() {
-    return serverSocket;
-  }
-
-  public Logger getLogger() {
-    return logger;
-  }
-
-  public ArrayList<Socket> getSockets() {
-    return sockets;
-  }
-
-  public ExecutorService getExecutorService() {
-    return executorService;
-  }
-
-  private class SocketListener extends Loop {
-
-    private final ServerSocket serverSocket;
-    private final Server server;
-
-    public SocketListener(Callback<Exception> exceptionCallback, ServerSocket serverSocket,
-        Server server) {
-      super(exceptionCallback);
-      this.serverSocket = serverSocket;
-      this.server = server;
+        logger.addHandler(handler);
     }
 
-    @Override
-    public void loop() throws IOException {
-      try {
-        Socket socket = serverSocket.accept();
+    public void run() {
+        logger.log(Level.INFO, "Initializing application");
 
-        sockets.add(socket);
-        SocketHandler handler = new SocketHandler(executorService, exceptionCallback, socket,
-            server);
-        handler.perform(socket);
-      } catch (SocketException e) {
-        if (!serverSocket.isClosed()) {
-          serverSocket.close();
+        try {
+            Callback<Exception> callback = obj -> {
+                StringWriter writer = new StringWriter();
+                obj.printStackTrace(new PrintWriter(writer));
+                logger.log(Level.WARNING, writer.toString());
+            };
+
+            File directory = new File("Server");
+            if (!directory.exists()) {
+                logger.log(Level.FINE, "Directory status creation: " + directory.mkdirs());
+            }
+
+            System.out.println("Loaded files: ");
+            for (File f : AssetManager.load(directory)) {
+                System.out.println("\n\t" + f.getPath());
+            }
+
+            SocketListener listener = new SocketListener(callback, serverSocket, this);
+            executorService.submit(listener);
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, "Error in initializing util " + e);
+            System.exit(-1);
+        }
+    }
+
+    public void stop() {
+        logger.log(Level.INFO, "Stopping application");
+
+        try {
+            serverSocket.close();
+
+            logger.log(Level.FINE, "Shutting down executor service");
+
+            executorService.shutdown();
+            Thread.sleep(SHUTDOWN_TIME);
+
+            if (!executorService.isShutdown()) {
+                logger.log(Level.FINE, "Shutting down executor service now");
+
+                executorService.shutdownNow();
+            }
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, "Severe stop!" + "\n\t" + e.toString());
+
+            //this really means stop lol
+            System.exit(-1);
+        }
+    }
+
+    public ServerSocket getServerSocket() {
+        return serverSocket;
+    }
+
+    public Logger getLogger() {
+        return logger;
+    }
+
+    public ArrayList<Socket> getSockets() {
+        return sockets;
+    }
+
+    public ExecutorService getExecutorService() {
+        return executorService;
+    }
+
+    private class SocketListener extends Loop {
+
+        private final ServerSocket serverSocket;
+        private final Server server;
+
+        public SocketListener(Callback<Exception> exceptionCallback, ServerSocket serverSocket,
+                              Server server) {
+            super(exceptionCallback);
+            this.serverSocket = serverSocket;
+            this.server = server;
         }
 
-        setRunning(false);
-      }
+        @Override
+        public void loop() throws IOException {
+            try {
+                Socket socket = serverSocket.accept();
+
+                sockets.add(socket);
+                SocketHandler handler = new SocketHandler(executorService, exceptionCallback, socket,
+                        server);
+                handler.perform(socket);
+            } catch (SocketException e) {
+                if (!serverSocket.isClosed()) {
+                    serverSocket.close();
+                }
+
+                setRunning(false);
+            }
+        }
     }
-  }
 }

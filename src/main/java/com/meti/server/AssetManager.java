@@ -13,35 +13,35 @@ import java.util.Set;
 
 public class AssetManager {
 
-  private static final HashMap<String, AssetBuilder> builderHashMap = new HashMap<>();
-  private static final HashMap<File, Asset> assetHashMap = new HashMap<>();
+    private static final HashMap<String, AssetBuilder> builderHashMap = new HashMap<>();
+    private static final HashMap<File, Asset> assetHashMap = new HashMap<>();
 
-  private AssetManager() {
-  }
-
-  public static List<File> load(File directory) throws IOException {
-    List<File> files = Utility.search(directory);
-
-    for (File file : files) {
-      AssetBuilder builder = null;
-      String extension = Utility.getExtension(file);
-      if (builderHashMap.containsKey(extension)) {
-        builder = builderHashMap.get(extension);
-      } else {
-        builder = new ByteBuilder();
-      }
-
-      assetHashMap.put(file, builder.build(file));
+    private AssetManager() {
     }
 
-    return files;
-  }
+    public static List<File> load(File directory) throws IOException {
+        List<File> files = Utility.search(directory);
 
-  public static Set<String> getExtensions() {
-    return builderHashMap.keySet();
-  }
+        for (File file : files) {
+            AssetBuilder builder = null;
+            String extension = Utility.getExtension(file);
+            if (builderHashMap.containsKey(extension)) {
+                builder = builderHashMap.get(extension);
+            } else {
+                //builder = new ByteBuilder();
+            }
 
-  public static Set<File> getFiles() {
-    return assetHashMap.keySet();
-  }
+            assetHashMap.put(file, builder.build(file));
+        }
+
+        return files;
+    }
+
+    public static Set<String> getExtensions() {
+        return builderHashMap.keySet();
+    }
+
+    public static Set<File> getFiles() {
+        return assetHashMap.keySet();
+    }
 }

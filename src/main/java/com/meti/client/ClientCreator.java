@@ -1,7 +1,6 @@
 package com.meti.client;
 
 import com.meti.util.Dialog;
-import com.meti.util.LoggerHandler;
 import com.meti.util.Utility;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -14,20 +13,16 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.URL;
-import java.util.ResourceBundle;
 import java.util.concurrent.ExecutorService;
-import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
-public class ClientCreator implements Initializable {
+import static com.meti.client.ClientProperties.logger;
 
+public class ClientCreator {
     private static final URL clientDisplayFile = ClientCreator.class
             .getResource("/fxml/client/ClientDisplay.fxml");
-
-    //??????
-    private static final Logger logger = Logger.getLogger("Application");
 
     @FXML
     private TextField addressField;
@@ -36,30 +31,42 @@ public class ClientCreator implements Initializable {
     private TextField portField;
     private ExecutorService executorService;
 
-
     @FXML
     public void connect() {
         try {
-            InetAddress address = InetAddress.getByName(addressField.getText());
-            int port = Integer.parseInt(portField.getText());
-
-            Socket socket = new Socket(address, port);
+            Socket socket;
+            {
+                socket = getSocket();
+                logger.log(Level.FINE, "Created the socket and connected to the server on port " + socket.getPort());
+            }
 
             //we need to pass both for initializing fields and performing the method
             //because it is an interface
-            ClientHandler clientHandler = new ClientHandler(logger, executorService, socket);
-            clientHandler.perform(socket);
+            ClientHandler clientHandler;
+            ClientDisplay display;
+            Stage stage;
+            {
+                //TODO: somehow fix this
+                clientHandler = new ClientHandler(socket);
+                clientHandler.perform(socket);
 
-            FXMLLoader loader = new FXMLLoader(clientDisplayFile);
-            Parent parent = loader.load();
-            ClientDisplay display = loader.getController();
+                //TODO: replace with utility
+                FXMLLoader loader = new FXMLLoader(clientDisplayFile);
+                Parent parent = loader.load();
+                display = loader.getController();
 
-            Stage stage = Utility.buildStage(parent);
-            //consider creating client class
-            display.setSocket(socket);
-            display.setHandler(clientHandler);
-            display.setStage(stage);
-            display.init();
+                stage = Utility.buildStage(parent);
+                logger.log(Level.FINE, "Loading ClientDisplay fxml");
+            }
+
+            {
+                display.setSocket(socket);
+                display.setHandler(clientHandler);
+                display.setStage(stage);
+
+                display.init();
+                logger.log(Level.FINE, "Initialized ClientDisplay with sockets");
+            }
         } catch (Exception e) {
             try {
                 Dialog.loadDialog().setException(e);
@@ -71,22 +78,14 @@ public class ClientCreator implements Initializable {
         }
     }
 
-    public void setExecutorService(ExecutorService executorService) {
-        this.executorService = executorService;
+    private Socket getSocket() throws IOException {
+        InetAddress address = InetAddress.getByName(addressField.getText());
+        int port = Integer.parseInt(portField.getText());
+
+        return new Socket(address, port);
     }
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        //sets up the logger
-        logger.setLevel(Level.ALL);
-        logger.setUseParentHandlers(false);
-
-        Handler handler = new LoggerHandler();
-        handler.setFormatter(new SimpleFormatter());
-        handler.setLevel(Level.ALL);
-
-        logger.addHandler(handler);
-
-        logger.log(Level.INFO, "Initializing application");
+    public void setExecutorService(ExecutorService executorService) {
+        this.executorService = executorService;
     }
 }

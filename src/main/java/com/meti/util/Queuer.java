@@ -15,15 +15,15 @@ import java.util.Queue;
  */
 public class Queuer extends Loop {
 
-  private final HashMap<Class<?>, Queue<Object>> queueHashMap = new HashMap<>();
-  private final ObjectInputStream inputStream;
+    private final HashMap<Class<?>, Queue<Object>> queueHashMap = new HashMap<>();
+    private final ObjectInputStream inputStream;
 
-  public Queuer(ObjectInputStream inputStream) {
-    this.inputStream = inputStream;
-  }
+    public Queuer(ObjectInputStream inputStream) {
+        this.inputStream = inputStream;
+    }
 
-  @Override
-  public void loop() throws Exception {
+    @Override
+    public void loop() throws Exception {
 /*
         Object obj = inputStream.readObject();
         if (!queueHashMap.containsKey(obj.getClass())) {
@@ -34,43 +34,43 @@ public class Queuer extends Loop {
         queue.add(obj);
 */
 
-    try {
-      Object obj = inputStream.readObject();
+        try {
+            Object obj = inputStream.readObject();
 
-      Class objectClass = obj.getClass();
+            Class objectClass = obj.getClass();
 
-      if (obj instanceof Command) {
-        add(Command.class, obj);
-      } else if (obj instanceof Change) {
-        add(Change.class, obj);
-      } else {
-        add(objectClass, obj);
-      }
+            if (obj instanceof Command) {
+                add(Command.class, obj);
+            } else if (obj instanceof Change) {
+                add(Change.class, obj);
+            } else {
+                add(objectClass, obj);
+            }
 
-    } catch (IOException | ClassNotFoundException e) {
-      setRunning(false);
-    }
-  }
-
-  public void add(Class<?> c, Object obj) {
-    buildQueue(c);
-
-    queueHashMap.get(c).add(obj);
-  }
-
-  private void buildQueue(Class<?> c) {
-    if (!queueHashMap.containsKey(c)) {
-      queueHashMap.put(c, new PriorityQueue<>());
-    }
-  }
-
-  public <T> T poll(Class<T> c) {
-    buildQueue(c);
-
-    while (queueHashMap.get(c).size() == 0) {
-      //we wait?
+        } catch (IOException | ClassNotFoundException e) {
+            setRunning(false);
+        }
     }
 
-    return (T) queueHashMap.get(c).poll();
-  }
+    public void add(Class<?> c, Object obj) {
+        buildQueue(c);
+
+        queueHashMap.get(c).add(obj);
+    }
+
+    private void buildQueue(Class<?> c) {
+        if (!queueHashMap.containsKey(c)) {
+            queueHashMap.put(c, new PriorityQueue<>());
+        }
+    }
+
+    public <T> T poll(Class<T> c) {
+        buildQueue(c);
+
+        while (queueHashMap.get(c).size() == 0) {
+            //we wait?
+        }
+
+        return (T) queueHashMap.get(c).poll();
+    }
 }
