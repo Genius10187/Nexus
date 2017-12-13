@@ -1,6 +1,7 @@
 package com.meti.server;
 
 import com.meti.util.Dialog;
+import com.meti.util.FXBundle;
 import com.meti.util.Utility;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -18,6 +19,8 @@ import java.util.logging.Level;
  * @since 12/3/2017
  */
 public class ServerCreator {
+    private static final URL advancedServerDisplayFXMLLocation = AdvancedServerCreator.class
+            .getResource("/fxml/server/AdvancedServerCreator.fxml");
     private static final URL serverDisplayFXMLLocation = ServerCreator.class
             .getResource("/fxml/server//ServerDisplay.fxml");
 
@@ -83,6 +86,12 @@ public class ServerCreator {
     @FXML
     public void openAdvancedSettings() {
         //TODO: advanced settings
+        try {
+            FXBundle bundle = Utility.buildStage(advancedServerDisplayFXMLLocation);
+            //continue  handling
+        } catch (IOException e) {
+            //TODO: handle logger
+        }
     }
 
     private class ServerThread implements Runnable {
