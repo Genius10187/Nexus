@@ -2,8 +2,9 @@ package com.meti.server;
 
 import com.meti.asset.Asset;
 import com.meti.asset.AssetBuilder;
-import com.meti.asset.DefaultBuilder;
+import com.meti.module.bytes.ByteBuilder;
 import com.meti.util.Utility;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
@@ -27,7 +28,7 @@ public class AssetManager {
       if (builderHashMap.containsKey(extension)) {
         builder = builderHashMap.get(extension);
       } else {
-        builder = new DefaultBuilder();
+        builder = new ByteBuilder();
       }
 
       assetHashMap.put(file, builder.build(file));
