@@ -1,4 +1,6 @@
-package com.meti.asset;
+package com.meti.module.bytes;
+
+import com.meti.asset.Asset;
 
 public class ByteAsset extends Asset {
 
