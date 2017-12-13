@@ -1,5 +1,6 @@
 package com.meti.client;
 
+import com.meti.asset.Asset;
 import com.meti.command.Command;
 import com.meti.command.ListCommand;
 import com.meti.util.Cargo;
@@ -13,23 +14,24 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static com.meti.client.ClientProperties.executorService;
-import static com.meti.client.ClientProperties.logger;
-
 //called from ClientMain
-public class ClientHandler implements Handler<Socket> {
+public class Client implements Handler<Socket> {
+    //edits for the master branch!
 
     private final Queuer queuer;
+    private final Logger logger;
     private List<File> filePaths;
     private List<File> extensions;
 
-    public ClientHandler(Socket socket) throws IOException {
+    public Client(Logger logger, ExecutorService service, Socket socket) throws IOException {
         this.queuer = new Queuer(new ObjectInputStream(socket.getInputStream()));
+        this.logger = logger;
 
-        executorService.submit(queuer);
+        service.submit(queuer);
     }
 
     @Override
@@ -64,11 +66,17 @@ public class ClientHandler implements Handler<Socket> {
         logger.log(Level.FINE, "Successfully received initialization cargo");
     }
 
+    public Asset getAsset(File location) {
+        //Command command = new GetCommand();
+
+        //TODO: handle get asset, use GetCommand
+        return null;
+    }
+
     public List<File> getFilePaths() {
         return filePaths;
     }
 
-    //TODO: Returns the extensions that can be processed by the server.
     public List<File> getExtensions() {
         return extensions;
     }

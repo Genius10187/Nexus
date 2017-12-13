@@ -6,96 +6,42 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.net.URL;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.logging.Level;
+
+import static com.meti.client.ClientProperties.executorService;
+import static com.meti.client.ClientProperties.logger;
 
 public class ClientMain extends Application {
 
-  private static final URL clientCreatorFXML = ClientMain.class
-      .getResource("/fxml/ClientCreator.fxml");
+    private static final URL clientCreatorFXML = ClientMain.class
+            .getResource("/fxml/ClientCreator.fxml");
 
-  private final ExecutorService executorService = Executors.newCachedThreadPool();
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+        initFXML();
+    }
 
-  public static void main(String[] args) {
-    launch(args);
-  }
+    private void initFXML() throws IOException {
+        FXMLLoader loader = new FXMLLoader(clientCreatorFXML);
+        Parent parent = loader.load();
+        ClientCreator controller = loader.getController();
 
-  @Override
-  public void start(Stage primaryStage) throws Exception {
-    /*    Scanner scanner = new Scanner(System.in);
+        controller.setExecutorService(executorService);
+        Utility.buildStage(parent);
 
-        ClientInput clientInput = ClientInput.invoke(new ClientInput(scanner));
-        InetAddress address = clientInput.getAddress();
-        int port = clientInput.getPort();*/
+        logger.log(Level.INFO, "Initialized ClientCreator FXML");
+    }
 
-    //10/10 throws an exception
+    @Override
+    public void stop() {
+        executorService.shutdown();
 
-    FXMLLoader loader = new FXMLLoader(clientCreatorFXML);
-    Parent parent = loader.load();
-    ClientCreator controller = loader.getController();
+        //TODO: handler service
+    }
 
-    controller.setExecutorService(executorService);
-
-    //TODO: put in utility file
-    Utility.buildStage(parent);
-  }
-
-  @Override
-  public void stop() throws Exception {
-    executorService.shutdown();
-
-    //TODO: handler service
-  }
-
-    /*private static class ClientInput {
-        private Scanner scanner;
-        private InetAddress address;
-        private int port;
-
-        public ClientInput(Scanner scanner) {
-            this.scanner = scanner;
-        }
-
-        public InetAddress getAddress() {
-            return address;
-        }
-
-        public int getPort() {
-            return port;
-        }
-
-        public static ClientInput invoke(ClientInput clientInput) {
-            System.out.println("Enter in an IP address to connect to:");
-
-            boolean addressValid = false;
-            clientInput.address = null;
-            do {
-                try {
-                    String addressString = clientInput.scanner.nextLine();
-                    clientInput.address = InetAddress.getByName(addressString);
-
-                    addressValid = true;
-                } catch (UnknownHostException e) {
-                    System.out.println("Invalid address");
-                }
-            } while (!addressValid);
-
-            System.out.println("Enter in a port to connect to");
-
-            boolean portValid = false;
-            clientInput.port = -1;
-            do {
-                try {
-                    String portString = clientInput.scanner.nextLine();
-                    clientInput.port = Integer.parseInt(portString);
-
-                    portValid = true;
-                } catch (NumberFormatException e) {
-                    System.out.println("Invalid port");
-                }
-            } while (!portValid);
-            return clientInput;
-        }
-    }*/
+    public static void main(String[] args) {
+        launch(args);
+    }
 }
