@@ -13,7 +13,7 @@
 **Contributing**:
 If you want to contribute, please read the code of conduct and contributing documents. Also, take a look at the wiki for developer information on the structure of the project. Any IDE that supports Gradle will work.
 
-**Website**
+**Website**:
 There is also a project website if you want to contribute to that as well. 
 The JavaDoc is also located on the website.
 https://meticuli-technologies.github.io/Nexus/
