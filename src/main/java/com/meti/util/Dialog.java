@@ -1,15 +1,16 @@
 package com.meti.util;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.TextArea;
 import javafx.stage.Stage;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 
 /**
  * @author SirMathhman
@@ -18,7 +19,7 @@ import javafx.stage.Stage;
  */
 public class Dialog {
 
-  private static final File dialogFile = new File("/fxml/Dialog.fxml");
+  private static final File dialogFile = new File("/fxml/util/Dialog.fxml");
 
   @FXML
   private TextArea output;
