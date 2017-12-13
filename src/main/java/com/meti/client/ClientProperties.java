@@ -2,6 +2,8 @@ package com.meti.client;
 
 import com.meti.util.LoggerHandler;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.logging.Handler;
@@ -17,6 +19,12 @@ import java.util.logging.SimpleFormatter;
 public class ClientProperties {
     public static final Logger logger = Logger.getLogger("Application");
     public static final ExecutorService executorService = Executors.newCachedThreadPool();
+
+    public static void log(Level level, Exception e) {
+        StringWriter writer = new StringWriter();
+        e.printStackTrace(new PrintWriter(writer));
+        logger.log(level, writer.toString());
+    }
 
     static {
         logger.setLevel(Level.ALL);

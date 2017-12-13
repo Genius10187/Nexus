@@ -31,31 +31,39 @@ public class ClientCreator {
     @FXML
     public void connect() {
         try {
-            Socket socket = getSocket();
-            logger.log(Level.FINE, "Created the socket and connected to the server on port " + socket.getPort());
+            Socket socket;
+            {
+                socket = getSocket();
+                logger.log(Level.FINE, "Created the socket and connected to the server on port " + socket.getPort());
+            }
 
             //we need to pass both for initializing fields and performing the method
             //because it is an interface
+            ClientHandler clientHandler;
+            ClientDisplay display;
+            Stage stage;
+            {
+                //TODO: somehow fix this
+                clientHandler = new ClientHandler(socket);
+                clientHandler.perform(socket);
 
-            //TODO: somehow fix this
-            ClientHandler clientHandler = new ClientHandler(socket);
-            clientHandler.perform(socket);
+                //TODO: replace with utility
+                FXMLLoader loader = new FXMLLoader(clientDisplayFile);
+                Parent parent = loader.load();
+                display = loader.getController();
 
-            //TODO: replace with utility
-            FXMLLoader loader = new FXMLLoader(clientDisplayFile);
-            Parent parent = loader.load();
-            ClientDisplay display = loader.getController();
+                stage = Utility.buildStage(parent);
+                logger.log(Level.FINE, "Loading ClientDisplay fxml");
+            }
 
-            Stage stage = Utility.buildStage(parent);
-            //consider creating client class
+            {
+                display.setSocket(socket);
+                display.setHandler(clientHandler);
+                display.setStage(stage);
 
-            logger.log(Level.FINE, "Loading ClientDisplay fxml");
-            display.setSocket(socket);
-            display.setHandler(clientHandler);
-            display.setStage(stage);
-
-            display.init();
-            logger.log(Level.FINE, "Initialized ClientDisplay with sockets");
+                display.init();
+                logger.log(Level.FINE, "Initialized ClientDisplay with sockets");
+            }
         } catch (Exception e) {
             try {
                 Dialog.loadDialog().setException(e);

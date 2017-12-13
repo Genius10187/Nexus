@@ -14,56 +14,62 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
 import java.util.logging.Level;
-import java.util.logging.Logger;
+
+import static com.meti.client.ClientProperties.*;
 
 //called from ClientMain
 public class Client implements Handler<Socket> {
     //edits for the master branch!
 
     private final Queuer queuer;
-    private final Logger logger;
     private List<File> filePaths;
     private List<File> extensions;
 
-    public Client(Logger logger, ExecutorService service, Socket socket) throws IOException {
+    public Client(Socket socket) throws IOException {
         this.queuer = new Queuer(new ObjectInputStream(socket.getInputStream()));
-        this.logger = logger;
 
-        service.submit(queuer);
+        executorService.submit(queuer);
     }
 
     @Override
     public void perform(Socket obj) throws IOException {
         ObjectOutputStream outputStream = new ObjectOutputStream(obj.getOutputStream());
 
-        logger.log(Level.FINE, "Writing initialization commands");
+        try {
+            getFilePaths(outputStream);
+            getExtensions(outputStream);
 
-        {
-            Command command = new ListCommand(ListCommand.TYPE_FILES);
-            outputStream.writeObject(command);
-            outputStream.flush();
-
-            //cargo not being received
-            Cargo cargo = queuer.poll(Cargo.class);
-
-            filePaths = new ArrayList<>();
-            cargo.getContents().forEach(o -> filePaths.add((File) o));
+            logger.log(Level.FINE, "Successfully received initialization cargo");
+        } catch (IOException e) {
+            log(Level.SEVERE, e);
         }
+    }
 
-        {
-            Command command = new ListCommand(ListCommand.TYPE_EXTENSIONS);
-            outputStream.writeObject(command);
-            outputStream.flush();
+    private void getFilePaths(ObjectOutputStream outputStream) throws IOException {
+        Command command = new ListCommand(ListCommand.TYPE_FILES);
+        writeObject(outputStream, command);
 
-            Cargo cargo = queuer.poll(Cargo.class);
+        //cargo not being received
+        Cargo cargo = queuer.poll(Cargo.class);
 
-            extensions = new ArrayList<>();
-            cargo.getContents().forEach(o -> extensions.add((File) o));
-        }
+        filePaths = new ArrayList<>();
+        cargo.getContents().forEach(o -> filePaths.add((File) o));
+    }
 
-        logger.log(Level.FINE, "Successfully received initialization cargo");
+    private void getExtensions(ObjectOutputStream outputStream) throws IOException {
+        Command command = new ListCommand(ListCommand.TYPE_EXTENSIONS);
+        writeObject(outputStream, command);
+
+        Cargo cargo = queuer.poll(Cargo.class);
+
+        extensions = new ArrayList<>();
+        cargo.getContents().forEach(o -> extensions.add((File) o));
+    }
+
+    private void writeObject(ObjectOutputStream outputStream, Object object) throws IOException {
+        outputStream.writeObject(object);
+        outputStream.flush();
     }
 
     public Asset getAsset(File location) {
@@ -79,9 +85,5 @@ public class Client implements Handler<Socket> {
 
     public List<File> getExtensions() {
         return extensions;
-    }
-
-    public Logger getLogger() {
-        return logger;
     }
 }
