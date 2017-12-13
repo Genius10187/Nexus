@@ -12,9 +12,7 @@ import java.util.logging.Level;
 
 import static com.meti.client.ClientProperties.executorService;
 import static com.meti.client.ClientProperties.logger;
-
 public class ClientMain extends Application {
-
     private static final URL clientCreatorFXML = ClientMain.class
             .getResource("/fxml/ClientCreator.fxml");
 

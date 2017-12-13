@@ -7,13 +7,13 @@
 3. Immediate push to production, no middleman.
 
 **Current Projects**:
-* 1.0 - All basic, fundamental, features requested that will be implemented before release 1.0. Once the project implements all the features, then Phase 2 will begin with bug fixes, etc. 
-* Music - This is a long term project to implement music editing.
+* Features - All basic, fundamental, features requested that will be implemented before the next release.
+* Bugs - Any sizable bugs worth mentioning.
 
 **Contributing**:
-If you want to contribute, please read the code of conduct and contributing documents. Also, take a look at the wiki for developer information on the structure of the project.
+If you want to contribute, please read the code of conduct and contributing documents. Also, take a look at the wiki for developer information on the structure of the project. Any IDE that supports Gradle will work.
 
-**Website**
+**Website**:
 There is also a project website if you want to contribute to that as well. 
 The JavaDoc is also located on the website.
 https://meticuli-technologies.github.io/Nexus/

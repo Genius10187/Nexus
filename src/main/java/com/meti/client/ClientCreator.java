@@ -4,6 +4,7 @@ import com.meti.util.Dialog;
 import com.meti.util.Utility;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
@@ -14,12 +15,14 @@ import java.net.Socket;
 import java.net.URL;
 import java.util.concurrent.ExecutorService;
 import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 
 import static com.meti.client.ClientProperties.logger;
 
 public class ClientCreator {
     private static final URL clientDisplayFile = ClientCreator.class
-            .getResource("/fxml/ClientDisplay.fxml");
+            .getResource("/fxml/client/ClientDisplay.fxml");
 
     @FXML
     private TextField addressField;
