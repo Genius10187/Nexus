@@ -23,12 +23,12 @@ public class AssetManager {
         List<File> files = Utility.search(directory);
 
         for (File file : files) {
-            AssetBuilder builder = null;
+            AssetBuilder builder;
             String extension = Utility.getExtension(file);
             if (builderHashMap.containsKey(extension)) {
                 builder = builderHashMap.get(extension);
             } else {
-                //builder = new ByteBuilder();
+                builder = new ByteBuilder();
             }
 
             assetHashMap.put(file, builder.build(file));

@@ -12,11 +12,6 @@ import java.net.ServerSocket;
 import java.net.URL;
 import java.util.logging.Level;
 
-import java.io.IOException;
-import java.net.ServerSocket;
-import java.net.URL;
-import java.util.logging.Level;
-
 /**
  * @author SirMathhman
  * @version 0.0.0
@@ -24,7 +19,7 @@ import java.util.logging.Level;
  */
 public class ServerCreator {
     private static final URL serverDisplayFXMLLocation = ServerCreator.class
-            .getResource("/fxml/ServerDisplay.fxml");
+            .getResource("/fxml/server//ServerDisplay.fxml");
 
     @FXML
     private TextField portField;
