@@ -13,7 +13,7 @@
 **Contributing**:
 If you want to contribute, please read the code of conduct and contributing documents. Also, take a look at the wiki for developer information on the structure of the project. Any IDE that supports Gradle will work.
 
-**Features**
+**Features**:
 If you want to suggest a new feature, create an Issue and label it as "Enhancement". However, features are not neccesarily prioriitzed and bugs are preferred. 
 
 **Website**:
