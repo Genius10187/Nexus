@@ -2,5 +2,11 @@ com.meti.asset
 com.meti.client
 com.meti.client.editor
 com.meti.command
+com.meti.module.bytes
+com.meti.module.text
 com.meti.server
-com.meti.util
+com.meti.util.concurrent
+com.meti.util.fx
+com.meti.util.intf
+com.meti.util.io
+com.meti.util.misc
