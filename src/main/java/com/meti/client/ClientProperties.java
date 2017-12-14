@@ -1,6 +1,6 @@
 package com.meti.client;
 
-import com.meti.util.LoggerHandler;
+import com.meti.util.misc.LoggerHandler;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;

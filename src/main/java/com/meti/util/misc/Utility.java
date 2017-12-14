@@ -1,5 +1,6 @@
-package com.meti.util;
+package com.meti.util.misc;
 
+import com.meti.util.fx.FXBundle;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -19,7 +20,7 @@ public class Utility {
     /**
      * Builds a FXBundle from a url.
      * Creates an FXMLLoader and loads the components.
-     * Builds the stage at {@link #buildStage(File)}, and displays it.
+     * Builds the stage at {@link #buildStage(Parent)} , and displays it.
      * Assembles an FXBundle from the components and returns it.
      *
      * @param url The url.

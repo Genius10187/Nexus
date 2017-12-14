@@ -2,7 +2,8 @@ package com.meti.command;
 
 import com.meti.server.AssetManager;
 import com.meti.server.Server;
-import com.meti.util.Cargo;
+import com.meti.util.io.Cargo;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;

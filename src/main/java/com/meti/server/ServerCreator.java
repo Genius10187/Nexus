@@ -1,8 +1,8 @@
 package com.meti.server;
 
-import com.meti.util.Dialog;
-import com.meti.util.FXBundle;
-import com.meti.util.Utility;
+import com.meti.util.fx.Dialog;
+import com.meti.util.fx.FXBundle;
+import com.meti.util.misc.Utility;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;

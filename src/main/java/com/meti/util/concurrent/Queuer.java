@@ -1,6 +1,7 @@
-package com.meti.util;
+package com.meti.util.concurrent;
 
 import com.meti.command.Command;
+import com.meti.util.io.Change;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;

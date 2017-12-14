@@ -1,4 +1,4 @@
-package com.meti.util;
+package com.meti.util.fx;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;

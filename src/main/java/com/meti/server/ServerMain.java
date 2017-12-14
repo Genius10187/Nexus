@@ -1,6 +1,6 @@
 package com.meti.server;
 
-import com.meti.util.LoggerHandler;
+import com.meti.util.misc.LoggerHandler;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;

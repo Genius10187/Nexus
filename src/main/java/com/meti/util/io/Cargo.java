@@ -1,4 +1,4 @@
-package com.meti.util;
+package com.meti.util.io;
 
 import java.io.Serializable;
 import java.util.ArrayList;
