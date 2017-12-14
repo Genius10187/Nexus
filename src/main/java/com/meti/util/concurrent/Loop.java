@@ -1,4 +1,6 @@
-package com.meti.util;
+package com.meti.util.concurrent;
+
+import com.meti.util.intf.Callback;
 
 /**
  * @author SirMathhman

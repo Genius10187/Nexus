@@ -1,11 +1,12 @@
 package com.meti.server;
 
 import com.meti.command.Command;
-import com.meti.util.Callback;
-import com.meti.util.Change;
-import com.meti.util.Handler;
-import com.meti.util.Loop;
-import com.meti.util.Queuer;
+import com.meti.util.concurrent.Loop;
+import com.meti.util.concurrent.Queuer;
+import com.meti.util.intf.Callback;
+import com.meti.util.intf.Handler;
+import com.meti.util.io.Change;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;

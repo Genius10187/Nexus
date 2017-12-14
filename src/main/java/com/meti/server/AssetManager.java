@@ -3,7 +3,7 @@ package com.meti.server;
 import com.meti.asset.Asset;
 import com.meti.asset.AssetBuilder;
 import com.meti.module.bytes.ByteBuilder;
-import com.meti.util.Utility;
+import com.meti.util.misc.Utility;
 
 import java.io.File;
 import java.io.IOException;

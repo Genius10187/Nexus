@@ -1,4 +1,4 @@
-package com.meti.util;
+package com.meti.util.fx;
 
 import javafx.scene.Parent;
 import javafx.stage.Stage;

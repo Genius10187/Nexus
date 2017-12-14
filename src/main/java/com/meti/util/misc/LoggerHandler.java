@@ -1,4 +1,4 @@
-package com.meti.util;
+package com.meti.util.misc;
 
 import java.util.logging.Handler;
 import java.util.logging.LogRecord;

@@ -3,9 +3,9 @@ package com.meti.client;
 import com.meti.asset.Asset;
 import com.meti.command.Command;
 import com.meti.command.ListCommand;
-import com.meti.util.Cargo;
-import com.meti.util.Handler;
-import com.meti.util.Queuer;
+import com.meti.util.concurrent.Queuer;
+import com.meti.util.intf.Handler;
+import com.meti.util.io.Cargo;
 
 import java.io.File;
 import java.io.IOException;

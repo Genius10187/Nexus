@@ -1,8 +1,8 @@
 package com.meti.server;
 
-import com.meti.util.Callback;
-import com.meti.util.LoggerHandler;
-import com.meti.util.Loop;
+import com.meti.util.concurrent.Loop;
+import com.meti.util.intf.Callback;
+import com.meti.util.misc.LoggerHandler;
 
 import java.io.File;
 import java.io.IOException;

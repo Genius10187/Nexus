@@ -1,7 +1,7 @@
 package com.meti.client;
 
 import com.meti.client.editor.Editor;
-import com.meti.util.Utility;
+import com.meti.util.misc.Utility;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
