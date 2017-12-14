@@ -71,9 +71,15 @@ public class Server {
             SocketListener listener = new SocketListener(callback, serverSocket, this);
             executorService.submit(listener);
         } catch (Exception e) {
-            logger.log(Level.SEVERE, "Error in initializing util " + e);
+            log(Level.SEVERE, e);
             System.exit(-1);
         }
+    }
+
+    public void log(Level level, Exception e) {
+        StringWriter writer = new StringWriter();
+        e.printStackTrace(new PrintWriter(writer));
+        logger.log(level, writer.toString());
     }
 
     public void stop() {
