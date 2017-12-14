@@ -3,12 +3,15 @@ package com.meti.server;
 import com.meti.util.Dialog;
 import com.meti.util.FXBundle;
 import com.meti.util.Utility;
+import javafx.beans.property.Property;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.TextField;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.URL;
 import java.util.logging.Level;
@@ -28,6 +31,17 @@ public class ServerCreator {
     private TextField portField;
 
     private ServerSocket serverSocket;
+
+    private Property<String> maxQueueSizeProperty;
+    private Property<String> addressProperty;
+
+    {
+        maxQueueSizeProperty = new SimpleStringProperty();
+        addressProperty = new SimpleStringProperty();
+
+        maxQueueSizeProperty.setValue(String.valueOf(50));
+        addressProperty.setValue("localhost");
+    }
 
     @FXML
     public void host() {
@@ -50,7 +64,7 @@ public class ServerCreator {
 
     private void createServer() throws IOException {
         if (serverSocket == null) {
-            serverSocket = new ServerSocket(Integer.parseInt(portField.getText()));
+            buildServerSocket(Integer.parseInt(portField.getText()));
         }
 
         FXMLLoader loader = new FXMLLoader(serverDisplayFXMLLocation);
@@ -68,12 +82,17 @@ public class ServerCreator {
         server.getExecutorService().submit(serverThread);
     }
 
+    private ServerSocket buildServerSocket(int port) throws IOException {
+        int maxQueueSize = Integer.parseInt(maxQueueSizeProperty.getValue());
+        InetAddress address = InetAddress.getByName(addressProperty.getValue());
+
+        return serverSocket = new ServerSocket(port, maxQueueSize, address);
+    }
+
     @FXML
     public void generateLocalPort() {
         try {
-            this.serverSocket = new ServerSocket(0);
-
-            portField.setText(String.valueOf(serverSocket.getLocalPort()));
+            this.serverSocket = buildServerSocket(0);
         } catch (IOException e) {
             try {
                 Dialog.loadDialog().setException(e);
@@ -88,6 +107,9 @@ public class ServerCreator {
         //TODO: advanced settings
         try {
             FXBundle bundle = Utility.buildStage(advancedServerDisplayFXMLLocation);
+            AdvancedServerCreator controller = (AdvancedServerCreator) bundle.getController();
+            controller.getMaxQueueSizeField().textProperty().bindBidirectional(maxQueueSizeProperty);
+            controller.getAddressField().textProperty().bindBidirectional(addressProperty);
             //continue  handling
         } catch (IOException e) {
             //TODO: handle logger
