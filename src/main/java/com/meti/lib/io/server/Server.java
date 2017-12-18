@@ -6,8 +6,8 @@ import com.meti.lib.io.client.Clients;
 import com.meti.lib.io.source.ObjectSource;
 import com.meti.lib.io.source.Sources;
 import com.meti.lib.util.Loop;
-import com.meti.lib.util.exec.Executable;
-import com.meti.lib.util.exec.Executables;
+import com.meti.lib.util.execute.Executable;
+import com.meti.lib.util.execute.Executables;
 
 import java.net.ServerSocket;
 import java.net.Socket;

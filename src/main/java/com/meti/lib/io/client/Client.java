@@ -2,7 +2,7 @@ package com.meti.lib.io.client;
 
 import com.meti.lib.io.server.asset.SplitInputStream;
 import com.meti.lib.io.source.ObjectSource;
-import com.meti.lib.util.exec.Executable;
+import com.meti.lib.util.execute.Executable;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;

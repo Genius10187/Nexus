@@ -24,11 +24,11 @@
             </rowConstraints>
             <children>
                 <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome to Nexus!" GridPane.halignment="CENTER"/>
-                <Button mnemonicParsing="false" onAction="#connectServer" text="Connect to a Server"
+                <Button mnemonicParsing="false" onAction="#connect" text="Connect to a Server"
                         GridPane.halignment="CENTER" GridPane.rowIndex="1"/>
-                <Button mnemonicParsing="false" onAction="#hostServer" text="Host a Server" GridPane.halignment="CENTER"
+                <Button mnemonicParsing="false" onAction="#host" text="Host a Server" GridPane.halignment="CENTER"
                         GridPane.rowIndex="2"/>
-                <Button mnemonicParsing="false" onAction="#localServer" text="Host a Local Server"
+                <Button mnemonicParsing="false" onAction="#local" text="Host a Local Server"
                         GridPane.halignment="CENTER" GridPane.rowIndex="3"/>
             </children>
         </GridPane>
