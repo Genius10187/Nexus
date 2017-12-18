@@ -73,18 +73,18 @@
     <h1 class="title">Hierarchy For All Packages</h1>
     <span class="packageHierarchyLabel">Package Hierarchies:</span>
     <ul class="horizontal">
-        <li><a href="com/meti/asset/package-tree.html">com.meti.asset</a>,</li>
-        <li><a href="com/meti/client/package-tree.html">com.meti.client</a>,</li>
-        <li><a href="com/meti/client/editor/package-tree.html">com.meti.client.editor</a>,</li>
+        <li><a href="com/meti/asset/package-tree.html">com.meti.lib.io.server.asset</a>,</li>
+        <li><a href="com/meti/client/package-tree.html">com.meti.lib.io.client</a>,</li>
+        <li><a href="com/meti/client/editor/package-tree.html">com.meti.lib.io.client.editor</a>,</li>
         <li><a href="com/meti/command/package-tree.html">com.meti.command</a>,</li>
         <li><a href="com/meti/module/bytes/package-tree.html">com.meti.module.bytes</a>,</li>
         <li><a href="com/meti/module/text/package-tree.html">com.meti.module.text</a>,</li>
         <li><a href="com/meti/server/package-tree.html">com.meti.server</a>,</li>
-        <li><a href="com/meti/util/concurrent/package-tree.html">com.meti.util.concurrent</a>,</li>
-        <li><a href="com/meti/util/fx/package-tree.html">com.meti.util.fx</a>,</li>
-        <li><a href="com/meti/util/intf/package-tree.html">com.meti.util.intf</a>,</li>
-        <li><a href="com/meti/util/io/package-tree.html">com.meti.util.io</a>,</li>
-        <li><a href="com/meti/util/misc/package-tree.html">com.meti.util.misc</a></li>
+        <li><a href="com/meti/util/concurrent/package-tree.html">com.meti.lib.util.concurrent</a>,</li>
+        <li><a href="com/meti/util/fx/package-tree.html">com.meti.lib.util.fx</a>,</li>
+        <li><a href="com/meti/util/intf/package-tree.html">com.meti.lib.util.intf</a>,</li>
+        <li><a href="com/meti/util/io/package-tree.html">com.meti.lib.util.io</a>,</li>
+        <li><a href="com/meti/util/misc/package-tree.html">com.meti.lib.util.misc</a></li>
     </ul>
 </div>
 <div class="contentContainer">
@@ -97,16 +97,16 @@
                 </li>
                 <li type="circle">javafx.application.Application
                     <ul>
-                        <li type="circle">com.meti.client.<a href="com/meti/client/ClientMain.html"
-                                                             title="class in com.meti.client"><span
+                        <li type="circle">com.meti.lib.io.client.<a href="com/meti/client/ClientMain.html"
+                                                                    title="class in com.meti.lib.io.client"><span
                                 class="typeNameLink">ClientMain</span></a></li>
                         <li type="circle">com.meti.server.<a href="com/meti/server/ServerMain.html"
                                                              title="class in com.meti.server"><span
                                 class="typeNameLink">ServerMain</span></a></li>
                     </ul>
                 </li>
-                <li type="circle">com.meti.asset.<a href="com/meti/asset/Asset.html"
-                                                    title="class in com.meti.asset"><span
+                <li type="circle">com.meti.lib.io.server.asset.<a href="com/meti/asset/Asset.html"
+                                                                  title="class in com.meti.lib.io.server.asset"><span
                         class="typeNameLink">Asset</span></a> (implements java.io.Serializable)
                     <ul>
                         <li type="circle">com.meti.module.bytes.<a href="com/meti/module/bytes/ByteAsset.html"
@@ -122,46 +122,53 @@
                 </li>
                 <li type="circle">com.meti.module.bytes.<a href="com/meti/module/bytes/ByteBuilder.html"
                                                            title="class in com.meti.module.bytes"><span
-                        class="typeNameLink">ByteBuilder</span></a> (implements com.meti.asset.<a
-                        href="com/meti/asset/AssetBuilder.html" title="interface in com.meti.asset">AssetBuilder</a>)
+                        class="typeNameLink">ByteBuilder</span></a> (implements com.meti.lib.io.server.asset.<a
+                        href="com/meti/asset/AssetBuilder.html" title="interface in com.meti.lib.io.server.asset">AssetBuilder</a>)
                 </li>
-                <li type="circle">com.meti.util.io.<a href="com/meti/util/io/Cargo.html"
-                                                      title="class in com.meti.util.io"><span
+                <li type="circle">com.meti.lib.util.io.<a href="com/meti/util/io/Cargo.html"
+                                                          title="class in com.meti.lib.util.io"><span
                         class="typeNameLink">Cargo</span></a> (implements java.io.Serializable)
                 </li>
-                <li type="circle">com.meti.util.io.<a href="com/meti/util/io/Change.html"
-                                                      title="class in com.meti.util.io"><span class="typeNameLink">Change</span></a>
+                <li type="circle">com.meti.lib.util.io.<a href="com/meti/util/io/Change.html"
+                                                          title="class in com.meti.lib.util.io"><span
+                        class="typeNameLink">Change</span></a>
                 </li>
-                <li type="circle">com.meti.client.<a href="com/meti/client/Client.html"
-                                                     title="class in com.meti.client"><span
-                        class="typeNameLink">Client</span></a> (implements com.meti.util.intf.<a
-                        href="com/meti/util/intf/Handler.html" title="interface in com.meti.util.intf">Handler</a>&lt;T&gt;)
+                <li type="circle">com.meti.lib.io.client.<a href="com/meti/client/Client.html"
+                                                            title="class in com.meti.lib.io.client"><span
+                        class="typeNameLink">Client</span></a> (implements com.meti.lib.util.intf.<a
+                        href="com/meti/util/intf/Handler.html" title="interface in com.meti.lib.util.intf">Handler</a>&lt;T&gt;)
                 </li>
-                <li type="circle">com.meti.client.<a href="com/meti/client/ClientCreator.html"
-                                                     title="class in com.meti.client"><span class="typeNameLink">ClientCreator</span></a>
+                <li type="circle">com.meti.lib.io.client.<a href="com/meti/client/ClientCreator.html"
+                                                            title="class in com.meti.lib.io.client"><span
+                        class="typeNameLink">ClientCreator</span></a>
                 </li>
-                <li type="circle">com.meti.client.<a href="com/meti/client/ClientDisplay.html"
-                                                     title="class in com.meti.client"><span class="typeNameLink">ClientDisplay</span></a>
+                <li type="circle">com.meti.lib.io.client.<a href="com/meti/client/ClientDisplay.html"
+                                                            title="class in com.meti.lib.io.client"><span
+                        class="typeNameLink">ClientDisplay</span></a>
                     (implements javafx.fxml.Initializable)
                 </li>
-                <li type="circle">com.meti.client.<a href="com/meti/client/ClientHandler.html"
-                                                     title="class in com.meti.client"><span class="typeNameLink">ClientHandler</span></a>
-                    (implements com.meti.util.intf.<a href="com/meti/util/intf/Handler.html"
-                                                      title="interface in com.meti.util.intf">Handler</a>&lt;T&gt;)
+                <li type="circle">com.meti.lib.io.client.<a href="com/meti/client/ClientHandler.html"
+                                                            title="class in com.meti.lib.io.client"><span
+                        class="typeNameLink">ClientHandler</span></a>
+                    (implements com.meti.lib.util.intf.<a href="com/meti/util/intf/Handler.html"
+                                                          title="interface in com.meti.lib.util.intf">Handler</a>&lt;T&gt;)
                 </li>
-                <li type="circle">com.meti.client.<a href="com/meti/client/ClientProperties.html"
-                                                     title="class in com.meti.client"><span class="typeNameLink">ClientProperties</span></a>
+                <li type="circle">com.meti.lib.io.client.<a href="com/meti/client/ClientProperties.html"
+                                                            title="class in com.meti.lib.io.client"><span
+                        class="typeNameLink">ClientProperties</span></a>
                 </li>
-                <li type="circle">com.meti.util.fx.<a href="com/meti/util/fx/Dialog.html"
-                                                      title="class in com.meti.util.fx"><span class="typeNameLink">Dialog</span></a>
+                <li type="circle">com.meti.lib.util.fx.<a href="com/meti/util/fx/Dialog.html"
+                                                          title="class in com.meti.lib.util.fx"><span
+                        class="typeNameLink">Dialog</span></a>
                 </li>
-                <li type="circle">com.meti.util.fx.<a href="com/meti/util/fx/FXBundle.html"
-                                                      title="class in com.meti.util.fx"><span class="typeNameLink">FXBundle</span></a>
+                <li type="circle">com.meti.lib.util.fx.<a href="com/meti/util/fx/FXBundle.html"
+                                                          title="class in com.meti.lib.util.fx"><span
+                        class="typeNameLink">FXBundle</span></a>
                 </li>
                 <li type="circle">java.util.logging.Handler
                     <ul>
-                        <li type="circle">com.meti.util.misc.<a href="com/meti/util/misc/LoggerHandler.html"
-                                                                title="class in com.meti.util.misc"><span
+                        <li type="circle">com.meti.lib.util.misc.<a href="com/meti/util/misc/LoggerHandler.html"
+                                                                    title="class in com.meti.lib.util.misc"><span
                                 class="typeNameLink">LoggerHandler</span></a></li>
                     </ul>
                 </li>
@@ -170,12 +177,12 @@
                     (implements com.meti.command.<a href="com/meti/command/Command.html"
                                                     title="interface in com.meti.command">Command</a>)
                 </li>
-                <li type="circle">com.meti.util.concurrent.<a href="com/meti/util/concurrent/Loop.html"
-                                                              title="class in com.meti.util.concurrent"><span
+                <li type="circle">com.meti.lib.util.concurrent.<a href="com/meti/util/concurrent/Loop.html"
+                                                                  title="class in com.meti.lib.util.concurrent"><span
                         class="typeNameLink">Loop</span></a> (implements java.lang.Runnable)
                     <ul>
-                        <li type="circle">com.meti.util.concurrent.<a href="com/meti/util/concurrent/Queuer.html"
-                                                                      title="class in com.meti.util.concurrent"><span
+                        <li type="circle">com.meti.lib.util.concurrent.<a href="com/meti/util/concurrent/Queuer.html"
+                                                                          title="class in com.meti.lib.util.concurrent"><span
                                 class="typeNameLink">Queuer</span></a></li>
                     </ul>
                 </li>
@@ -190,44 +197,46 @@
                 </li>
                 <li type="circle">com.meti.server.<a href="com/meti/server/SocketHandler.html"
                                                      title="class in com.meti.server"><span class="typeNameLink">SocketHandler</span></a>
-                    (implements com.meti.util.intf.<a href="com/meti/util/intf/Handler.html"
-                                                      title="interface in com.meti.util.intf">Handler</a>&lt;T&gt;)
+                    (implements com.meti.lib.util.intf.<a href="com/meti/util/intf/Handler.html"
+                                                          title="interface in com.meti.lib.util.intf">Handler</a>&lt;T&gt;)
                 </li>
-                <li type="circle">com.meti.asset.<a href="com/meti/asset/TextAsset.html"
-                                                    title="class in com.meti.asset"><span
+                <li type="circle">com.meti.lib.io.server.asset.<a href="com/meti/asset/TextAsset.html"
+                                                                  title="class in com.meti.lib.io.server.asset"><span
                         class="typeNameLink">TextAsset</span></a></li>
                 <li type="circle">com.meti.module.text.<a href="com/meti/module/text/TextChange.html"
                                                           title="class in com.meti.module.text"><span
                         class="typeNameLink">TextChange</span></a></li>
                 <li type="circle">com.meti.module.text.<a href="com/meti/module/text/TextEditor.html"
                                                           title="class in com.meti.module.text"><span
-                        class="typeNameLink">TextEditor</span></a> (implements com.meti.client.editor.<a
-                        href="com/meti/client/editor/Editor.html" title="interface in com.meti.client.editor">Editor</a>)
+                        class="typeNameLink">TextEditor</span></a> (implements com.meti.lib.io.client.editor.<a
+                        href="com/meti/client/editor/Editor.html" title="interface in com.meti.lib.io.client.editor">Editor</a>)
                 </li>
-                <li type="circle">com.meti.util.misc.<a href="com/meti/util/misc/Utility.html"
-                                                        title="class in com.meti.util.misc"><span class="typeNameLink">Utility</span></a>
+                <li type="circle">com.meti.lib.util.misc.<a href="com/meti/util/misc/Utility.html"
+                                                            title="class in com.meti.lib.util.misc"><span
+                        class="typeNameLink">Utility</span></a>
                 </li>
             </ul>
         </li>
     </ul>
     <h2 title="Interface Hierarchy">Interface Hierarchy</h2>
     <ul>
-        <li type="circle">com.meti.util.intf.Action&lt;T&gt;
+        <li type="circle">com.meti.lib.util.intf.Action&lt;T&gt;
             <ul>
-                <li type="circle">com.meti.util.intf.<a href="com/meti/util/intf/Callback.html"
-                                                        title="interface in com.meti.util.intf"><span
+                <li type="circle">com.meti.lib.util.intf.<a href="com/meti/util/intf/Callback.html"
+                                                            title="interface in com.meti.lib.util.intf"><span
                         class="typeNameLink">Callback</span></a>&lt;T&gt;
                 </li>
-                <li type="circle">com.meti.util.intf.<a href="com/meti/util/intf/Handler.html"
-                                                        title="interface in com.meti.util.intf"><span
+                <li type="circle">com.meti.lib.util.intf.<a href="com/meti/util/intf/Handler.html"
+                                                            title="interface in com.meti.lib.util.intf"><span
                         class="typeNameLink">Handler</span></a>&lt;T&gt;
                 </li>
             </ul>
         </li>
-        <li type="circle">com.meti.asset.<a href="com/meti/asset/AssetBuilder.html" title="interface in com.meti.asset"><span
+        <li type="circle">com.meti.lib.io.server.asset.<a href="com/meti/asset/AssetBuilder.html"
+                                                          title="interface in com.meti.lib.io.server.asset"><span
                 class="typeNameLink">AssetBuilder</span></a></li>
-        <li type="circle">com.meti.client.editor.<a href="com/meti/client/editor/Editor.html"
-                                                    title="interface in com.meti.client.editor"><span
+        <li type="circle">com.meti.lib.io.client.editor.<a href="com/meti/client/editor/Editor.html"
+                                                           title="interface in com.meti.lib.io.client.editor"><span
                 class="typeNameLink">Editor</span></a></li>
         <li type="circle">java.io.Serializable
             <ul>
