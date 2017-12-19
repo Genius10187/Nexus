@@ -3,37 +3,33 @@ package com.meti.app;
 import com.meti.lib.util.Console;
 import com.meti.lib.util.Utility;
 import javafx.application.Application;
-import javafx.fxml.FXML;
 import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.logging.Level;
 
 /**
  * @author SirMathhman
  * @version 0.0.0
- * @since 12/16/2017
+ * @since 12/19/2017
  */
 public class Main extends Application {
-    public static final Console console = new Console("Main");
+    public static final Console console = new Console("Login");
+    public static final File resources = new File("src/resources");
 
-    private static final File mainFXML;
-    private static final File connectFXML;
-    private static final File hostFXML;
-    private static final File localFXML;
+    public static final ExecutorService service = Executors.newCachedThreadPool();
 
-    static {
-        File resources = new File("src/resources");
-
-        mainFXML = new File(resources, "Main.fxml");
-        connectFXML = new File(resources, "Connect.fxml");
-        hostFXML = new File(resources, "Host.fxml");
-        localFXML = new File(resources, "Local.fxml");
-    }
+    private static final File mainFXML = new File(resources, "Login.fxml");
+    private static final long SHUTDOWN_WAIT_TIME = 5000;
 
     @Override
     public void start(Stage primaryStage) {
+        console.log(Level.INFO, "Starting application");
+
         try {
             Utility.load(mainFXML, primaryStage);
         } catch (IOException e) {
@@ -41,34 +37,31 @@ public class Main extends Application {
         }
     }
 
+    @Override
+    public void stop() {
+        console.log(Level.INFO, "Stopping application");
+
+        console.log(Level.INFO, "Shutting down service.");
+        service.shutdown();
+
+        if (!service.isShutdown()) {
+            console.log(Level.INFO, "Service not shut down, forcing shut down!");
+
+            try {
+                Thread.sleep(SHUTDOWN_WAIT_TIME);
+                List<Runnable> runnables = service.shutdownNow();
+                console.log(Level.INFO, "Shut down server with " +
+                        runnables.size() +
+                        " runnables left");
+            } catch (InterruptedException e) {
+                console.log(Level.SEVERE, "Stop thread interrupted!", e);
+            }
+        }
+
+        System.exit(0);
+    }
+
     public static void main(String[] args) {
         launch(args);
-    }
-
-    @FXML
-    public void connect() {
-        try {
-            Utility.load(connectFXML);
-        } catch (IOException e) {
-            console.log(Level.SEVERE, e);
-        }
-    }
-
-    @FXML
-    public void host() {
-        try {
-            Utility.load(hostFXML);
-        } catch (IOException e) {
-            console.log(Level.SEVERE, e);
-        }
-    }
-
-    @FXML
-    public void local() {
-        try {
-            Utility.load(localFXML);
-        } catch (IOException e) {
-            console.log(Level.SEVERE, e);
-        }
     }
 }

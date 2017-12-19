@@ -6,4 +6,5 @@ package com.meti.app;
  * @since 12/18/2017
  */
 public class Connect {
+
 }

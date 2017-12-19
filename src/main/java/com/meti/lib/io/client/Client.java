@@ -34,11 +34,19 @@ public class Client implements Executable {
         };
     }
 
-    public Object readClass(Class<?> c) {
+    public boolean hasClass(Class c) {
+        return inputStream.hasClass(c);
+    }
+
+    public boolean hasSuperClass(Class<?> c) {
+        return inputStream.hasSuperClass(c);
+    }
+
+    public <T> T readClass(Class<T> c) {
         return inputStream.pollClass(c);
     }
 
-    public Object readSuperClass(Class<?> c) {
+    public <T> T readSuperClass(Class<T> c) {
         return inputStream.pollSuperClass(c);
     }
 
@@ -54,6 +62,10 @@ public class Client implements Executable {
 
     public void write(Object obj) throws IOException {
         outputStream.writeObject(obj);
+    }
+
+    public void flush() throws IOException {
+        outputStream.flush();
     }
 
     public void close() throws IOException {

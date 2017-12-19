@@ -3,6 +3,7 @@ package com.meti.lib.util;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Properties;
+import java.util.logging.ConsoleHandler;
 import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -30,6 +31,13 @@ public class Console {
     public Console(Logger logger) {
         this.logger = logger;
 
+        logger.setLevel(Level.ALL);
+        logger.setUseParentHandlers(false);
+
+        Handler handler = new ConsoleHandler();
+        handler.setLevel(Level.ALL);
+        logger.addHandler(handler);
+
         setProperty(severe_shutdown, "true");
     }
 
@@ -44,10 +52,24 @@ public class Console {
         log(level, writer.toString());
     }
 
+    public void log(Level level, String message, Exception exception) {
+        StringWriter writer = new StringWriter();
+        writer.append(message);
+        writer.append("\n");
+        exception.printStackTrace(new PrintWriter(writer));
+        log(level, writer.toString());
+    }
+
     public void log(Level level, String message) {
         logger.log(level, message);
 
-        if (Boolean.parseBoolean(properties.getProperty(severe_shutdown))) {
+        if (level.equals(Level.SEVERE) && Boolean.parseBoolean(properties.getProperty(severe_shutdown))) {
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
             System.exit(-1);
         }
     }

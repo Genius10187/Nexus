@@ -25,19 +25,22 @@ public class SplitInputStream extends Loop {
     public void loop() throws Exception {
         Object obj = inputStream.readObject();
         Class<?> objClass = obj.getClass();
-        if (queueHashMap.containsKey(objClass)) {
-            queueHashMap.get(objClass).add(obj);
-        } else {
-            Queue<Object> queue = new PriorityQueue<>();
-            queue.add(obj);
-            queueHashMap.put(objClass, queue);
+        buildIfNotExist(objClass);
+
+        queueHashMap.get(objClass).add(obj);
+    }
+
+    private void buildIfNotExist(Class c) {
+        if (!queueHashMap.containsKey(c)) {
+            queueHashMap.put(c, new PriorityQueue<>());
         }
     }
 
-    public Object pollClass(Class c) {
+    public <T> T pollClass(Class<T> c) {
         checkLoopRunning();
+        buildIfNotExist(c);
 
-        return queueHashMap.get(c).poll();
+        return (T) queueHashMap.get(c).poll();
     }
 
     private void checkLoopRunning() {
@@ -46,7 +49,23 @@ public class SplitInputStream extends Loop {
         }
     }
 
-    public Object pollSuperClass(Class<?> c) {
+    public boolean hasClass(Class c) {
+        return !queueHashMap.get(c).isEmpty();
+    }
+
+    public boolean hasSuperClass(Class<?> c) {
+        boolean result = false;
+
+        for (Class key : queueHashMap.keySet()) {
+            if (c.isAssignableFrom(key)) {
+                result = result || !queueHashMap.get(key).isEmpty();
+            }
+        }
+
+        return result;
+    }
+
+    public <T> T pollSuperClass(Class<T> c) {
         checkLoopRunning();
 
         if (queueHashMap.size() == 0) {
@@ -55,7 +74,7 @@ public class SplitInputStream extends Loop {
 
         for (Class key : queueHashMap.keySet()) {
             if (c.isAssignableFrom(key)) {
-                return queueHashMap.get(key).poll();
+                return (T) queueHashMap.get(key).poll();
             }
         }
 

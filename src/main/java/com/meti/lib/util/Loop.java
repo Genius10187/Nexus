@@ -16,6 +16,7 @@ public abstract class Loop implements Runnable {
     public void run() {
         setRunning(true);
 
+        init();
         while (!Thread.interrupted() && running) {
             try {
                 loop();
@@ -23,6 +24,9 @@ public abstract class Loop implements Runnable {
                 callback.act(e);
             }
         }
+    }
+
+    public void init() {
     }
 
     public abstract void loop() throws Exception;

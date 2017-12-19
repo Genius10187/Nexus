@@ -1,5 +1,6 @@
 package com.meti.lib.util;
 
+import com.meti.lib.util.fx.FXMLBundle;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -18,24 +19,27 @@ public class Utility {
     private Utility() {
     }
 
-    public static void load(File file, Stage stage) throws IOException {
+    public static FXMLBundle load(File file, Stage stage) throws IOException {
         if (file.exists()) {
-            load(file.toURI().toURL(), stage);
+            return load(file.toURI().toURL(), stage);
         } else {
             throw new IllegalArgumentException(file.getAbsolutePath() + " does not exist, fxml can't be loaded");
         }
     }
 
-    public static void load(URL url, Stage stage) throws IOException {
+    public static FXMLBundle load(URL url, Stage stage) throws IOException {
         assertNullParameters(url, stage);
 
-        Parent parent = FXMLLoader.load(url);
+        FXMLLoader loader = new FXMLLoader(url);
+        Parent parent = loader.load();
         Scene scene = new Scene(parent);
         stage.setScene(scene);
         stage.show();
+
+        return new FXMLBundle(loader, parent, loader.getController(), stage);
     }
 
-    private static void assertNullParameters(Object... parameters) {
+    public static void assertNullParameters(Object... parameters) {
         for (int i = 0; i < parameters.length; i++) {
             Object obj = parameters[i];
             if (obj == null) {
@@ -44,13 +48,12 @@ public class Utility {
         }
     }
 
-    public static Stage load(File file) throws IOException {
+    public static FXMLBundle load(File file) throws IOException {
         return load(file.toURI().toURL());
     }
 
-    public static Stage load(URL url) throws IOException {
+    public static FXMLBundle load(URL url) throws IOException {
         Stage stage = new Stage();
-        load(url, stage);
-        return stage;
+        return load(url, stage);
     }
 }
