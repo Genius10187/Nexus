@@ -9,6 +9,8 @@ import javafx.stage.Stage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author SirMathhman
@@ -17,6 +19,44 @@ import java.net.URL;
  */
 public class Utility {
     private Utility() {
+    }
+
+    public static List<File> scan(File directory, String... extensions) {
+        List<File> fileList = new ArrayList<>();
+        scan(directory, fileList, extensions);
+        return fileList;
+    }
+
+    public static void scan(File file, List<File> files, String[] extensions) {
+        if (file.isDirectory()) {
+            files.add(file);
+
+            File[] directoryFiles = file.listFiles();
+
+            if (directoryFiles != null && directoryFiles.length != 0) {
+                for (File f : directoryFiles) {
+                    scan(f, files, extensions);
+                }
+            }
+        } else {
+            if (extensions.length != 0) {
+                String fileExtension = getExtension(file);
+
+                for (String ext : extensions) {
+                    if (fileExtension.equals(ext)) {
+                        files.add(file);
+                        return;
+                    }
+                }
+            } else {
+                files.add(file);
+            }
+        }
+    }
+
+    public static String getExtension(File file) {
+        String[] splitName = file.getName().split("\\.");
+        return splitName[splitName.length - 1];
     }
 
     public static FXMLBundle load(File file, Stage stage) throws IOException {

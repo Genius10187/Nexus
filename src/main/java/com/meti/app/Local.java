@@ -73,6 +73,8 @@ public class Local extends StageableImpl {
     private int loadServer() {
         try {
             Server server = Servers.create(0, Main.console);
+            server.getState().getManager().load(new File(fileField.getText()));
+
             int localPort = server.getPort();
 
             Executables.execute(service, server);
