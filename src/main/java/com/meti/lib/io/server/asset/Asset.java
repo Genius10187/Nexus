@@ -6,13 +6,13 @@ package com.meti.lib.io.server.asset;
  * @since 12/18/2017
  */
 public class Asset<T> {
-    private T content;
+    private T[] content;
 
-    public Asset(T content) {
+    public Asset(T[] content) {
         this.content = content;
     }
 
-    public T getContent() {
+    public T[] getContent() {
         return content;
     }
 

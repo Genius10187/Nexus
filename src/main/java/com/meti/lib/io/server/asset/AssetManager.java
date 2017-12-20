@@ -4,7 +4,7 @@ import com.meti.lib.io.source.Sources;
 import com.meti.lib.util.Utility;
 
 import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
@@ -20,7 +20,7 @@ public class AssetManager {
     private final HashMap<String, AssetBuilder> builderHashMap = new HashMap<>();
     private final HashMap<Long, Asset> assetHashMap = new HashMap<>();
 
-    public void load(File file) throws FileNotFoundException {
+    public void load(File file) throws IOException {
         List<File> fileList = Utility.scan(file);
         for (File f : fileList) {
             if (!f.isDirectory()) {

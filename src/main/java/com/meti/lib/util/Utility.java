@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
 
 /**
@@ -19,6 +20,15 @@ import java.util.List;
  */
 public class Utility {
     private Utility() {
+    }
+
+    //ugh, why java???
+    public static Character[] toObjectArray(char[] chars) {
+        Character[] array = new Character[chars.length];
+        for (int i = 0; i < chars.length; i++) {
+            array[i] = chars[i];
+        }
+        return array;
     }
 
     public static List<File> scan(File directory, String... extensions) {
@@ -59,22 +69,23 @@ public class Utility {
         return splitName[splitName.length - 1];
     }
 
-    public static FXMLBundle load(File file, Stage stage) throws IOException {
+    public static FXMLBundle load(File file, Stage stage, EnumSet<FXML> flags) throws IOException {
         if (file.exists()) {
-            return load(file.toURI().toURL(), stage);
+            return load(file.toURI().toURL(), stage, flags);
         } else {
             throw new IllegalArgumentException(file.getAbsolutePath() + " does not exist, fxml can't be loaded");
         }
     }
 
-    public static FXMLBundle load(URL url, Stage stage) throws IOException {
-        assertNullParameters(url, stage);
-
+    public static FXMLBundle load(URL url, Stage stage, EnumSet<FXML> flags) throws IOException {
         FXMLLoader loader = new FXMLLoader(url);
         Parent parent = loader.load();
         Scene scene = new Scene(parent);
-        stage.setScene(scene);
-        stage.show();
+
+        if (flags.contains(FXML.LOAD_STAGE) && stage != null) {
+            stage.setScene(scene);
+            stage.show();
+        }
 
         return new FXMLBundle(loader, parent, loader.getController(), stage);
     }
@@ -88,12 +99,20 @@ public class Utility {
         }
     }
 
-    public static FXMLBundle load(File file) throws IOException {
-        return load(file.toURI().toURL());
+    public static FXMLBundle load(File file, EnumSet<FXML> flags) throws IOException {
+        return load(file.toURI().toURL(), flags);
     }
 
-    public static FXMLBundle load(URL url) throws IOException {
-        Stage stage = new Stage();
-        return load(url, stage);
+    public static FXMLBundle load(URL url, EnumSet<FXML> flags) throws IOException {
+        Stage stage = null;
+        if (flags.contains(FXML.LOAD_STAGE)) {
+            stage = new Stage();
+        }
+        return load(url, stage, flags);
+    }
+
+    public enum FXML {
+        NONE,
+        LOAD_STAGE
     }
 }

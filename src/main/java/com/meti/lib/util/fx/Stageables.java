@@ -4,6 +4,7 @@ import com.meti.lib.util.Utility;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.EnumSet;
 
 /**
  * @author SirMathhman
@@ -15,6 +16,6 @@ public class Stageables {
     }
 
     public static void load(URL url, Stageable stageable) throws IOException {
-        Utility.load(url, stageable.getStage());
+        Utility.load(url, stageable.getStage(), EnumSet.of(Utility.FXML.LOAD_STAGE));
     }
 }

@@ -7,6 +7,7 @@ import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -26,12 +27,16 @@ public class Main extends Application {
     private static final File mainFXML = new File(resources, "Login.fxml");
     private static final long SHUTDOWN_WAIT_TIME = 5000;
 
+    private static Main instance;
+
     @Override
     public void start(Stage primaryStage) {
+        instance = this;
+
         console.log(Level.INFO, "Starting application");
 
         try {
-            Utility.load(mainFXML, primaryStage);
+            Utility.load(mainFXML, primaryStage, EnumSet.of(Utility.FXML.LOAD_STAGE));
         } catch (IOException e) {
             console.log(Level.SEVERE, e);
         }
@@ -59,6 +64,10 @@ public class Main extends Application {
         }
 
         System.exit(0);
+    }
+
+    public static Main getInstance() {
+        return instance;
     }
 
     public static void main(String[] args) {

@@ -56,8 +56,9 @@ public class Server implements Executable {
             state.getConsole().log(Level.FINE, "Created client object for " + socket.getInetAddress());
             Client client = Clients.create(objectSource);
             ClientLoop loop = new ClientLoop(client, state);
-            Executable loopExecutable = Executables.fromRunnable(loop);
+            state.getClientLoops().add(loop);
 
+            Executable loopExecutable = Executables.fromRunnable(loop);
             Executables.executeAll(state.getService(), loopExecutable, client);
         }
     }

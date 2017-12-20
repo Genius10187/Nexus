@@ -5,6 +5,8 @@ import com.meti.lib.io.server.asset.AssetChange;
 import com.meti.lib.io.server.command.Command;
 import com.meti.lib.util.Loop;
 
+import java.io.IOException;
+
 /**
  * @author SirMathhman
  * @version 0.0.0
@@ -20,14 +22,23 @@ public class ClientLoop extends Loop {
     }
 
     @Override
-    public void loop() {
-        if (client.hasSuperClass(Command.class)) {
-            Command command = client.readSuperClass(Command.class);
-            command.perform(state, client);
-        } else if (client.hasSuperClass(AssetChange.class)) {
+    public void loop() throws IOException {
+        try {
+            if (client.hasSuperClass(Command.class)) {
+                Command command = client.readSuperClass(Command.class);
+                command.perform(state, client);
+            } else if (client.hasSuperClass(AssetChange.class)) {
 
-        } else if (client.hasSuperClass(Object.class)) {
+            } else if (client.hasSuperClass(Object.class)) {
 
+            }
+        } catch (Exception e) {
+            client.write(e);
+            client.flush();
         }
+    }
+
+    public Client getClient() {
+        return client;
     }
 }

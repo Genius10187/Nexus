@@ -16,9 +16,9 @@ import static com.meti.app.Main.resources;
  * @since 12/16/2017
  */
 public class Login extends StageableImpl {
-    private static final File connectFXML;
-    private static final File hostFXML;
-    private static final File localFXML;
+    public static final File connectFXML;
+    public static final File hostFXML;
+    public static final File localFXML;
 
     static {
         connectFXML = new File(resources, "Connect.fxml");
