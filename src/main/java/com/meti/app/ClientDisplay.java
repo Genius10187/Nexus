@@ -81,7 +81,11 @@ public class ClientDisplay extends StageableImpl implements Initializable {
             MenuItem separateWindow = new MenuItem("Open in a Separate Window");
             separateWindow.setOnAction(event -> separateWindow(viewName));
 
-            menu.getItems().addAll(close, separateWindow);
+            MenuItem[] menuItems = {
+                    separateWindow,
+                    close
+            };
+            menu.getItems().addAll(menuItems);
             tab.setContextMenu(menu);
 
             currentViews.put(viewName, tab);

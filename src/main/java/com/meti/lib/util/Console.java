@@ -1,5 +1,8 @@
 package com.meti.lib.util;
 
+import com.meti.app.InputStreamHandler;
+
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Properties;
@@ -20,6 +23,9 @@ public class Console {
     private final Properties properties = new Properties();
     private final Logger logger;
 
+    //is basically final
+    private InputStreamHandler inputStreamHandler;
+
     public Console() {
         this("Console");
     }
@@ -39,23 +45,27 @@ public class Console {
         logger.addHandler(handler);
 
         setProperty(severe_shutdown, "true");
+
+        InputStreamHandler inputStreamHandler = buildInputStreamHandler();
+        if (inputStreamHandler != null) {
+            inputStreamHandler.setLevel(Level.ALL);
+            logger.addHandler(inputStreamHandler);
+        }
+
+        this.inputStreamHandler = inputStreamHandler;
     }
 
-    //delegate
-    public void setProperty(String key, String value) {
-        properties.setProperty(key, value);
+    private InputStreamHandler buildInputStreamHandler() {
+        try {
+            return new InputStreamHandler();
+        } catch (IOException e) {
+            log(Level.WARNING, e);
+        }
+        return null;
     }
 
     public void log(Level level, Exception exception) {
         StringWriter writer = new StringWriter();
-        exception.printStackTrace(new PrintWriter(writer));
-        log(level, writer.toString());
-    }
-
-    public void log(Level level, String message, Exception exception) {
-        StringWriter writer = new StringWriter();
-        writer.append(message);
-        writer.append("\n");
         exception.printStackTrace(new PrintWriter(writer));
         log(level, writer.toString());
     }
@@ -72,6 +82,23 @@ public class Console {
 
             System.exit(-1);
         }
+    }
+
+    //delegate
+    public void setProperty(String key, String value) {
+        properties.setProperty(key, value);
+    }
+
+    public InputStreamHandler getInputStreamHandler() {
+        return inputStreamHandler;
+    }
+
+    public void log(Level level, String message, Exception exception) {
+        StringWriter writer = new StringWriter();
+        writer.append(message);
+        writer.append("\n");
+        exception.printStackTrace(new PrintWriter(writer));
+        log(level, writer.toString());
     }
 
     public void addHandler(Handler handler) throws SecurityException {
