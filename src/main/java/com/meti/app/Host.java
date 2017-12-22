@@ -3,6 +3,7 @@ package com.meti.app;
 import com.meti.lib.io.server.Server;
 import com.meti.lib.io.server.Servers;
 import com.meti.lib.util.execute.Executables;
+import com.meti.lib.util.fx.FXMLBundle;
 import com.meti.lib.util.fx.StageableImpl;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -24,6 +25,7 @@ import static com.meti.app.Main.*;
  * @since 12/18/2017
  */
 public class Host extends StageableImpl implements Initializable {
+    private static final File serverDisplayLocation = new File(Main.resources, "ServerDisplay.fxml");
     private static final File defaultLocation = new File("Server");
 
     @FXML
@@ -73,6 +75,16 @@ public class Host extends StageableImpl implements Initializable {
             Executables.execute(service, server);
 
             console.log(Level.FINE, "Loaded server");
+
+            FXMLBundle bundle = load(serverDisplayLocation);
+            Object controller = bundle.getController();
+            if (controller instanceof ServerDisplay) {
+                ServerDisplay display = (ServerDisplay) controller;
+                display.setServer(server);
+                display.init(loadedFiles);
+            } else {
+                throw new IllegalStateException("ServerDisplay controller is not equal to ServerDisplay class!");
+            }
         } catch (IOException e) {
             console.log(Level.SEVERE, "Failed to load server", e);
         }

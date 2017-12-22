@@ -20,6 +20,7 @@ import java.util.logging.Level;
  */
 public class Files implements View {
     private final HashMap<File, TreeItem<String>> filePaths = new HashMap<>();
+
     @FXML
     private TreeView<String> fileView;
 
