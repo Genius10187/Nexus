@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
-import java.util.function.Consumer;
 
 /**
  * @author SirMathhman
@@ -37,9 +36,6 @@ public class AssetManager {
                     Asset asset = builder.build(location, Sources.createBasicSource(location));
                     assetHashMap.put(random.nextLong(), asset);
                 }
-            } else {
-                //TODO: handle directories
-
             }
         }
     }
@@ -50,12 +46,7 @@ public class AssetManager {
 
     public List<File> getFiles() {
         List<File> paths = new ArrayList<>();
-        assetHashMap.values().forEach(new Consumer<Asset>() {
-            @Override
-            public void accept(Asset asset) {
-                paths.add(asset.getLocation());
-            }
-        });
+        assetHashMap.values().forEach(asset -> paths.add(asset.getLocation()));
 
         return paths;
     }
