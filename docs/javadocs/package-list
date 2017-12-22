@@ -1,6 +1,6 @@
 com.meti.lib.io.server.asset
-com.meti.lib.io.client
-com.meti.lib.io.client.editor
+com.meti.lib.io.state
+com.meti.lib.io.state.editor
 com.meti.command
 com.meti.module.bytes
 com.meti.module.text

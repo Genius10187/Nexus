@@ -1,5 +1,6 @@
 package com.meti.lib.io.client;
 
+import com.meti.lib.io.server.asset.ListCommand;
 import com.meti.lib.io.server.asset.SplitInputStream;
 import com.meti.lib.io.source.ObjectSource;
 import com.meti.lib.util.execute.Executable;
@@ -71,5 +72,11 @@ public class Client implements Executable {
     public void close() throws IOException {
         inputStream.close();
         outputStream.close();
+    }
+
+    public Object command(ListCommand command) throws IOException {
+        write(command);
+        flush();
+        return readSuperClass(Object.class);
     }
 }

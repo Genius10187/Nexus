@@ -1,6 +1,7 @@
 package com.meti.app;
 
 import com.meti.lib.io.client.Client;
+import com.meti.lib.io.client.ClientState;
 import com.meti.lib.io.client.Clients;
 import com.meti.lib.io.server.Server;
 import com.meti.lib.io.server.Servers;
@@ -61,7 +62,7 @@ public class Local extends StageableImpl {
         try {
             FXMLBundle bundle = load(new File(resources, "ClientDisplay.fxml"));
             ClientDisplay controller = (ClientDisplay) bundle.getController();
-            controller.setClient(client);
+            controller.setState(new ClientState(client));
             controller.init();
 
             console.log(Level.FINE, "Loaded client display");

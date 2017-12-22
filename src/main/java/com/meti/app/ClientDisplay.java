@@ -1,6 +1,6 @@
 package com.meti.app;
 
-import com.meti.lib.io.client.Client;
+import com.meti.lib.io.client.ClientState;
 import com.meti.lib.io.server.command.Command;
 import com.meti.lib.io.server.command.DisconnectCommand;
 import com.meti.lib.io.server.command.LogCommand;
@@ -41,7 +41,8 @@ public class ClientDisplay extends StageableImpl implements Initializable {
 
     private final HashMap<String, Tab> currentViews = new HashMap<>();
 
-    private Client client;
+    private ClientState state;
+
     @FXML
     private ListView<String> views;
     @FXML
@@ -118,16 +119,18 @@ public class ClientDisplay extends StageableImpl implements Initializable {
         currentViews.remove(viewName);
     }
 
-    public void setClient(Client client) {
-        this.client = client;
+    public void setState(ClientState state) {
+        this.state = state;
     }
 
     public void init() {
         console.log(Level.FINE, "Initializing controller");
 
+        //TODO: change init
+
         try {
             Command test = new LogCommand(Level.WARNING, "Hello Server!");
-            client.write(test);
+            state.getClient().write(test);
         } catch (IOException e) {
             console.log(Level.SEVERE, e);
         }
@@ -151,8 +154,8 @@ public class ClientDisplay extends StageableImpl implements Initializable {
         try {
             Command disconnectCommand = new DisconnectCommand();
 
-            client.write(disconnectCommand);
-            client.close();
+            state.getClient().write(disconnectCommand);
+            state.getClient().close();
 
             console.log(Level.FINE, "Successfully disconnected from server");
         } catch (IOException e) {
