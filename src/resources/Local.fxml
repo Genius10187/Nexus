@@ -8,7 +8,6 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-
 <AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="768.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/8"
             fx:controller="com.meti.app.Local">
     <children>
@@ -16,7 +15,7 @@
                   AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="200.0"/>
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="897.0" minWidth="10.0" prefWidth="492.0"/>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="900.0" minWidth="10.0" prefWidth="500.0"/>
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="0.0" prefWidth="200.0"/>
             </columnConstraints>
             <rowConstraints>

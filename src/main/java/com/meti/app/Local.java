@@ -39,7 +39,7 @@ public class Local extends StageableImpl implements Initializable {
     @FXML
     private TextField fileField;
 
-    private File defaultLocation = new File("Server");
+    private static final File defaultLocation = new File("Server");
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -90,7 +90,6 @@ public class Local extends StageableImpl implements Initializable {
             Server server = Servers.create(0, Main.console);
 
             //TODO: alternative
-
             String path = fileField.getText();
             if (path.equals(defaultLocation.getAbsolutePath())) {
                 path = defaultLocation.getPath();
