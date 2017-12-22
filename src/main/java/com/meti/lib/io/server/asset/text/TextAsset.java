@@ -1,4 +1,4 @@
-package com.meti.app.text;
+package com.meti.lib.io.server.asset.text;
 
 import com.meti.lib.io.server.asset.Asset;
 

@@ -1,10 +1,13 @@
 package com.meti.lib.io.server.asset;
 
+import com.meti.lib.io.server.asset.Array.ArrayBuilder;
 import com.meti.lib.io.source.Sources;
 import com.meti.lib.util.Utility;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -19,7 +22,7 @@ import java.util.function.Consumer;
 public class AssetManager {
     private final Random random = new Random();
 
-    private final HashMap<String, AssetBuilder> builderHashMap = new HashMap<>();
+    private final HashMap<String, AssetBuilder<?, InputStream, OutputStream>> builderHashMap = new HashMap<>();
     private final HashMap<Long, Asset> assetHashMap = new HashMap<>();
 
     public void load(File file) throws IOException {
@@ -27,15 +30,16 @@ public class AssetManager {
         for (File location : fileList) {
             if (!location.isDirectory()) {
                 String ext = Utility.getExtension(location);
-                AssetBuilder builder = builderHashMap.get(ext);
-                if (builder == null) {
-                    //TODO: invalid builder
-                } else {
+                AssetBuilder<?, InputStream, OutputStream> builder = builderHashMap.get(ext);
+                if (builder != null) {
+                    builder = new ArrayBuilder();
+
                     Asset asset = builder.build(location, Sources.createBasicSource(location));
                     assetHashMap.put(random.nextLong(), asset);
                 }
             } else {
                 //TODO: handle directories
+
             }
         }
     }
