@@ -19,9 +19,11 @@ public class ArrayBuilder implements AssetBuilder<Integer, InputStream, OutputSt
     @Override
     public Asset<Integer> build(File location, Source<InputStream, OutputStream> source) throws IOException {
         ArrayList<Integer> byteList = new ArrayList<>();
-        int next;
-        while ((next = source.getInputStream().read()) == -1) {
-            byteList.add(next);
+        if (location.length() != 0) {
+            int next;
+            while ((next = source.getInputStream().read()) == -1) {
+                byteList.add(next);
+            }
         }
 
         Integer[] array = new Integer[byteList.size()];

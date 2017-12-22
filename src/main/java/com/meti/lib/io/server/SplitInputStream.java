@@ -1,4 +1,4 @@
-package com.meti.lib.io.server.asset;
+package com.meti.lib.io.server;
 
 import com.meti.lib.util.Loop;
 
@@ -68,17 +68,17 @@ public class SplitInputStream extends Loop {
     public <T> T pollSuperClass(Class<T> c) {
         checkLoopRunning();
 
-        if (queueHashMap.size() == 0) {
-            throw new IllegalStateException("No internal queues found");
-        }
-
-        for (Class key : queueHashMap.keySet()) {
-            if (c.isAssignableFrom(key)) {
-                return (T) queueHashMap.get(key).poll();
+        if (queueHashMap.size() != 0) {
+            for (Class key : queueHashMap.keySet()) {
+                if (c.isAssignableFrom(key)) {
+                    return (T) queueHashMap.get(key).poll();
+                }
             }
-        }
 
-        throw new IllegalArgumentException("Internal queues do not contain class " + c.getName());
+            throw new IllegalArgumentException("Internal queues do not contain class " + c.getName());
+        } else {
+            return null;
+        }
     }
 
     public void close() throws IOException {

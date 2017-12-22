@@ -1,7 +1,7 @@
 package com.meti.lib.io.client;
 
+import com.meti.lib.io.server.SplitInputStream;
 import com.meti.lib.io.server.asset.ListCommand;
-import com.meti.lib.io.server.asset.SplitInputStream;
 import com.meti.lib.io.source.ObjectSource;
 import com.meti.lib.util.execute.Executable;
 
@@ -74,9 +74,17 @@ public class Client implements Executable {
         outputStream.close();
     }
 
-    public Object command(ListCommand command) throws IOException {
+    public Object runCommand(ListCommand command) throws IOException {
         write(command);
         flush();
+
+        //TODO: if runCommand is not of returnable type
+
+        //might have high cpu usage here
+        boolean contains;
+        do {
+            contains = hasSuperClass(Object.class);
+        } while (!contains);
         return readSuperClass(Object.class);
     }
 }

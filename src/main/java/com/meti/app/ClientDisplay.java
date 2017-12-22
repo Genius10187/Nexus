@@ -3,7 +3,6 @@ package com.meti.app;
 import com.meti.lib.io.client.ClientState;
 import com.meti.lib.io.server.command.Command;
 import com.meti.lib.io.server.command.DisconnectCommand;
-import com.meti.lib.io.server.command.LogCommand;
 import com.meti.lib.util.Utility;
 import com.meti.lib.util.fx.FXMLBundle;
 import com.meti.lib.util.fx.StageableImpl;
@@ -51,7 +50,7 @@ public class ClientDisplay extends StageableImpl implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         {
-            views.getItems().addAll("Chat", "Files", "Console");
+            views.getItems().addAll(viewFXMLMap.keySet());
             views.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
                 try {
                     //TODO: handle tabs
@@ -68,7 +67,10 @@ public class ClientDisplay extends StageableImpl implements Initializable {
         File file = viewFXMLMap.get(viewName);
         FXMLBundle bundle = Utility.load(file, EnumSet.of(Utility.FXML.NONE));
         Parent parent = bundle.getParent();
-        if (parent != null && !currentViews.containsKey(viewName)) {
+        Object controller = bundle.getController();
+        if (parent != null && !currentViews.containsKey(viewName) && controller instanceof View) {
+            View viewController = (View) controller;
+
             Tab tab = new Tab(viewName);
             tab.setContent(parent);
 
@@ -90,6 +92,9 @@ public class ClientDisplay extends StageableImpl implements Initializable {
             tab.setContextMenu(menu);
 
             currentViews.put(viewName, tab);
+
+            viewController.setClientState(state);
+            viewController.init();
         }
     }
 
@@ -127,13 +132,6 @@ public class ClientDisplay extends StageableImpl implements Initializable {
         console.log(Level.FINE, "Initializing controller");
 
         //TODO: change init
-
-        try {
-            Command test = new LogCommand(Level.WARNING, "Hello Server!");
-            state.getClient().write(test);
-        } catch (IOException e) {
-            console.log(Level.SEVERE, e);
-        }
     }
 
     @FXML

@@ -24,20 +24,26 @@ public class AssetManager {
     private final HashMap<String, AssetBuilder<?, InputStream, OutputStream>> builderHashMap = new HashMap<>();
     private final HashMap<Long, Asset> assetHashMap = new HashMap<>();
 
-    public void load(File file) throws IOException {
+    public List<File> load(File file) throws IOException {
         List<File> fileList = Utility.scan(file);
+
+        List<File> loadedFiles = new ArrayList<>();
         for (File location : fileList) {
             if (!location.isDirectory()) {
                 String ext = Utility.getExtension(location);
                 AssetBuilder<?, InputStream, OutputStream> builder = builderHashMap.get(ext);
-                if (builder != null) {
+                if (builder == null) {
                     builder = new ArrayBuilder();
-
-                    Asset asset = builder.build(location, Sources.createBasicSource(location));
-                    assetHashMap.put(random.nextLong(), asset);
                 }
+
+                Asset asset = builder.build(location, Sources.createBasicSource(location));
+                assetHashMap.put(random.nextLong(), asset);
+
+                loadedFiles.add(location);
             }
         }
+
+        return loadedFiles;
     }
 
     public Asset getAsset(long assetID) {

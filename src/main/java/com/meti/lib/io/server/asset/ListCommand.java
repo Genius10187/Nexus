@@ -24,10 +24,11 @@ public class ListCommand extends Command {
         switch (type) {
             case FILES:
                 client.write(state.getManager().getFiles());
-                client.flush();
                 break;
             default:
                 client.write(new UnsupportedOperationException("Cannot use argument " + type.name() + " in ListCommand"));
         }
+
+        client.flush();
     }
 }

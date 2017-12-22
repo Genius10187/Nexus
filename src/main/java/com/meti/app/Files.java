@@ -19,10 +19,11 @@ import java.util.logging.Level;
  * @since 12/20/2017
  */
 public class Files implements View {
-    private final HashMap<File, TreeItem<File>> filePaths = new HashMap<>();
+    private final HashMap<File, TreeItem<String>> filePaths = new HashMap<>();
     @FXML
-    private TreeView<File> fileView;
-    private TreeItem<File> root = new TreeItem<>();
+    private TreeView<String> fileView;
+
+    private TreeItem<String> root = new TreeItem<>();
     private ClientState state;
 
     @Override
@@ -34,7 +35,7 @@ public class Files implements View {
     public void init() {
         try {
             ListCommand command = new ListCommand(Argument.FILES);
-            List<?> fileList = (List<?>) state.getClient().command(command);
+            List<?> fileList = (List<?>) state.getClient().runCommand(command);
             for (Object o : fileList) {
                 if (o instanceof File) {
                     createTreeItem((File) o);
@@ -52,8 +53,8 @@ public class Files implements View {
         //never create this file, only there for utility methods
         File parentFile = file.getParentFile();
 
-        TreeItem<File> item = new TreeItem<>();
-        item.setValue(file);
+        TreeItem<String> item = new TreeItem<>();
+        item.setValue(file.getName());
 
         if (parentFile != null) {
             if (filePaths.containsKey(parentFile)) {
