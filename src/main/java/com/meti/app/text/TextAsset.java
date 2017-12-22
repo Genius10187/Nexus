@@ -9,6 +9,6 @@ import com.meti.lib.io.server.asset.Asset;
  */
 public class TextAsset extends Asset<Character> {
     public TextAsset(Character[] content) {
-        super(content);
+        super(location, content);
     }
 }

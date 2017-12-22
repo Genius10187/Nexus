@@ -41,7 +41,6 @@ public class Sources {
         public InputStream getInputStream() {
             return inputStream;
         }
-
         @Override
         public OutputStream getOutputStream() {
             return outputStream;

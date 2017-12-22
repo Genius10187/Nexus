@@ -15,7 +15,7 @@ import java.util.List;
  */
 public class TextBuilder implements AssetBuilder<Character, InputStream, OutputStream> {
     @Override
-    public Asset<Character> build(Source<InputStream, OutputStream> source) throws IOException {
+    public Asset<Character> build(File location, Source<InputStream, OutputStream> source) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(source.getInputStream()));
         List<Character> charList = new ArrayList<>();
 
@@ -26,6 +26,6 @@ public class TextBuilder implements AssetBuilder<Character, InputStream, OutputS
 
         Character[] array = new Character[charList.size()];
         charList.toArray(array);
-        return new Asset<>(array);
+        return new Asset<>(location, array);
     }
 }

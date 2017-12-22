@@ -1,15 +1,13 @@
 package com.meti.app;
 
-import javafx.animation.AnimationTimer;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TextArea;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.net.URL;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
+import java.util.logging.Handler;
+import java.util.logging.LogRecord;
 
 import static com.meti.app.Main.console;
 
@@ -24,22 +22,23 @@ public class Console implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        AnimationTimer timer = new AnimationTimer() {
-            private InputStream inputStream = Main.console.getInputStreamHandler().getInputStream();
-
-            @Override
-            public void handle(long now) {
-                try {
-                    if (inputStream.available() > 0) {
-                        output.appendText((char) inputStream.read() + "");
-                    }
-                } catch (IOException e) {
-                    console.log(Level.WARNING, e);
-                }
-            }
-        };
-
-        timer.start();
+        console.addHandler(new ConsoleHandler());
     }
 
+    private class ConsoleHandler extends Handler {
+        @Override
+        public void publish(LogRecord record) {
+            output.appendText(record.getLevel() + ": " + record.getMessage());
+        }
+
+        @Override
+        public void flush() {
+
+        }
+
+        @Override
+        public void close() throws SecurityException {
+
+        }
+    }
 }

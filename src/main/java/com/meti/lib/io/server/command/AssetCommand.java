@@ -6,7 +6,7 @@ package com.meti.lib.io.server.command;
  * @since 12/19/2017
  */
 public abstract class AssetCommand extends Command {
-    private final long assetID;
+    protected final long assetID;
 
     public AssetCommand(long assetID) {
         this.assetID = assetID;
