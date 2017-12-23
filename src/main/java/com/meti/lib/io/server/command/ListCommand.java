@@ -24,7 +24,7 @@ public class ListCommand extends Command {
                 client.write(state.getManager().getFiles());
                 break;
             case CHAT:
-                client.write(state.getChatState().getChats());
+                client.write(state.getChatState().getMessages());
                 break;
             default:
                 client.write(new UnsupportedOperationException("Cannot use argument " + type.name() + " in ListCommand"));

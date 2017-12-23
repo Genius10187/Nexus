@@ -1,5 +1,6 @@
 package com.meti.lib.io.server;
 
+import com.meti.lib.io.server.chat.Message;
 import java.util.ArrayList;
 
 /**
@@ -8,13 +9,12 @@ import java.util.ArrayList;
  * @since 12/22/2017
  */
 public class ChatState {
-    private final ArrayList<String> chats = new ArrayList<>();
+    private final ArrayList<Message> messages = new ArrayList<>();
 
-    public ArrayList<String> getChats() {
-        return chats;
+    public ArrayList<Message> getMessages() {
+        return messages;
     }
 
-    public void add(String content) {
-        chats.add(content);
-    }
+    public void add(Message message) {
+        messages.add(message);
 }

@@ -36,6 +36,9 @@ public class ClientDisplay extends StageableImpl implements Initializable {
         viewFXMLMap.put("Chat", new File(Main.resources, "Chat.fxml"));
         viewFXMLMap.put("Files", new File(Main.resources, "Files.fxml"));
         viewFXMLMap.put("Console", new File(Main.resources, "Console.fxml"));
+
+        //properties are also settings
+        viewFXMLMap.put("Properties", new File(Main.resources, "PropertyViewer.fxml"));
     }
 
     private final HashMap<String, Tab> currentViews = new HashMap<>();
@@ -53,9 +56,7 @@ public class ClientDisplay extends StageableImpl implements Initializable {
             views.getItems().addAll(viewFXMLMap.keySet());
             views.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
                 try {
-                    //TODO: handle tabs
                     loadView(newValue);
-
                 } catch (IOException e) {
                     console.log(Level.WARNING, e);
                 }
@@ -76,26 +77,30 @@ public class ClientDisplay extends StageableImpl implements Initializable {
 
             viewPane.getTabs().add(tab);
 
-            ContextMenu menu = new ContextMenu();
-
-            MenuItem close = new MenuItem("Close");
-            close.setOnAction(event -> closeView(viewName));
-
-            MenuItem separateWindow = new MenuItem("Open in a Separate Window");
-            separateWindow.setOnAction(event -> separateWindow(viewName));
-
-            MenuItem[] menuItems = {
-                    separateWindow,
-                    close
-            };
-            menu.getItems().addAll(menuItems);
-            tab.setContextMenu(menu);
-
+            buildContentMenu(viewName, tab);
             currentViews.put(viewName, tab);
 
             viewController.setClientState(state);
             viewController.init();
         }
+    }
+
+    private void buildContentMenu(String viewName, Tab tab) {
+        ContextMenu menu = new ContextMenu();
+
+        MenuItem close = new MenuItem("Close");
+        close.setOnAction(event -> closeView(viewName));
+
+        MenuItem separateWindow = new MenuItem("Open in a Separate Window");
+        separateWindow.setOnAction(event -> separateWindow(viewName));
+
+        MenuItem[] menuItems = {
+                separateWindow,
+                close
+        };
+
+        menu.getItems().addAll(menuItems);
+        tab.setContextMenu(menu);
     }
 
     private void separateWindow(String viewName) {
