@@ -1,6 +1,7 @@
 package com.meti.app;
 
 import com.meti.lib.io.server.Server;
+import com.meti.lib.io.server.chat.Message;
 import com.meti.lib.util.fx.StageableImpl;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -151,5 +152,15 @@ public class ServerDisplay extends StageableImpl implements Initializable {
         handler.setFormatter(new SimpleFormatter());
         handler.setLevel(Level.ALL);
         server.getState().getConsole().addHandler(handler);
+
+        //chat
+        server.getState().getChatState().setOnAdd(params -> {
+            for (Message message : params) {
+                chat.appendText(message.toString() + "\n");
+            }
+
+            //returns void
+            return null;
+        });
     }
 }

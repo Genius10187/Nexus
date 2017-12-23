@@ -16,6 +16,11 @@ public class Message implements Serializable {
         this.content = content;
     }
 
+    @Override
+    public String toString() {
+        return "[" + name + "]: " + content;
+    }
+
     public String getName() {
         return name;
     }
