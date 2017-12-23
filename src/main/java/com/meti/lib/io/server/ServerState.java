@@ -2,6 +2,7 @@ package com.meti.lib.io.server;
 
 import com.meti.lib.io.server.asset.AssetManager;
 import com.meti.lib.util.Console;
+import com.meti.lib.util.Handler;
 
 import java.net.ServerSocket;
 import java.util.ArrayList;
@@ -21,6 +22,7 @@ public class ServerState {
     private final ChatState chatState = new ChatState();
     private final ServerSocket serverSocket;
     private final Console console;
+    private Handler<ServerLoop> onAddServerLoop;
 
     public ServerState(ServerSocket serverSocket, Console console) {
         this.serverSocket = serverSocket;
@@ -49,5 +51,18 @@ public class ServerState {
 
     public List<ServerLoop> getServerLoops() {
         return serverLoops;
+    }
+
+    public Handler<ServerLoop> getOnAddServerLoop() {
+        return onAddServerLoop;
+    }
+
+    public void setOnAddServerLoop(Handler<ServerLoop> onAddServerLoop) {
+        this.onAddServerLoop = onAddServerLoop;
+    }
+
+    public void addServerLoop(ServerLoop loop) {
+        serverLoops.add(loop);
+        onAddServerLoop.act(loop);
     }
 }

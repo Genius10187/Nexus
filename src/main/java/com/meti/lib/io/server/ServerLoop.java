@@ -5,6 +5,7 @@ import com.meti.lib.io.server.command.Command;
 import com.meti.lib.util.Loop;
 
 import java.io.IOException;
+import java.net.Socket;
 
 /**
  * @author SirMathhman
@@ -12,10 +13,12 @@ import java.io.IOException;
  * @since 12/18/2017
  */
 public class ServerLoop extends Loop {
+    private final Socket socket;
     private final Client client;
     private final ServerState state;
 
-    public ServerLoop(Client client, ServerState state) {
+    public ServerLoop(Socket socket, Client client, ServerState state) {
+        this.socket = socket;
         this.client = client;
         this.state = state;
     }
@@ -45,5 +48,9 @@ public class ServerLoop extends Loop {
 
     public Client getClient() {
         return client;
+    }
+
+    public Socket getSocket() {
+        return socket;
     }
 }

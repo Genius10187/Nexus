@@ -1,6 +1,7 @@
 package com.meti.app;
 
 import com.meti.lib.io.server.Server;
+import com.meti.lib.io.server.ServerLoop;
 import com.meti.lib.io.server.chat.Message;
 import com.meti.lib.util.fx.StageableImpl;
 import javafx.application.Platform;
@@ -123,6 +124,19 @@ public class ServerDisplay extends StageableImpl implements Initializable {
     }
 
     public void init(List<File> loadedFiles) {
+        //clients
+        for (ServerLoop loop : server.getState().getServerLoops()) {
+            clientView.getItems().add(loop.getSocket().getInetAddress().toString());
+        }
+
+        server.getState().setOnAddServerLoop(params -> {
+            for (ServerLoop loop : params) {
+                clientView.getItems().add(loop.getSocket().getInetAddress().toString());
+            }
+
+            return null;
+        });
+
         //files
         for (Object o : loadedFiles) {
             if (o instanceof File) {
