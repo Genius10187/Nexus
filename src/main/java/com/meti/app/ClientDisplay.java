@@ -128,10 +128,10 @@ public class ClientDisplay extends StageableImpl implements Initializable {
         this.state = state;
     }
 
-    public void init() {
+    public void run() {
         console.log(Level.FINE, "Initializing controller");
 
-        //TODO: change init
+        //TODO: change run
     }
 
     @FXML

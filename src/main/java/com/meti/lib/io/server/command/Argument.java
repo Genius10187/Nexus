@@ -6,5 +6,5 @@ package com.meti.lib.io.server.command;
  * @since 12/21/2017
  */
 public enum Argument {
-    FILES
+    CHAT, FILES
 }

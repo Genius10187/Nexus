@@ -7,5 +7,6 @@ import java.io.Serializable;
  * @version 0.0.0
  * @since 12/19/2017
  */
-public class Change implements Serializable {
+public interface Change extends Serializable {
+    void update(ServerState state);
 }

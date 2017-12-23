@@ -1,6 +1,5 @@
 package com.meti.lib.io.server;
 
-import com.meti.lib.io.client.ClientLoop;
 import com.meti.lib.io.server.asset.AssetManager;
 import com.meti.lib.util.Console;
 
@@ -17,8 +16,9 @@ import java.util.concurrent.Executors;
  */
 public class ServerState {
     private final ExecutorService service = Executors.newCachedThreadPool();
-    private final List<ClientLoop> clientLoops = new ArrayList<>();
+    private final List<ServerLoop> serverLoops = new ArrayList<>();
     private final AssetManager manager = new AssetManager();
+    private final ChatState chatState = new ChatState();
     private final ServerSocket serverSocket;
     private final Console console;
 
@@ -39,11 +39,15 @@ public class ServerState {
         return manager;
     }
 
+    public ChatState getChatState() {
+        return chatState;
+    }
+
     public Console getConsole() {
         return console;
     }
 
-    public List<ClientLoop> getClientLoops() {
-        return clientLoops;
+    public List<ServerLoop> getServerLoops() {
+        return serverLoops;
     }
 }

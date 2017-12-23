@@ -1,13 +1,14 @@
 package com.meti.lib.io.client;
 
 import com.meti.lib.io.server.SplitInputStream;
-import com.meti.lib.io.server.asset.ListCommand;
+import com.meti.lib.io.server.command.Command;
 import com.meti.lib.io.source.ObjectSource;
 import com.meti.lib.util.execute.Executable;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.util.concurrent.Callable;
+import java.util.concurrent.TimeoutException;
 
 /**
  * @author SirMathhman
@@ -44,10 +45,42 @@ public class Client implements Executable {
     }
 
     public <T> T readClass(Class<T> c) {
+        boolean contains;
+        do {
+            contains = hasClass(c);
+        } while (!contains);
+
         return inputStream.pollClass(c);
     }
 
+    public <T> T readClass(Class<T> c, long time) throws TimeoutException {
+        long start = System.currentTimeMillis();
+        boolean contains;
+        do {
+            contains = hasClass(c);
+
+            if (System.currentTimeMillis() - start >= time) {
+                throw new TimeoutException("Time of " + time + " has passed before object was received");
+            }
+        } while (!contains);
+
+        return inputStream.pollClass(c);
+    }
+
+    public Object runCommand(Command command) throws IOException {
+        write(command);
+        flush();
+
+        //TODO: if runCommand is not of returnable type
+        return readSuperClass(Object.class);
+    }
+
     public <T> T readSuperClass(Class<T> c) {
+        boolean contains;
+        do {
+            contains = hasSuperClass(c);
+        } while (!contains);
+
         return inputStream.pollSuperClass(c);
     }
 
@@ -74,17 +107,27 @@ public class Client implements Executable {
         outputStream.close();
     }
 
-    public Object runCommand(ListCommand command) throws IOException {
+    public Object runCommand(Command command, long time) throws IOException, TimeoutException {
         write(command);
         flush();
 
         //TODO: if runCommand is not of returnable type
 
         //might have high cpu usage here
+        return readSuperClass(Object.class, time);
+    }
+
+    public <T> T readSuperClass(Class<T> c, long time) throws TimeoutException {
+        long start = System.currentTimeMillis();
         boolean contains;
         do {
-            contains = hasSuperClass(Object.class);
+            contains = hasSuperClass(c);
+
+            if (System.currentTimeMillis() - start >= time) {
+                throw new TimeoutException("Time of " + time + " has passed before object was received");
+            }
         } while (!contains);
-        return readSuperClass(Object.class);
+
+        return inputStream.pollSuperClass(c);
     }
 }

@@ -22,6 +22,9 @@ public abstract class Loop implements Runnable {
                 loop();
             } catch (Exception e) {
                 callback.act(e);
+
+                //stop the loop
+                break;
             }
         }
     }

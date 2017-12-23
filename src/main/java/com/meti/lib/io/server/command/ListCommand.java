@@ -1,9 +1,7 @@
-package com.meti.lib.io.server.asset;
+package com.meti.lib.io.server.command;
 
 import com.meti.lib.io.client.Client;
 import com.meti.lib.io.server.ServerState;
-import com.meti.lib.io.server.command.Argument;
-import com.meti.lib.io.server.command.Command;
 
 import java.io.IOException;
 
@@ -24,6 +22,9 @@ public class ListCommand extends Command {
         switch (type) {
             case FILES:
                 client.write(state.getManager().getFiles());
+                break;
+            case CHAT:
+                client.write(state.getChatState().getChats());
                 break;
             default:
                 client.write(new UnsupportedOperationException("Cannot use argument " + type.name() + " in ListCommand"));

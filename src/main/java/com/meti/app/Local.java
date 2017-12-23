@@ -77,7 +77,7 @@ public class Local extends StageableImpl implements Initializable {
             FXMLBundle bundle = load(new File(resources, "ClientDisplay.fxml"));
             ClientDisplay controller = (ClientDisplay) bundle.getController();
             controller.setState(new ClientState(client));
-            controller.init();
+            controller.run();
 
             console.log(Level.FINE, "Loaded client display");
         } catch (IOException e) {

@@ -1,7 +1,6 @@
 package com.meti.lib.io.server;
 
 import com.meti.lib.io.client.Client;
-import com.meti.lib.io.client.ClientLoop;
 import com.meti.lib.io.client.Clients;
 import com.meti.lib.io.source.ObjectSource;
 import com.meti.lib.io.source.Sources;
@@ -55,8 +54,8 @@ public class Server implements Executable {
 
             state.getConsole().log(Level.FINE, "Created client object for " + socket.getInetAddress());
             Client client = Clients.create(objectSource);
-            ClientLoop loop = new ClientLoop(client, state);
-            state.getClientLoops().add(loop);
+            ServerLoop loop = new ServerLoop(client, state);
+            state.getServerLoops().add(loop);
 
             Executable loopExecutable = Executables.fromRunnable(loop);
             Executables.executeAll(state.getService(), loopExecutable, client);

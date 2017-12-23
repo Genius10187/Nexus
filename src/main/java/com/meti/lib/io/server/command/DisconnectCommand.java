@@ -1,7 +1,7 @@
 package com.meti.lib.io.server.command;
 
 import com.meti.lib.io.client.Client;
-import com.meti.lib.io.client.ClientLoop;
+import com.meti.lib.io.server.ServerLoop;
 import com.meti.lib.io.server.ServerState;
 
 /**
@@ -12,10 +12,10 @@ import com.meti.lib.io.server.ServerState;
 public class DisconnectCommand extends Command {
     @Override
     public void perform(ServerState state, Client client) {
-        if (state.getClientLoops().size() == 0) {
+        if (state.getServerLoops().size() == 0) {
             throw new UnsupportedOperationException("Number of clients in server cannot be zero");
         } else {
-            for (ClientLoop loop : state.getClientLoops()) {
+            for (ServerLoop loop : state.getServerLoops()) {
                 if (loop.getClient().equals(client) && loop.isRunning()) {
                     loop.setRunning(false);
                     return;

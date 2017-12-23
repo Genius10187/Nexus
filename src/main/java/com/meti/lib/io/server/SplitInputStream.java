@@ -50,7 +50,7 @@ public class SplitInputStream extends Loop {
     }
 
     public boolean hasClass(Class c) {
-        return !queueHashMap.get(c).isEmpty();
+        return queueHashMap.containsKey(c) && !queueHashMap.get(c).isEmpty();
     }
 
     public boolean hasSuperClass(Class<?> c) {
