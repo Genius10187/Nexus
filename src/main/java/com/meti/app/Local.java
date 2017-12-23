@@ -56,7 +56,7 @@ public class Local extends StageableImpl implements Initializable {
     @FXML
     public void back() {
         try {
-            load(new File(resources, "Login.fxml"));
+            load(new File(resources, "Startup.fxml"));
         } catch (IOException e) {
             console.log(Level.SEVERE, e);
         }
@@ -102,6 +102,8 @@ public class Local extends StageableImpl implements Initializable {
             Executables.execute(service, server);
 
             console.log(Level.FINE, "Loaded server");
+
+            Startup.getState().setServer(server);
 
             return localPort;
         } catch (IOException e) {

@@ -6,7 +6,6 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-
 <AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="768.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/8"
             fx:controller="com.meti.app.ClientDisplay">
     <children>
@@ -20,6 +19,8 @@
                                 <MenuItem mnemonicParsing="false" onAction="#disconnect" text="Disconnect"/>
                                 <MenuItem mnemonicParsing="false" onAction="#differentServer"
                                           text="Connect to Another"/>
+                                <MenuItem mnemonicParsing="false" onAction="#openServerDisplay"
+                                          text="Open Server Display"/>
                             </items>
                         </Menu>
                         <Menu mnemonicParsing="false" text="Help">

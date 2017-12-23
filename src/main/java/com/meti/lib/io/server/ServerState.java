@@ -63,6 +63,9 @@ public class ServerState {
 
     public void addServerLoop(ServerLoop loop) {
         serverLoops.add(loop);
-        onAddServerLoop.act(loop);
+
+        if (onAddServerLoop != null) {
+            onAddServerLoop.act(loop);
+        }
     }
 }

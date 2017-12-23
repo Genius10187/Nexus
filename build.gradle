@@ -14,7 +14,7 @@ dependencies {
 
 jar {
     manifest {
-        attributes 'Login-Class': mainClassName
+        attributes 'Startup-Class': mainClassName
     }
     from {
         configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }

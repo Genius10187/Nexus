@@ -34,7 +34,7 @@ public class Connect extends StageableImpl {
     @FXML
     public void back() {
         try {
-            load(new File(resources, "Login.fxml"));
+            load(new File(resources, "Startup.fxml"));
         } catch (IOException e) {
             console.log(Level.SEVERE, e);
         }

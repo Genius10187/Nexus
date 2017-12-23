@@ -51,7 +51,7 @@ public class Host extends StageableImpl implements Initializable {
     @FXML
     public void back() {
         try {
-            load(new File(resources, "Login.fxml"));
+            load(new File(resources, "Startup.fxml"));
         } catch (IOException e) {
             console.log(Level.SEVERE, e);
         }
@@ -82,6 +82,8 @@ public class Host extends StageableImpl implements Initializable {
                 ServerDisplay display = (ServerDisplay) controller;
                 display.setServer(server);
                 display.init(loadedFiles);
+
+                Startup.getState().setServer(server);
             } else {
                 throw new IllegalStateException("ServerDisplay controller is not equal to ServerDisplay class!");
             }

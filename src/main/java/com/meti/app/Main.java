@@ -19,12 +19,12 @@ import java.util.logging.Level;
  * @since 12/19/2017
  */
 public class Main extends Application {
-    public static final Console console = new Console("Login");
+    public static final Console console = new Console("Startup");
     public static final File resources = new File("src/resources");
 
     public static final ExecutorService service = Executors.newCachedThreadPool();
 
-    private static final File mainFXML = new File(resources, "Login.fxml");
+    private static final File mainFXML = new File(resources, "Startup.fxml");
     private static final long SHUTDOWN_WAIT_TIME = 5000;
 
     private static Main instance;

@@ -1,6 +1,7 @@
 package com.meti.app;
 
 import com.meti.lib.io.client.ClientState;
+import com.meti.lib.io.server.Server;
 import com.meti.lib.io.server.command.Command;
 import com.meti.lib.io.server.command.DisconnectCommand;
 import com.meti.lib.util.Utility;
@@ -30,6 +31,7 @@ import static com.meti.app.Main.console;
  * @since 12/19/2017
  */
 public class ClientDisplay extends StageableImpl implements Initializable {
+    private static final File serverDisplayLocation = new File(Main.resources, "ServerDisplay.fxml");
     private static final HashMap<String, File> viewFXMLMap = new HashMap<>();
 
     static {
@@ -144,7 +146,7 @@ public class ClientDisplay extends StageableImpl implements Initializable {
         disconnect();
 
         try {
-            load(Login.connectFXML);
+            load(Startup.connectFXML);
         } catch (IOException e) {
             console.log(Level.SEVERE, e);
         }
@@ -163,6 +165,18 @@ public class ClientDisplay extends StageableImpl implements Initializable {
             console.log(Level.FINE, "Successfully disconnected from server");
         } catch (IOException e) {
             console.log(Level.SEVERE, e);
+        }
+    }
+
+    @FXML
+    public void openServerDisplay() {
+        try {
+            Server server = Startup.getState().getServer();
+            ServerDisplay controller = (ServerDisplay) Utility.load(serverDisplayLocation, EnumSet.of(Utility.FXML.LOAD_STAGE)).getController();
+            controller.setServer(server);
+            controller.init(server.getState().getManager().getFiles());
+        } catch (IOException e) {
+            console.log(Level.WARNING, e);
         }
     }
 

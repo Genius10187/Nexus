@@ -15,7 +15,7 @@ import static com.meti.app.Main.resources;
  * @version 0.0.0
  * @since 12/16/2017
  */
-public class Login extends StageableImpl {
+public class Startup extends StageableImpl {
     public static final File connectFXML;
     public static final File hostFXML;
     public static final File localFXML;
@@ -26,8 +26,17 @@ public class Login extends StageableImpl {
         localFXML = new File(resources, "Local.fxml");
     }
 
+    //ugggh FXML to static doesn't look good
+    private static StartupState state = new StartupState();
+
+    public static StartupState getState() {
+        return state;
+    }
+
     @FXML
     public void connect() {
+        state.setRemote(true);
+
         try {
             load(connectFXML);
         } catch (IOException e) {
@@ -37,6 +46,8 @@ public class Login extends StageableImpl {
 
     @FXML
     public void host() {
+        state.setRemote(true);
+
         try {
             load(hostFXML);
         } catch (IOException e) {
@@ -46,6 +57,8 @@ public class Login extends StageableImpl {
 
     @FXML
     public void local() {
+        state.setRemote(false);
+
         try {
             load(localFXML);
         } catch (IOException e) {
