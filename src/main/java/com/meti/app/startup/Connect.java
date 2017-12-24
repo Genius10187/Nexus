@@ -1,7 +1,6 @@
 package com.meti.app.startup;
 
 import com.meti.app.ClientDisplay;
-import com.meti.app.Main;
 import com.meti.lib.io.client.Client;
 import com.meti.lib.io.client.Clients;
 import com.meti.lib.io.sources.ObjectSource;
@@ -68,8 +67,9 @@ public class Connect extends StageableImpl {
             ObjectSource source = Sources.createObjectSource(socket);
             Client client = Clients.create(source);
 
-            Main.getAppState().setClient(client);
             Executables.execute(service, client);
+
+            getAppState().setClient(client);
 
             console.log(Level.FINE, "Loaded client");
         } catch (IOException e) {

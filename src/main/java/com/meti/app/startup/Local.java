@@ -116,6 +116,7 @@ public class Local extends StageableImpl implements Initializable {
 
             console.log(Level.FINE, "Loaded client");
 
+            getAppState().setClient(client);
             return client;
         } catch (IOException e) {
             console.log(Level.SEVERE, "Failed to load client", e);
