@@ -64,7 +64,6 @@ public class Host extends StageableImpl implements Initializable {
             int port = Integer.parseInt(portField.getText());
             Server server = Servers.create(port, console);
 
-            //TODO: alternative
             String path = fileField.getText();
             if (path.equals(defaultLocation.getAbsolutePath())) {
                 path = defaultLocation.getPath();

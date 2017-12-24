@@ -38,7 +38,7 @@ public class ClientDisplay extends StageableImpl implements Initializable {
     private static final HashMap<String, File> viewFXMLMap = new HashMap<>();
 
     static {
-        viewFXMLMap.put("Chat", new File(resources, "Chat.fxml"));
+        viewFXMLMap.put("Chat", new File(resources, "ChatView.fxml"));
         viewFXMLMap.put("FileView", new File(resources, "FileView.fxml"));
         viewFXMLMap.put("ConsoleView", new File(resources, "ConsoleView.fxml"));
 
