@@ -7,6 +7,7 @@ import com.meti.lib.util.thread.Handler;
 import java.net.ServerSocket;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -19,14 +20,19 @@ public class ServerState {
     private final ExecutorService service = Executors.newCachedThreadPool();
     private final List<ServerLoop> serverLoops = new ArrayList<>();
     private final AssetManager manager = new AssetManager();
+    private final Properties properties = new Properties();
     private final ChatState chatState = new ChatState();
     private final ServerSocket serverSocket;
     private final Console console;
+
     private Handler<ServerLoop> onAddServerLoop;
 
     public ServerState(ServerSocket serverSocket, Console console) {
         this.serverSocket = serverSocket;
         this.console = console;
+
+        //initialize some properties here
+        properties.setProperty("port", String.valueOf(serverSocket.getLocalPort()));
     }
 
     public ServerSocket getServerSocket() {
@@ -67,5 +73,9 @@ public class ServerState {
         if (onAddServerLoop != null) {
             onAddServerLoop.act(loop);
         }
+    }
+
+    public Properties getProperties() {
+        return properties;
     }
 }

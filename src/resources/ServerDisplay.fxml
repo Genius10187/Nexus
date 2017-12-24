@@ -7,15 +7,16 @@
 <?import javafx.scene.layout.*?>
 
 <AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="768.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/8"
-            fx:controller="com.meti.app.ServerDisplay">
+            fx:controller="com.meti.app.server.ServerDisplay">
     <children>
         <BorderPane prefHeight="768.0" prefWidth="1024.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
                     AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <top>
                 <MenuBar BorderPane.alignment="CENTER">
                     <menus>
-                        <Menu mnemonicParsing="false" text="File">
+                        <Menu mnemonicParsing="false" text="Connection">
                             <items>
+                                <MenuItem mnemonicParsing="false" onAction="#openProperties" text="Properties"/>
                                 <MenuItem mnemonicParsing="false" onAction="#shutdown" text="Shutdown"/>
                             </items>
                         </Menu>

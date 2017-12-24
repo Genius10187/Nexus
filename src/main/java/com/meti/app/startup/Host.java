@@ -1,6 +1,6 @@
 package com.meti.app.startup;
 
-import com.meti.app.ServerDisplay;
+import com.meti.app.server.ServerDisplay;
 import com.meti.lib.io.server.Server;
 import com.meti.lib.io.server.Servers;
 import com.meti.lib.util.fx.FXMLBundle;

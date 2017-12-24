@@ -1,4 +1,4 @@
-package com.meti.app.view;
+package com.meti.app.client.view;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;

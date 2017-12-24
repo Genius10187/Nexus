@@ -1,4 +1,4 @@
-package com.meti.app.view;
+package com.meti.app.client.view;
 
 import com.meti.lib.io.server.command.Argument;
 import com.meti.lib.io.server.command.ListCommand;

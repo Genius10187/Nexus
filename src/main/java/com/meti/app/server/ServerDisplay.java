@@ -1,8 +1,10 @@
-package com.meti.app;
+package com.meti.app.server;
 
+import com.meti.app.Main;
 import com.meti.lib.io.server.Server;
 import com.meti.lib.io.server.ServerLoop;
 import com.meti.lib.io.server.chat.Message;
+import com.meti.lib.util.Utility;
 import com.meti.lib.util.fx.stageable.StageableImpl;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -16,6 +18,7 @@ import javafx.stage.DirectoryChooser;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -30,6 +33,8 @@ import java.util.logging.SimpleFormatter;
  * @since 12/22/2017
  */
 public class ServerDisplay extends StageableImpl implements Initializable {
+    private static final File propertiesFXML = new File(Main.resources, "ServerProperties.fxml");
+
     private final HashMap<File, TreeItem<String>> filePaths = new HashMap<>();
 
     @FXML
@@ -55,6 +60,15 @@ public class ServerDisplay extends StageableImpl implements Initializable {
 
     public void setServer(Server server) {
         this.server = server;
+    }
+
+    @FXML
+    public void openProperties() {
+        try {
+            Utility.load(propertiesFXML, EnumSet.of(Utility.FXML.LOAD_STAGE));
+        } catch (IOException e) {
+            Main.console.log(Level.SEVERE, e);
+        }
     }
 
     @FXML

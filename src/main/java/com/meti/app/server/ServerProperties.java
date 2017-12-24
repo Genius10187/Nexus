@@ -1,12 +1,15 @@
-package com.meti.app.view;
+package com.meti.app.server;
 
-import com.meti.lib.io.client.ClientState;
+import com.meti.lib.io.server.ServerState;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 
+import java.net.URL;
+import java.util.ResourceBundle;
 import java.util.function.BiConsumer;
 
 import static com.meti.app.Main.getAppState;
@@ -14,16 +17,15 @@ import static com.meti.app.Main.getAppState;
 /**
  * @author SirMathhman
  * @version 0.0.0
- * @since 12/23/2017
+ * @since 12/24/2017
  */
-public class PropertyView implements View {
-
+public class ServerProperties implements Initializable {
     @FXML
     private GridPane propertyPane;
 
     @Override
-    public void init() {
-        ClientState state = getAppState().getClient().getState();
+    public void initialize(URL location, ResourceBundle resources) {
+        ServerState state = getAppState().getServer().getState();
         state.getProperties().forEach(new BiConsumer<Object, Object>() {
             int counter = 0;
 

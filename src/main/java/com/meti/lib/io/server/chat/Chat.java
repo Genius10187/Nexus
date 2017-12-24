@@ -1,6 +1,6 @@
 package com.meti.lib.io.server.chat;
 
-import com.meti.app.view.View;
+import com.meti.app.client.view.View;
 import com.meti.lib.io.client.Client;
 import com.meti.lib.io.server.command.Argument;
 import com.meti.lib.io.server.command.ListCommand;

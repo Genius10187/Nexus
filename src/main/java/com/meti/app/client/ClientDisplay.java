@@ -1,7 +1,8 @@
-package com.meti.app;
+package com.meti.app.client;
 
+import com.meti.app.client.view.View;
+import com.meti.app.server.ServerDisplay;
 import com.meti.app.startup.Startup;
-import com.meti.app.view.View;
 import com.meti.lib.io.client.Client;
 import com.meti.lib.io.server.Server;
 import com.meti.lib.io.server.command.Command;

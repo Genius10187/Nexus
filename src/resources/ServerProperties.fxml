@@ -6,9 +6,10 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8"
-            fx:controller="com.meti.app.client.view.PropertyView">
+<AnchorPane xmlns:fx="http://javafx.com/fxml"
+            xmlns="http://javafx.com/javafx"
+            fx:controller="com.meti.app.server.ServerProperties"
+            prefHeight="400.0" prefWidth="600.0">
     <children>
         <ScrollPane fitToHeight="true" fitToWidth="true" prefViewportHeight="400.0" prefViewportWidth="600.0">
             <content>
