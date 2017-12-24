@@ -1,13 +1,14 @@
-package com.meti.app;
+package com.meti.app.startup;
 
+import com.meti.app.ClientDisplay;
+import com.meti.app.Main;
 import com.meti.lib.io.client.Client;
-import com.meti.lib.io.client.ClientState;
 import com.meti.lib.io.client.Clients;
-import com.meti.lib.io.source.ObjectSource;
-import com.meti.lib.io.source.Sources;
-import com.meti.lib.util.execute.Executables;
+import com.meti.lib.io.sources.ObjectSource;
+import com.meti.lib.io.sources.Sources;
 import com.meti.lib.util.fx.FXMLBundle;
-import com.meti.lib.util.fx.StageableImpl;
+import com.meti.lib.util.fx.stageable.StageableImpl;
+import com.meti.lib.util.thread.execute.Executables;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 
@@ -42,15 +43,14 @@ public class Connect extends StageableImpl {
 
     @FXML
     public void next() {
-        Client client = loadClient();
-        loadDisplay(client);
+        loadClient();
+        loadDisplay();
     }
 
-    private void loadDisplay(Client client) {
+    private void loadDisplay() {
         try {
             FXMLBundle bundle = load(new File(resources, "ClientDisplay.fxml"));
             ClientDisplay controller = (ClientDisplay) bundle.getController();
-            controller.setState(new ClientState(client));
             controller.run();
 
             console.log(Level.FINE, "Loaded client display");
@@ -59,7 +59,7 @@ public class Connect extends StageableImpl {
         }
     }
 
-    private Client loadClient() {
+    private void loadClient() {
         try {
             InetAddress address = InetAddress.getByName(addressField.getText());
             int port = Integer.parseInt(portField.getText());
@@ -68,15 +68,12 @@ public class Connect extends StageableImpl {
             ObjectSource source = Sources.createObjectSource(socket);
             Client client = Clients.create(source);
 
+            Main.getAppState().setClient(client);
             Executables.execute(service, client);
 
             console.log(Level.FINE, "Loaded client");
-
-            return client;
         } catch (IOException e) {
             console.log(Level.SEVERE, "Failed to load client", e);
         }
-
-        return null;
     }
 }

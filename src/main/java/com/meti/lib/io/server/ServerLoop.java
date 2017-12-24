@@ -2,7 +2,7 @@ package com.meti.lib.io.server;
 
 import com.meti.lib.io.client.Client;
 import com.meti.lib.io.server.command.Command;
-import com.meti.lib.util.Loop;
+import com.meti.lib.util.thread.Loop;
 
 import java.io.IOException;
 import java.net.Socket;

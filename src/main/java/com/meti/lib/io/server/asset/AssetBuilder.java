@@ -1,6 +1,6 @@
 package com.meti.lib.io.server.asset;
 
-import com.meti.lib.io.source.Source;
+import com.meti.lib.io.sources.Source;
 
 import java.io.File;
 import java.io.IOException;

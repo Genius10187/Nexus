@@ -2,8 +2,8 @@ package com.meti.lib.io.client;
 
 import com.meti.lib.io.server.SplitInputStream;
 import com.meti.lib.io.server.command.Command;
-import com.meti.lib.io.source.ObjectSource;
-import com.meti.lib.util.execute.Executable;
+import com.meti.lib.io.sources.ObjectSource;
+import com.meti.lib.util.thread.execute.Executable;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -18,6 +18,8 @@ import java.util.concurrent.TimeoutException;
 public class Client implements Executable {
     private final SplitInputStream inputStream;
     private final ObjectOutputStream outputStream;
+
+    private final ClientState state = new ClientState();
 
     public Client(ObjectSource objectSource) {
         this.inputStream = new SplitInputStream(objectSource.getInputStream());
@@ -36,14 +38,6 @@ public class Client implements Executable {
         };
     }
 
-    public boolean hasClass(Class c) {
-        return inputStream.hasClass(c);
-    }
-
-    public boolean hasSuperClass(Class<?> c) {
-        return inputStream.hasSuperClass(c);
-    }
-
     public <T> T readClass(Class<T> c) {
         boolean contains;
         do {
@@ -51,6 +45,10 @@ public class Client implements Executable {
         } while (!contains);
 
         return inputStream.pollClass(c);
+    }
+
+    public boolean hasClass(Class c) {
+        return inputStream.hasClass(c);
     }
 
     public <T> T readClass(Class<T> c, long time) throws TimeoutException {
@@ -84,14 +82,8 @@ public class Client implements Executable {
         return inputStream.pollSuperClass(c);
     }
 
-    public void writeAll(Object... objects) throws IOException {
-        if (objects.length == 0) {
-            throw new IllegalArgumentException("Objects do not exist");
-        }
-
-        for (Object obj : objects) {
-            write(obj);
-        }
+    public boolean hasSuperClass(Class<?> c) {
+        return inputStream.hasSuperClass(c);
     }
 
     public void write(Object obj) throws IOException {
@@ -100,6 +92,16 @@ public class Client implements Executable {
 
     public void flush() throws IOException {
         outputStream.flush();
+    }
+
+    public void writeAll(Object... objects) throws IOException {
+        if (objects.length == 0) {
+            throw new IllegalArgumentException("Objects do not exist");
+        }
+
+        for (Object obj : objects) {
+            write(obj);
+        }
     }
 
     public void close() throws IOException {
@@ -129,5 +131,9 @@ public class Client implements Executable {
         } while (!contains);
 
         return inputStream.pollSuperClass(c);
+    }
+
+    public ClientState getState() {
+        return state;
     }
 }

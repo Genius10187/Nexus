@@ -8,22 +8,13 @@ import java.util.Properties;
  * @since 12/22/2017
  */
 public class ClientState {
-    private final Client client;
     private final Properties properties = new Properties();
 
     {
         properties.setProperty("username", "Anonymous");
     }
 
-    public ClientState(Client client) {
-        this.client = client;
-    }
-
     public Properties getProperties() {
         return properties;
-    }
-
-    public Client getClient() {
-        return client;
     }
 }

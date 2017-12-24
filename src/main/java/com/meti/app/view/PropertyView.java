@@ -1,4 +1,4 @@
-package com.meti.app;
+package com.meti.app.view;
 
 import com.meti.lib.io.client.ClientState;
 import javafx.fxml.FXML;
@@ -9,24 +9,21 @@ import javafx.scene.layout.GridPane;
 
 import java.util.function.BiConsumer;
 
+import static com.meti.app.Main.getAppState;
+
 /**
  * @author SirMathhman
  * @version 0.0.0
  * @since 12/23/2017
  */
-public class PropertyViewer implements View {
-    private ClientState state;
+public class PropertyView implements View {
 
     @FXML
     private GridPane propertyPane;
 
     @Override
-    public void setClientState(ClientState state) {
-        this.state = state;
-    }
-
-    @Override
     public void init() {
+        ClientState state = getAppState().getClient().getState();
         state.getProperties().forEach(new BiConsumer<Object, Object>() {
             int counter = 0;
 
@@ -42,9 +39,7 @@ public class PropertyViewer implements View {
 
                 counter++;
 
-                value.setOnAction(event -> {
-                    state.getProperties().setProperty(name.getText(), value.getText());
-                });
+                value.setOnAction(event -> state.getProperties().setProperty(name.getText(), value.getText()));
             }
         });
     }

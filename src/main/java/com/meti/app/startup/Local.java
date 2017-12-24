@@ -1,15 +1,15 @@
-package com.meti.app;
+package com.meti.app.startup;
 
+import com.meti.app.ClientDisplay;
+import com.meti.app.Main;
 import com.meti.lib.io.client.Client;
-import com.meti.lib.io.client.ClientState;
 import com.meti.lib.io.client.Clients;
 import com.meti.lib.io.server.Server;
 import com.meti.lib.io.server.Servers;
-import com.meti.lib.io.source.ObjectSource;
-import com.meti.lib.io.source.Sources;
-import com.meti.lib.util.execute.Executables;
-import com.meti.lib.util.fx.FXMLBundle;
-import com.meti.lib.util.fx.StageableImpl;
+import com.meti.lib.io.sources.ObjectSource;
+import com.meti.lib.io.sources.Sources;
+import com.meti.lib.util.fx.stageable.StageableImpl;
+import com.meti.lib.util.thread.execute.Executables;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TextField;
@@ -33,13 +33,12 @@ import static com.meti.lib.util.Utility.assertNullParameters;
  * @since 12/18/2017
  */
 public class Local extends StageableImpl implements Initializable {
+    private static final File defaultLocation = new File("Server");
     //for the fxml here, we show the absolute path
     //but sometimes we have to use the relative path
     //therefore we have a default path
     @FXML
     private TextField fileField;
-
-    private static final File defaultLocation = new File("Server");
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -49,8 +48,8 @@ public class Local extends StageableImpl implements Initializable {
     @FXML
     public void openViewer() {
         DirectoryChooser chooser = new DirectoryChooser();
-        File returned = chooser.showDialog(stage);
-        fileField.setText(returned.getPath());
+        File chosen = chooser.showDialog(stage);
+        fileField.setText(chosen.getPath());
     }
 
     @FXML
@@ -74,9 +73,7 @@ public class Local extends StageableImpl implements Initializable {
         assertNullParameters(client);
 
         try {
-            FXMLBundle bundle = load(new File(resources, "ClientDisplay.fxml"));
-            ClientDisplay controller = (ClientDisplay) bundle.getController();
-            controller.setState(new ClientState(client));
+            ClientDisplay controller = this.<ClientDisplay>load(new File(resources, "ClientDisplay.fxml")).getController();
             controller.run();
 
             console.log(Level.FINE, "Loaded client display");
@@ -89,23 +86,19 @@ public class Local extends StageableImpl implements Initializable {
         try {
             Server server = Servers.create(0, Main.console);
 
-            //TODO: alternative
             String path = fileField.getText();
             if (path.equals(defaultLocation.getAbsolutePath())) {
                 path = defaultLocation.getPath();
             }
+
             List<File> loadedFiles = server.getState().getManager().load(new File(path));
             console.log(Level.FINE, "Loaded " + loadedFiles.size() + " files");
-
-            int localPort = server.getPort();
+            console.log(Level.FINE, "Loaded server");
 
             Executables.execute(service, server);
 
-            console.log(Level.FINE, "Loaded server");
-
-            Startup.getState().setServer(server);
-
-            return localPort;
+            getAppState().setServer(server);
+            return server.getPort();
         } catch (IOException e) {
             console.log(Level.SEVERE, "Failed to load server", e);
         }

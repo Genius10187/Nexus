@@ -19,35 +19,30 @@ import java.util.logging.Level;
  * @since 12/19/2017
  */
 public class Main extends Application {
+    public static final ExecutorService service = Executors.newCachedThreadPool();
     public static final Console console = new Console("Startup");
     public static final File resources = new File("src/resources");
-
-    public static final ExecutorService service = Executors.newCachedThreadPool();
-
-    private static final File mainFXML = new File(resources, "Startup.fxml");
     private static final long SHUTDOWN_WAIT_TIME = 5000;
+    private static final File startupFXML = new File(resources, "Startup.fxml");
 
-    private static Main instance;
+    private static final AppState appState = new AppState();
 
     @Override
     public void start(Stage primaryStage) {
-        instance = this;
-
-        console.log(Level.INFO, "Starting application");
+        appState.setApplication(this);
 
         try {
-            Utility.load(mainFXML, primaryStage, EnumSet.of(Utility.FXML.LOAD_STAGE));
+            Utility.load(startupFXML, primaryStage, EnumSet.of(Utility.FXML.LOAD_STAGE));
         } catch (IOException e) {
             console.log(Level.SEVERE, e);
         }
+        console.log(Level.INFO, "Started application.");
     }
 
     @Override
     public void stop() {
-        console.log(Level.INFO, "Stopping application");
-
-        console.log(Level.INFO, "Shutting down service.");
         service.shutdown();
+        console.log(Level.INFO, "Attempting to shut down service.");
 
         if (!service.isShutdown()) {
             console.log(Level.INFO, "Service not shut down, forcing shut down!");
@@ -55,19 +50,20 @@ public class Main extends Application {
             try {
                 Thread.sleep(SHUTDOWN_WAIT_TIME);
                 List<Runnable> runnables = service.shutdownNow();
-                console.log(Level.INFO, "Shut down server with " +
+                console.log(Level.INFO, "Successfully shut down service with " +
                         runnables.size() +
                         " runnables left");
             } catch (InterruptedException e) {
-                console.log(Level.SEVERE, "Stop thread interrupted!", e);
+                console.log(Level.SEVERE, "The stop thread has interrupted!", e);
             }
         }
+        console.log(Level.INFO, "Stopped application");
 
         System.exit(0);
     }
 
-    public static Main getInstance() {
-        return instance;
+    public static AppState getAppState() {
+        return appState;
     }
 
     public static void main(String[] args) {

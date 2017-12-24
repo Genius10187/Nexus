@@ -1,4 +1,4 @@
-package com.meti.app;
+package com.meti.app.view;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -16,7 +16,7 @@ import static com.meti.app.Main.console;
  * @version 0.0.0
  * @since 12/20/2017
  */
-public class Console implements Initializable {
+public class ConsoleView implements Initializable {
     @FXML
     private TextArea output;
 

@@ -1,6 +1,6 @@
 package com.meti.lib.io.server;
 
-import com.meti.lib.util.Loop;
+import com.meti.lib.util.thread.Loop;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -15,7 +15,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class SplitInputStream extends Loop {
     private final ObjectInputStream inputStream;
-    private final ConcurrentHashMap<Class, Queue<Object>> queueHashMap = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<Class<?>, Queue<Object>> queueHashMap = new ConcurrentHashMap<>();
 
     public SplitInputStream(ObjectInputStream inputStream) {
         this.inputStream = inputStream;
@@ -40,7 +40,7 @@ public class SplitInputStream extends Loop {
         checkLoopRunning();
         buildIfNotExist(c);
 
-        return (T) queueHashMap.get(c).poll();
+        return c.cast(queueHashMap.get(c).poll());
     }
 
     private void checkLoopRunning() {
@@ -71,7 +71,7 @@ public class SplitInputStream extends Loop {
         if (queueHashMap.size() != 0) {
             for (Class key : queueHashMap.keySet()) {
                 if (c.isAssignableFrom(key)) {
-                    return (T) queueHashMap.get(key).poll();
+                    return c.cast(queueHashMap.get(key).poll());
                 }
             }
 

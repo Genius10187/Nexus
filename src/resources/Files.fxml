@@ -9,7 +9,7 @@
 
 
 <AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8"
-            fx:controller="com.meti.app.Files">
+            fx:controller="com.meti.app.view.FileView">
     <children>
         <ScrollPane fitToHeight="true" fitToWidth="true" prefHeight="400.0" prefViewportHeight="200.0"
                     prefViewportWidth="200.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0"

@@ -1,4 +1,4 @@
-package com.meti.lib.util.callback;
+package com.meti.lib.util.thread.callback;
 
 /**
  * @author SirMathhman

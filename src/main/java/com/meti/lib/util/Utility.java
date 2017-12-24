@@ -69,7 +69,7 @@ public class Utility {
         return splitName[splitName.length - 1];
     }
 
-    public static FXMLBundle load(File file, Stage stage, EnumSet<FXML> flags) throws IOException {
+    public static <T> FXMLBundle<T> load(File file, Stage stage, EnumSet<FXML> flags) throws IOException {
         if (file.exists()) {
             return load(file.toURI().toURL(), stage, flags);
         } else {
@@ -77,7 +77,7 @@ public class Utility {
         }
     }
 
-    public static FXMLBundle load(URL url, Stage stage, EnumSet<FXML> flags) throws IOException {
+    public static <T> FXMLBundle<T> load(URL url, Stage stage, EnumSet<FXML> flags) throws IOException {
         FXMLLoader loader = new FXMLLoader(url);
         Parent parent = loader.load();
         Scene scene = new Scene(parent);
@@ -87,7 +87,8 @@ public class Utility {
             stage.show();
         }
 
-        return new FXMLBundle(loader, parent, loader.getController(), stage);
+        //unchecked
+        return new FXMLBundle<>(parent, loader.getController(), stage);
     }
 
     public static void assertNullParameters(Object... parameters) {
@@ -99,11 +100,11 @@ public class Utility {
         }
     }
 
-    public static FXMLBundle load(File file, EnumSet<FXML> flags) throws IOException {
+    public static <T> FXMLBundle<T> load(File file, EnumSet<FXML> flags) throws IOException {
         return load(file.toURI().toURL(), flags);
     }
 
-    public static FXMLBundle load(URL url, EnumSet<FXML> flags) throws IOException {
+    public static <T> FXMLBundle<T> load(URL url, EnumSet<FXML> flags) throws IOException {
         Stage stage = null;
         if (flags.contains(FXML.LOAD_STAGE)) {
             stage = new Stage();

@@ -1,7 +1,7 @@
 package com.meti.lib.io.server.asset;
 
 import com.meti.lib.io.server.asset.Array.ArrayBuilder;
-import com.meti.lib.io.source.Sources;
+import com.meti.lib.io.sources.Sources;
 import com.meti.lib.util.Utility;
 
 import java.io.File;
@@ -23,6 +23,10 @@ public class AssetManager {
 
     private final HashMap<String, AssetBuilder<?, InputStream, OutputStream>> builderHashMap = new HashMap<>();
     private final HashMap<Long, Asset> assetHashMap = new HashMap<>();
+
+    {
+        //TODO: load builders
+    }
 
     public List<File> load(File file) throws IOException {
         List<File> fileList = Utility.scan(file);

@@ -1,4 +1,4 @@
-package com.meti.lib.util.fx;
+package com.meti.lib.util.fx.stageable;
 
 import javafx.stage.Stage;
 

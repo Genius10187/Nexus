@@ -1,6 +1,7 @@
-package com.meti.lib.util.fx;
+package com.meti.lib.util.fx.stageable;
 
 import com.meti.lib.util.Utility;
+import com.meti.lib.util.fx.FXMLBundle;
 import javafx.stage.Stage;
 
 import java.io.File;
@@ -26,11 +27,11 @@ public class StageableImpl implements Stageable {
         this.stage = stage;
     }
 
-    public FXMLBundle load(URL url) throws IOException {
+    public <T> FXMLBundle<T> load(URL url) throws IOException {
         return Utility.load(url, stage, EnumSet.of(Utility.FXML.LOAD_STAGE));
     }
 
-    public FXMLBundle load(File file) throws IOException {
+    public <T> FXMLBundle<T> load(File file) throws IOException {
         return Utility.load(file, stage, EnumSet.of(Utility.FXML.LOAD_STAGE));
     }
 }

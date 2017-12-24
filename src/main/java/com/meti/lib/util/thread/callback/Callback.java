@@ -1,6 +1,6 @@
-package com.meti.lib.util.callback;
+package com.meti.lib.util.thread.callback;
 
-import com.meti.lib.util.Action;
+import com.meti.lib.util.thread.Action;
 
 /**
  * @author SirMathhman

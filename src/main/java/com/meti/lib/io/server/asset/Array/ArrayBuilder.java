@@ -2,7 +2,7 @@ package com.meti.lib.io.server.asset.Array;
 
 import com.meti.lib.io.server.asset.Asset;
 import com.meti.lib.io.server.asset.AssetBuilder;
-import com.meti.lib.io.source.Source;
+import com.meti.lib.io.sources.Source;
 
 import java.io.File;
 import java.io.IOException;

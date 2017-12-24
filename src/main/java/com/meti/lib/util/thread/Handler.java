@@ -1,4 +1,4 @@
-package com.meti.lib.util;
+package com.meti.lib.util.thread;
 
 /**
  * @author SirMathhman

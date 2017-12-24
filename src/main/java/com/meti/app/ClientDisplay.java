@@ -1,12 +1,14 @@
 package com.meti.app;
 
-import com.meti.lib.io.client.ClientState;
+import com.meti.app.startup.Startup;
+import com.meti.app.view.View;
+import com.meti.lib.io.client.Client;
 import com.meti.lib.io.server.Server;
 import com.meti.lib.io.server.command.Command;
 import com.meti.lib.io.server.command.DisconnectCommand;
 import com.meti.lib.util.Utility;
 import com.meti.lib.util.fx.FXMLBundle;
-import com.meti.lib.util.fx.StageableImpl;
+import com.meti.lib.util.fx.stageable.StageableImpl;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
@@ -18,12 +20,13 @@ import javafx.stage.Stage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 
-import static com.meti.app.Main.console;
+import static com.meti.app.Main.*;
+import static com.meti.lib.util.Utility.FXML.LOAD_STAGE;
+import static java.util.EnumSet.of;
 
 /**
  * @author SirMathhman
@@ -31,46 +34,46 @@ import static com.meti.app.Main.console;
  * @since 12/19/2017
  */
 public class ClientDisplay extends StageableImpl implements Initializable {
-    private static final File serverDisplayLocation = new File(Main.resources, "ServerDisplay.fxml");
+    private static final File serverDisplayLocation = new File(resources, "ServerDisplay.fxml");
     private static final HashMap<String, File> viewFXMLMap = new HashMap<>();
 
     static {
-        viewFXMLMap.put("Chat", new File(Main.resources, "Chat.fxml"));
-        viewFXMLMap.put("Files", new File(Main.resources, "Files.fxml"));
-        viewFXMLMap.put("Console", new File(Main.resources, "Console.fxml"));
+        viewFXMLMap.put("Chat", new File(resources, "Chat.fxml"));
+        viewFXMLMap.put("FileView", new File(resources, "FileView.fxml"));
+        viewFXMLMap.put("ConsoleView", new File(resources, "ConsoleView.fxml"));
 
         //properties are also settings
-        viewFXMLMap.put("Properties", new File(Main.resources, "PropertyViewer.fxml"));
+        viewFXMLMap.put("Properties", new File(resources, "PropertyView.fxml"));
     }
 
     private final HashMap<String, Tab> currentViews = new HashMap<>();
-
-    private ClientState state;
 
     @FXML
     private ListView<String> views;
     @FXML
     private TabPane viewPane;
+    private Client client;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        {
-            views.getItems().addAll(viewFXMLMap.keySet());
-            views.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-                try {
-                    loadView(newValue);
-                } catch (IOException e) {
-                    console.log(Level.WARNING, e);
-                }
-            });
-        }
+        client = getAppState().getClient();
+
+        views.getItems().addAll(viewFXMLMap.keySet());
+        views.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            try {
+                loadView(newValue);
+            } catch (IOException e) {
+                console.log(Level.WARNING, e);
+            }
+        });
     }
 
     private void loadView(String viewName) throws IOException {
         File file = viewFXMLMap.get(viewName);
-        FXMLBundle bundle = Utility.load(file, EnumSet.of(Utility.FXML.NONE));
+        FXMLBundle bundle = Utility.load(file, of(Utility.FXML.NONE));
         Parent parent = bundle.getParent();
         Object controller = bundle.getController();
+
         if (parent != null && !currentViews.containsKey(viewName) && controller instanceof View) {
             View viewController = (View) controller;
 
@@ -82,7 +85,6 @@ public class ClientDisplay extends StageableImpl implements Initializable {
             buildContentMenu(viewName, tab);
             currentViews.put(viewName, tab);
 
-            viewController.setClientState(state);
             viewController.init();
         }
     }
@@ -131,10 +133,6 @@ public class ClientDisplay extends StageableImpl implements Initializable {
         currentViews.remove(viewName);
     }
 
-    public void setState(ClientState state) {
-        this.state = state;
-    }
-
     public void run() {
         console.log(Level.FINE, "Initializing controller");
 
@@ -159,8 +157,8 @@ public class ClientDisplay extends StageableImpl implements Initializable {
         try {
             Command disconnectCommand = new DisconnectCommand();
 
-            state.getClient().write(disconnectCommand);
-            state.getClient().close();
+            client.write(disconnectCommand);
+            client.close();
 
             console.log(Level.FINE, "Successfully disconnected from server");
         } catch (IOException e) {
@@ -171,8 +169,9 @@ public class ClientDisplay extends StageableImpl implements Initializable {
     @FXML
     public void openServerDisplay() {
         try {
-            Server server = Startup.getState().getServer();
-            ServerDisplay controller = (ServerDisplay) Utility.load(serverDisplayLocation, EnumSet.of(Utility.FXML.LOAD_STAGE)).getController();
+            Server server = getAppState().getServer();
+            ServerDisplay controller = Utility.<ServerDisplay>load(serverDisplayLocation, of(LOAD_STAGE)).getController();
+
             controller.setServer(server);
             controller.init(server.getState().getManager().getFiles());
         } catch (IOException e) {
@@ -182,21 +181,21 @@ public class ClientDisplay extends StageableImpl implements Initializable {
 
     @FXML
     public void openProblem() {
-        Main.getInstance().getHostServices().showDocument("https://github.com/Meticuli-Technologies/Nexus/issues/new");
+        getAppState().getApplication().getHostServices().showDocument("https://github.com/Meticuli-Technologies/Nexus/issues/new");
     }
 
     @FXML
     public void openGitHub() {
-        Main.getInstance().getHostServices().showDocument("https://github.com/Meticuli-Technologies/Nexus");
+        getAppState().getApplication().getHostServices().showDocument("https://github.com/Meticuli-Technologies/Nexus");
     }
 
     @FXML
     public void openWebsite() {
-        Main.getInstance().getHostServices().showDocument("https://meticuli-technologies.github.io/Nexus/");
+        getAppState().getApplication().getHostServices().showDocument("https://meticuli-technologies.github.io/Nexus/");
     }
 
     @FXML
     public void openDocumentation() {
-        Main.getInstance().getHostServices().showDocument("https://meticuli-technologies.github.io/Nexus/javadocs/index.html");
+        getAppState().getApplication().getHostServices().showDocument("https://meticuli-technologies.github.io/Nexus/javadocs/index.html");
     }
 }

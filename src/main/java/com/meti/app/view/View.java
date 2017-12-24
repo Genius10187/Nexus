@@ -1,6 +1,4 @@
-package com.meti.app;
-
-import com.meti.lib.io.client.ClientState;
+package com.meti.app.view;
 
 import java.io.IOException;
 
@@ -10,8 +8,5 @@ import java.io.IOException;
  * @since 12/22/2017
  */
 public interface View {
-    //TODO: convert to class
-    void setClientState(ClientState state);
-
     void init() throws IOException;
 }

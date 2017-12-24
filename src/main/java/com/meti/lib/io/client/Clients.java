@@ -1,6 +1,6 @@
 package com.meti.lib.io.client;
 
-import com.meti.lib.io.source.ObjectSource;
+import com.meti.lib.io.sources.ObjectSource;
 
 /**
  * @author SirMathhman

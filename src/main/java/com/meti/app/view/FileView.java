@@ -1,6 +1,5 @@
-package com.meti.app;
+package com.meti.app.view;
 
-import com.meti.lib.io.client.ClientState;
 import com.meti.lib.io.server.command.Argument;
 import com.meti.lib.io.server.command.ListCommand;
 import javafx.fxml.FXML;
@@ -13,30 +12,27 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 
+import static com.meti.app.Main.console;
+import static com.meti.app.Main.getAppState;
+
 /**
  * @author SirMathhman
  * @version 0.0.0
  * @since 12/20/2017
  */
-public class Files implements View {
+public class FileView implements View {
     private final HashMap<File, TreeItem<String>> filePaths = new HashMap<>();
 
     @FXML
     private TreeView<String> fileView;
 
-    private TreeItem<String> root = new TreeItem<>();
-    private ClientState state;
-
-    @Override
-    public void setClientState(ClientState state) {
-        this.state = state;
-    }
+    private final TreeItem<String> root = new TreeItem<>();
 
     @Override
     public void init() {
         try {
             ListCommand command = new ListCommand(Argument.FILES);
-            List<?> fileList = (List<?>) state.getClient().runCommand(command);
+            List<?> fileList = (List<?>) getAppState().getClient().runCommand(command);
             for (Object o : fileList) {
                 if (o instanceof File) {
                     createTreeItem((File) o);
@@ -46,7 +42,7 @@ public class Files implements View {
             fileView.setRoot(root);
             fileView.setShowRoot(false);
         } catch (IOException e) {
-            Main.console.log(Level.SEVERE, e);
+            console.log(Level.SEVERE, e);
         }
     }
 

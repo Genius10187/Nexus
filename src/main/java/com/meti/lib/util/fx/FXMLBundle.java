@@ -1,6 +1,6 @@
 package com.meti.lib.util.fx;
 
-import javafx.fxml.FXMLLoader;
+import com.meti.lib.util.fx.stageable.Stageable;
 import javafx.scene.Parent;
 import javafx.stage.Stage;
 
@@ -9,14 +9,12 @@ import javafx.stage.Stage;
  * @version 0.0.0
  * @since 12/19/2017
  */
-public class FXMLBundle {
-    private final FXMLLoader loader;
+public class FXMLBundle<T> {
     private final Parent parent;
-    private final Object controller;
+    private final T controller;
     private final Stage stage;
 
-    public FXMLBundle(FXMLLoader loader, Parent parent, Object controller, Stage stage) {
-        this.loader = loader;
+    public FXMLBundle(Parent parent, T controller, Stage stage) {
         this.parent = parent;
         this.controller = controller;
         this.stage = stage;
@@ -26,15 +24,11 @@ public class FXMLBundle {
         }
     }
 
-    public FXMLLoader getLoader() {
-        return loader;
-    }
-
     public Parent getParent() {
         return parent;
     }
 
-    public Object getController() {
+    public T getController() {
         return controller;
     }
 

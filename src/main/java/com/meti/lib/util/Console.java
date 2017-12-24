@@ -20,7 +20,7 @@ public class Console {
     private final Properties properties = new Properties();
     private final Logger logger;
     public Console() {
-        this("Console");
+        this("ConsoleView");
     }
 
     public Console(String name) {

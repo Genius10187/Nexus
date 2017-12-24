@@ -9,7 +9,7 @@ import java.io.File;
  */
 public class Asset<T> {
     private final File location;
-    private T[] content;
+    private final T[] content;
 
     public Asset(File location, T[] content) {
         this.location = location;

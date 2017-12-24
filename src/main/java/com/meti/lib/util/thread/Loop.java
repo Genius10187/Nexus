@@ -1,7 +1,7 @@
-package com.meti.lib.util;
+package com.meti.lib.util.thread;
 
-import com.meti.lib.util.callback.Callback;
-import com.meti.lib.util.callback.DefaultCallback;
+import com.meti.lib.util.thread.callback.Callback;
+import com.meti.lib.util.thread.callback.DefaultCallback;
 
 /**
  * @author SirMathhman
@@ -16,7 +16,6 @@ public abstract class Loop implements Runnable {
     public void run() {
         setRunning(true);
 
-        init();
         while (!Thread.interrupted() && running) {
             try {
                 loop();
@@ -27,9 +26,6 @@ public abstract class Loop implements Runnable {
                 break;
             }
         }
-    }
-
-    public void init() {
     }
 
     public abstract void loop() throws Exception;

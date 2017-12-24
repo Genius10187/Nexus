@@ -3,7 +3,7 @@ package com.meti.app;
 import com.meti.lib.io.server.Server;
 import com.meti.lib.io.server.ServerLoop;
 import com.meti.lib.io.server.chat.Message;
-import com.meti.lib.util.fx.StageableImpl;
+import com.meti.lib.util.fx.stageable.StageableImpl;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -44,7 +44,7 @@ public class ServerDisplay extends StageableImpl implements Initializable {
     @FXML
     private TreeView<String> fileView;
 
-    private TreeItem<String> root = new TreeItem<>();
+    private final TreeItem<String> root = new TreeItem<>();
     private Server server;
 
     @Override
@@ -105,22 +105,22 @@ public class ServerDisplay extends StageableImpl implements Initializable {
 
     @FXML
     public void openProblem() {
-        Main.getInstance().getHostServices().showDocument("https://github.com/Meticuli-Technologies/Nexus/issues/new");
+        Main.getAppState().getApplication().getHostServices().showDocument("https://github.com/Meticuli-Technologies/Nexus/issues/new");
     }
 
     @FXML
     public void openGitHub() {
-        Main.getInstance().getHostServices().showDocument("https://github.com/Meticuli-Technologies/Nexus");
+        Main.getAppState().getApplication().getHostServices().showDocument("https://github.com/Meticuli-Technologies/Nexus");
     }
 
     @FXML
     public void openWebsite() {
-        Main.getInstance().getHostServices().showDocument("https://meticuli-technologies.github.io/Nexus/");
+        Main.getAppState().getApplication().getHostServices().showDocument("https://meticuli-technologies.github.io/Nexus/");
     }
 
     @FXML
     public void openDocumentation() {
-        Main.getInstance().getHostServices().showDocument("https://meticuli-technologies.github.io/Nexus/javadocs/index.html");
+        Main.getAppState().getApplication().getHostServices().showDocument("https://meticuli-technologies.github.io/Nexus/javadocs/index.html");
     }
 
     public void init(List<File> loadedFiles) {

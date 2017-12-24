@@ -1,10 +1,11 @@
-package com.meti.app;
+package com.meti.app.startup;
 
+import com.meti.app.ServerDisplay;
 import com.meti.lib.io.server.Server;
 import com.meti.lib.io.server.Servers;
-import com.meti.lib.util.execute.Executables;
 import com.meti.lib.util.fx.FXMLBundle;
-import com.meti.lib.util.fx.StageableImpl;
+import com.meti.lib.util.fx.stageable.StageableImpl;
+import com.meti.lib.util.thread.execute.Executables;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TextField;
@@ -25,7 +26,7 @@ import static com.meti.app.Main.*;
  * @since 12/18/2017
  */
 public class Host extends StageableImpl implements Initializable {
-    private static final File serverDisplayLocation = new File(Main.resources, "ServerDisplay.fxml");
+    private static final File serverDisplayLocation = new File(resources, "ServerDisplay.fxml");
     private static final File defaultLocation = new File("Server");
 
     @FXML
@@ -61,7 +62,7 @@ public class Host extends StageableImpl implements Initializable {
     public void next() {
         try {
             int port = Integer.parseInt(portField.getText());
-            Server server = Servers.create(port, Main.console);
+            Server server = Servers.create(port, console);
 
             //TODO: alternative
             String path = fileField.getText();
@@ -83,7 +84,7 @@ public class Host extends StageableImpl implements Initializable {
                 display.setServer(server);
                 display.init(loadedFiles);
 
-                Startup.getState().setServer(server);
+                getAppState().setServer(server);
             } else {
                 throw new IllegalStateException("ServerDisplay controller is not equal to ServerDisplay class!");
             }

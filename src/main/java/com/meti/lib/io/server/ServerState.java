@@ -2,7 +2,7 @@ package com.meti.lib.io.server;
 
 import com.meti.lib.io.server.asset.AssetManager;
 import com.meti.lib.util.Console;
-import com.meti.lib.util.Handler;
+import com.meti.lib.util.thread.Handler;
 
 import java.net.ServerSocket;
 import java.util.ArrayList;

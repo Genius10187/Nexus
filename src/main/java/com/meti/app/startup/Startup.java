@@ -1,6 +1,6 @@
-package com.meti.app;
+package com.meti.app.startup;
 
-import com.meti.lib.util.fx.StageableImpl;
+import com.meti.lib.util.fx.stageable.StageableImpl;
 import javafx.fxml.FXML;
 
 import java.io.File;
@@ -26,17 +26,8 @@ public class Startup extends StageableImpl {
         localFXML = new File(resources, "Local.fxml");
     }
 
-    //ugggh FXML to static doesn't look good
-    private static StartupState state = new StartupState();
-
-    public static StartupState getState() {
-        return state;
-    }
-
     @FXML
     public void connect() {
-        state.setRemote(true);
-
         try {
             load(connectFXML);
         } catch (IOException e) {
@@ -46,8 +37,6 @@ public class Startup extends StageableImpl {
 
     @FXML
     public void host() {
-        state.setRemote(true);
-
         try {
             load(hostFXML);
         } catch (IOException e) {
@@ -57,8 +46,6 @@ public class Startup extends StageableImpl {
 
     @FXML
     public void local() {
-        state.setRemote(false);
-
         try {
             load(localFXML);
         } catch (IOException e) {
