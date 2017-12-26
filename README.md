@@ -1,4 +1,4 @@
-# Nexus [https://travis-ci.org/Meticuli-Technologies/Nexus.svg?branch=master]
+# Nexus [![Travis Build](https://travis-ci.org/Meticuli-Technologies/Nexus.svg?branch=master)](https://travis-ci.org/Meticuli-Technologies/Nexus) 
 **Nexus** is programming, 3D modelling, and music production software.
 
 **Goals**: 
