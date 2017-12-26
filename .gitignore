@@ -5,6 +5,8 @@ build/**
 .idea/**
 *.iml
 
+!gradle/wrapper/*
+
 #
 # JAVA .GITIGNORE
 #
