@@ -2,6 +2,7 @@ package com.meti.lib.io.sources;
 
 import java.io.*;
 import java.net.Socket;
+import java.net.URL;
 
 /**
  * @author SirMathhman
@@ -28,6 +29,14 @@ public class Sources {
         return new SocketObjectSource(socket);
     }
 
+    public static BasicSource createBasicSource(URL url) throws IOException {
+        return new BasicSource(url.openStream(), null);
+    }
+
+    public static BasicSource createBasicSource(InputStream inputStream, OutputStream outputStream) {
+        return new BasicSource(inputStream, outputStream);
+    }
+
     private static class BasicSource implements Source<InputStream, OutputStream> {
         private final InputStream inputStream;
         private final OutputStream outputStream;
@@ -41,6 +50,7 @@ public class Sources {
         public InputStream getInputStream() {
             return inputStream;
         }
+
         @Override
         public OutputStream getOutputStream() {
             return outputStream;

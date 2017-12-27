@@ -75,12 +75,4 @@ public class Console {
     public void addHandler(Handler handler) throws SecurityException {
         logger.addHandler(handler);
     }
-
-    public Logger getLogger() {
-        return logger;
-    }
-
-    public Properties getProperties() {
-        return properties;
-    }
 }
