@@ -1,4 +1,4 @@
-package com.meti;
+package com.meti.app;
 
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * @since 12/27/2017
  */
 @ExtendWith(ApplicationExtension.class)
-public class TestMain {
+public class SampleTest {
     private Button button;
 
     @Start

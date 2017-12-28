@@ -2,6 +2,7 @@ package com.meti.app;
 
 import com.meti.lib.util.Console;
 import com.meti.lib.util.Utility;
+import com.meti.lib.util.fx.FXMLBundle;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -31,12 +32,18 @@ public class Main extends Application {
     public void start(Stage primaryStage) {
         appState.setApplication(this);
 
+        loadFXML(primaryStage);
+
+        console.log(Level.INFO, "Started application.");
+    }
+
+    public FXMLBundle<Object> loadFXML(Stage stage) {
         try {
-            Utility.load(startupFXML, primaryStage, EnumSet.of(Utility.FXML.LOAD_STAGE));
+            return Utility.load(startupFXML, stage, EnumSet.of(Utility.FXML.LOAD_STAGE));
         } catch (IOException e) {
             console.log(Level.SEVERE, e);
         }
-        console.log(Level.INFO, "Started application.");
+        return null;
     }
 
     @Override
