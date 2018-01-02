@@ -12,6 +12,7 @@ repositories {
 
 dependencies {
     testCompile 'org.junit.jupiter:junit-jupiter-api:5.0.0'
+    testCompile "org.testfx:testfx-core:4.0.10-alpha"
     testCompile "org.testfx:testfx-junit5:4.0.10-alpha"
 }
 
