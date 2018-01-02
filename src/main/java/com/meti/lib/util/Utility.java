@@ -152,17 +152,21 @@ public class Utility {
      * @throws IOException If an I/O error occurred.
      */
     public static <T> FXMLBundle<T> load(Source<? extends InputStream, ?> source, Stage stage, EnumSet<FXML> flags) throws IOException {
-        FXMLLoader loader = new FXMLLoader();
-        Parent parent = loader.load(source.getInputStream());
-        Scene scene = new Scene(parent);
+        if (source.getInputStream().available() > 0) {
+            FXMLLoader loader = new FXMLLoader();
+            Parent parent = loader.load(source.getInputStream());
+            Scene scene = new Scene(parent);
 
-        if (flags.contains(FXML.LOAD_STAGE) && stage != null) {
-            stage.setScene(scene);
-            stage.show();
+            if (flags.contains(FXML.LOAD_STAGE) && stage != null) {
+                stage.setScene(scene);
+                stage.show();
+            }
+
+            //unchecked
+            return new FXMLBundle<>(parent, loader.getController(), stage);
+        } else {
+            throw new IllegalArgumentException("Cannot read any bytes for FXML.");
         }
-
-        //unchecked
-        return new FXMLBundle<>(parent, loader.getController(), stage);
     }
 
     public enum FXML {

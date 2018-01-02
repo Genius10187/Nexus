@@ -6,7 +6,6 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -39,7 +38,7 @@ public class Main extends Application {
     private void loadFXML(Stage stage) {
         try {
             Utility.load(startupFXML, stage, EnumSet.of(Utility.FXML.LOAD_STAGE));
-        } catch (IOException e) {
+        } catch (Exception e) {
             console.log(Level.SEVERE, e);
         }
     }
