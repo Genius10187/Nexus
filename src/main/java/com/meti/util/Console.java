@@ -11,18 +11,21 @@ import java.util.logging.Logger;
  * @since 1/14/2018
  */
 public class Console {
+    private final ConsoleState state = new ConsoleState();
     private final Logger logger;
 
     public Console() {
-        this.logger = Logger.getLogger("Default");
-    }
-
-    public Console(Class<?> c) {
-        this(c.getName());
+        this("Default");
     }
 
     public Console(String name) {
         this.logger = Logger.getLogger(name);
+
+        this.state.setProperty(ConsoleEvent.EXIT_ON_SEVERE, false);
+    }
+
+    public Console(Class<?> c) {
+        this(c.getName());
     }
 
     public boolean log(Level level, String message) {
@@ -48,6 +51,11 @@ public class Console {
             }
 
             logger.log(level, builder.toString());
+
+            Object exit = state.getProperty(ConsoleEvent.EXIT_ON_SEVERE);
+            if (exit != null && exit.equals(true) && level.equals(Level.SEVERE)) {
+                System.exit(0);
+            }
             return true;
         } else {
             return false;
