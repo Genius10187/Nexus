@@ -1,4 +1,6 @@
-package com.meti.util;
+package com.meti.util.fxml;
+
+import com.meti.util.console.Console;
 
 /**
  * @author SirMathhman

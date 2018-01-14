@@ -1,4 +1,6 @@
-package com.meti.util;
+package com.meti.util.console;
+
+import com.meti.util.State;
 
 /**
  * @author SirMathhman

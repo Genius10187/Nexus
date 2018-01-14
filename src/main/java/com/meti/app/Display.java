@@ -1,7 +1,7 @@
 package com.meti.app;
 
-import com.meti.util.Controller;
-import com.meti.util.FXMLUtil;
+import com.meti.util.fxml.Controller;
+import com.meti.util.fxml.FXMLUtil;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;

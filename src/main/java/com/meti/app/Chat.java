@@ -1,6 +1,6 @@
 package com.meti.app;
 
-import com.meti.util.Controller;
+import com.meti.util.fxml.Controller;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TextArea;

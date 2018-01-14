@@ -1,6 +1,6 @@
 package com.meti.app;
 
-import com.meti.util.FXMLUtil;
+import com.meti.util.fxml.FXMLUtil;
 import javafx.application.Application;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
