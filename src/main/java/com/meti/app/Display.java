@@ -1,5 +1,6 @@
 package com.meti.app;
 
+import com.meti.util.Controller;
 import com.meti.util.FXMLUtil;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -8,13 +9,14 @@ import javafx.scene.layout.BorderPane;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.logging.Level;
 
 /**
  * @author SirMathhman
  * @version 0.0.0
  * @since 1/14/2018
  */
-public class Display {
+public class Display extends Controller {
     private final URL chatFXML = getClass().getResource("Chat.fxml");
 
     @FXML
@@ -28,8 +30,7 @@ public class Display {
 
             //TODO: multiple places instead of BorderPane.setCenter(Node node)
         } catch (IOException e) {
-            e.printStackTrace();
-            //TODO: replace caught exception with console
+            console.log(Level.SEVERE, "Failed to load view", e);
         }
     }
 

@@ -1,5 +1,6 @@
 package com.meti.app;
 
+import com.meti.util.Controller;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TextArea;
@@ -13,7 +14,7 @@ import java.util.ResourceBundle;
  * @version 0.0.0
  * @since 1/14/2018
  */
-public class Chat implements Initializable {
+public class Chat extends Controller implements Initializable {
     @FXML
     private AnchorPane anchorPane;
 
