@@ -5,7 +5,8 @@ import com.meti.util.fxml.FXUtil;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TextArea;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.BorderPane;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -17,7 +18,10 @@ import java.util.ResourceBundle;
  */
 public class Chat extends Controller implements Initializable {
     @FXML
-    private AnchorPane anchorPane;
+    private BorderPane contentPane;
+
+    @FXML
+    private TextField inputField;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -25,6 +29,12 @@ public class Chat extends Controller implements Initializable {
         //TODO: replace area with RichTextFX API in chat
 
         FXUtil.zeroAnchors(area);
-        anchorPane.getChildren().add(area);
+        contentPane.setCenter(area);
+    }
+
+    @FXML
+    public void handleInput() {
+        String value = inputField.getText();
+        //TODO: handle value for input in the chat
     }
 }
