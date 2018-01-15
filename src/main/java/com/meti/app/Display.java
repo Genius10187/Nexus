@@ -1,7 +1,7 @@
 package com.meti.app;
 
 import com.meti.util.fxml.Controller;
-import com.meti.util.fxml.FXMLUtil;
+import com.meti.util.fxml.FXUtil;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
@@ -25,7 +25,7 @@ public class Display extends Controller {
     @FXML
     public void openChat() {
         try {
-            Parent parent = FXMLUtil.load(chatFXML).getParent();
+            Parent parent = FXUtil.load(chatFXML).getParent();
             contentPane.setCenter(parent);
 
             //TODO: multiple places instead of BorderPane.setCenter(Node node)

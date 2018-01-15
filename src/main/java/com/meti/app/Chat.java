@@ -1,6 +1,7 @@
 package com.meti.app;
 
 import com.meti.util.fxml.Controller;
+import com.meti.util.fxml.FXUtil;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TextArea;
@@ -23,6 +24,7 @@ public class Chat extends Controller implements Initializable {
         TextArea area = new TextArea();
         //TODO: replace area with RichTextFX API in chat
 
+        FXUtil.zeroAnchors(area);
         anchorPane.getChildren().add(area);
     }
 }

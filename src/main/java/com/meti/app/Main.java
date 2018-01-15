@@ -1,6 +1,6 @@
 package com.meti.app;
 
-import com.meti.util.fxml.FXMLUtil;
+import com.meti.util.fxml.FXUtil;
 import javafx.application.Application;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -18,7 +18,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Parent parent = FXMLUtil.load(displayFXML).getParent();
+        Parent parent = FXUtil.load(displayFXML).getParent();
         Scene scene = new Scene(parent);
         primaryStage.setScene(scene);
         primaryStage.show();
