@@ -14,6 +14,9 @@ import java.net.URL;
  * @since 1/14/2018
  */
 public class Main extends Application {
+    //fields
+    public static final AppState appState = new AppState();
+
     private final URL displayFXML = getClass().getResource("Display.fxml");
 
     @Override

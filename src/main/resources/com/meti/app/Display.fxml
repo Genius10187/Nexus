@@ -25,9 +25,9 @@
                                 <MenuItem mnemonicParsing="false" onAction="#openChat" text="Chat"/>
                             </items>
                         </Menu>
-                        <Menu mnemonicParsing="false" text="Connection">
+                        <Menu mnemonicParsing="false" text="Connections">
                             <items>
-                                <MenuItem mnemonicParsing="false" text="Action 1"/>
+                                <MenuItem mnemonicParsing="false" onAction="#openNewConnection" text="New Connection"/>
                             </items>
                         </Menu>
                         <Menu mnemonicParsing="false" text="Help">

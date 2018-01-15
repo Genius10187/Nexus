@@ -35,6 +35,11 @@ public class Display extends Controller {
     }
 
     @FXML
+    public void openNewConnection() {
+
+    }
+
+    @FXML
     public void close() {
         Platform.exit();
     }
