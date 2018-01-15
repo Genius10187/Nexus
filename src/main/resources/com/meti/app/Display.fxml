@@ -23,6 +23,7 @@
                         <Menu mnemonicParsing="false" text="View">
                             <items>
                                 <MenuItem mnemonicParsing="false" onAction="#openChat" text="Chat"/>
+                                <MenuItem mnemonicParsing="false" onAction="#openConnections" text="Connections"/>
                             </items>
                         </Menu>
                         <Menu mnemonicParsing="false" text="Connections">

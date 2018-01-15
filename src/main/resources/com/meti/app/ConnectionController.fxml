@@ -42,7 +42,7 @@
                                                         <ContextMenu>
                                                             <items>
                                                                 <MenuItem mnemonicParsing="false"
-                                                                          onAction="#addConnection" text="Add"/>
+                                                                          onAction="#newConnection" text="Add"/>
                                                             </items>
                                                         </ContextMenu>
                                                     </contextMenu>
