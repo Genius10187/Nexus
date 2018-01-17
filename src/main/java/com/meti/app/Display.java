@@ -5,9 +5,7 @@ import com.meti.util.fxml.FXUtil;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
-import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
@@ -20,6 +18,7 @@ import java.util.logging.Level;
  */
 public class Display extends Controller {
     private final URL connectionControllerFXML = getClass().getResource("ConnectionController.fxml");
+    private final URL newConnectionFXML = getClass().getResource("NewConnection.fxml");
     private final URL chatFXML = getClass().getResource("Chat.fxml");
 
     @FXML
@@ -40,10 +39,7 @@ public class Display extends Controller {
     @FXML
     public void openConnections() {
         try {
-            Parent parent = FXUtil.load(connectionControllerFXML).getParent();
-            Stage stage = new Stage();
-            stage.setScene(new Scene(parent));
-            stage.show();
+            FXUtil.load(connectionControllerFXML, null);
         } catch (IOException e) {
             console.log(Level.SEVERE, e);
         }
@@ -51,7 +47,11 @@ public class Display extends Controller {
 
     @FXML
     public void openNewConnection() {
-
+        try {
+            FXUtil.load(newConnectionFXML, null);
+        } catch (IOException e) {
+            console.log(Level.SEVERE, e);
+        }
     }
 
     @FXML

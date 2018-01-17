@@ -15,6 +15,7 @@
     <orderEntry type="library" name="Gradle: org.fxmisc.flowless:flowless:0.6" level="project" />
     <orderEntry type="library" name="Gradle: org.reactfx:reactfx:2.0-M5" level="project" />
     <orderEntry type="library" name="Gradle: org.fxmisc.wellbehaved:wellbehavedfx:0.3" level="project" />
+    <orderEntry type="library" name="Block2P" level="project" />
   </component>
   <component name="TestModuleProperties" production-module="Nexus_main" />
 </module>
