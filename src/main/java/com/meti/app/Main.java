@@ -7,6 +7,9 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.net.URL;
+import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.logging.Level;
 
 /**
  * @author SirMathhman
@@ -19,6 +22,11 @@ public class Main extends Application {
 
     private final URL displayFXML = getClass().getResource("Display.fxml");
 
+    //methods
+    public static void main(String[] args) {
+        launch(args);
+    }
+
     @Override
     public void start(Stage primaryStage) throws Exception {
         Parent parent = FXUtil.load(displayFXML).getParent();
@@ -29,10 +37,22 @@ public class Main extends Application {
 
     @Override
     public void stop() {
-    }
+        try {
+            ExecutorService service = appState.getService();
+            service.shutdown();
 
-    //methods
-    public static void main(String[] args) {
-        launch(args);
+            if (!service.isShutdown()) {
+                Thread.sleep(1000);
+
+                List<Runnable> runnables = service.shutdownNow();
+                if (runnables.size() > 0) {
+                    appState.getConsole().log(Level.WARNING, "Executor service shut down with " + runnables.size() + " runnables remaining");
+                }
+            } else {
+                appState.getConsole().log(Level.INFO, "Shut down executor service successfully.");
+            }
+        } catch (InterruptedException e) {
+            appState.getConsole().log(Level.SEVERE, e);
+        }
     }
 }
