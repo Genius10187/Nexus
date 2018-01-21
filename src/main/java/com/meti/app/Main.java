@@ -21,20 +21,6 @@ public class Main extends Application {
     public static final AppState appState = new AppState();
 
     private final URL displayFXML = getClass().getResource("Display.fxml");
-
-    //methods
-    public static void main(String[] args) {
-        launch(args);
-    }
-
-    @Override
-    public void start(Stage primaryStage) throws Exception {
-        Parent parent = FXUtil.load(displayFXML).getParent();
-        Scene scene = new Scene(parent);
-        primaryStage.setScene(scene);
-        primaryStage.show();
-    }
-
     @Override
     public void stop() {
         try {
@@ -54,5 +40,21 @@ public class Main extends Application {
         } catch (InterruptedException e) {
             appState.getConsole().log(Level.SEVERE, e);
         }
+
+        System.exit(0);
     }
+
+    public static void main(String[] args) {
+        launch(args);
+    }
+
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+        Parent parent = FXUtil.load(displayFXML).getParent();
+        Scene scene = new Scene(parent);
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    }
+
+    //methods
 }
