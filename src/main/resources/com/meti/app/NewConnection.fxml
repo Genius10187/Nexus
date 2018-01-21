@@ -37,7 +37,7 @@
                       GridPane.rowIndex="1"/>
                 <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Port:" GridPane.halignment="CENTER"
                       GridPane.rowIndex="2"/>
-                <Text fx:id="status" strokeType="OUTSIDE" strokeWidth="0.0" text="Waiting..."
+                <Text fx:id="statusText" strokeType="OUTSIDE" strokeWidth="0.0" text="Waiting..."
                       GridPane.halignment="CENTER" GridPane.rowIndex="3"/>
                 <Button fx:id="nextButton" mnemonicParsing="false" onAction="#next" text="Next" GridPane.columnIndex="1"
                         GridPane.halignment="CENTER" GridPane.rowIndex="3"/>
