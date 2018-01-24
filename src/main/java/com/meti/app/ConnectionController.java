@@ -3,8 +3,6 @@ package com.meti.app;
 import com.meti.util.fxml.Controller;
 import com.meti.util.fxml.FXUtil;
 import javafx.fxml.FXML;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.ListView;
 import javafx.stage.Stage;
 
@@ -18,18 +16,25 @@ import java.util.logging.Level;
  * @since 1/15/2018
  */
 public class ConnectionController extends Controller {
-    private final URL newConnectionFXML = getClass().getResource("NewConnection.fxml");
+    private final URL addConnectionFXML = getClass().getResource("AddConnection.fxml");
+    private final URL addListenerFXML = getClass().getResource("AddListener.fxml");
 
     @FXML
     private ListView<String> conectionListView;
 
     @FXML
-    public void newConnection() {
+    public void addConnection() {
         try {
-            Parent parent = FXUtil.load(newConnectionFXML).getParent();
-            Stage stage = new Stage();
-            stage.setScene(new Scene(parent));
-            stage.show();
+            FXUtil.load(addConnectionFXML, new Stage());
+        } catch (IOException e) {
+            console.log(Level.SEVERE, e);
+        }
+    }
+
+    @FXML
+    public void addListener() {
+        try {
+            FXUtil.load(addListenerFXML, new Stage());
         } catch (IOException e) {
             console.log(Level.SEVERE, e);
         }

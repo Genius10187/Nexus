@@ -1,7 +1,7 @@
 <component name="libraryTable">
-  <library name="Block2P">
+  <library name="block2p-master-1.0">
     <CLASSES>
-      <root url="jar://$PROJECT_DIR$/lib/Block2P.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/block2p-master-1.0.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
