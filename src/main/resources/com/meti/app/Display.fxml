@@ -1,39 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="1024.0" prefWidth="1280.0"
-            xmlns="http://javafx.com/javafx/8" fx:controller="com.meti.app.Display">
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+
+<AnchorPane prefHeight="1024.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.meti.app.Display">
     <children>
-        <BorderPane fx:id="contentPane" prefHeight="1024.0" prefWidth="1280.0" AnchorPane.bottomAnchor="0.0"
-                    AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <BorderPane fx:id="contentPane" prefHeight="1024.0" prefWidth="1280.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <top>
                 <MenuBar BorderPane.alignment="CENTER">
                     <menus>
                         <Menu mnemonicParsing="false" text="File">
                             <items>
-                                <MenuItem mnemonicParsing="false" onAction="#close" text="Close"/>
+                        <Menu mnemonicParsing="false" text="Settings">
+                          <items>
+                                      <MenuItem mnemonicParsing="false" onAction="#openConnections" text="Connections" />
+                          </items>
+                        </Menu>
+                                <MenuItem mnemonicParsing="false" onAction="#close" text="Close" />
                             </items>
                         </Menu>
                         <Menu mnemonicParsing="false" text="Edit">
                             <items>
-                                <MenuItem mnemonicParsing="false" text="Delete"/>
+                                <MenuItem mnemonicParsing="false" text="Delete" />
                             </items>
                         </Menu>
                         <Menu mnemonicParsing="false" text="View">
                             <items>
-                                <MenuItem mnemonicParsing="false" onAction="#openChat" text="Chat"/>
-                                <MenuItem mnemonicParsing="false" onAction="#openConnections" text="Connections"/>
-                            </items>
-                        </Menu>
-                        <Menu mnemonicParsing="false" text="Connections">
-                            <items>
-                                <MenuItem mnemonicParsing="false" onAction="#openNewConnection" text="New Connection"/>
+                                <MenuItem mnemonicParsing="false" onAction="#openChat" text="Chat" />
                             </items>
                         </Menu>
                         <Menu mnemonicParsing="false" text="Help">
                             <items>
-                                <MenuItem mnemonicParsing="false" text="About"/>
+                                <MenuItem mnemonicParsing="false" text="About" />
                             </items>
                         </Menu>
                     </menus>

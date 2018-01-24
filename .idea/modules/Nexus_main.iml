@@ -15,5 +15,6 @@
     <orderEntry type="library" name="Gradle: org.reactfx:reactfx:2.0-M5" level="project" />
     <orderEntry type="library" name="Gradle: org.fxmisc.wellbehaved:wellbehavedfx:0.3" level="project" />
     <orderEntry type="library" name="Block2P" level="application" />
+    <orderEntry type="library" name="block2p-master-1.0" level="project" />
   </component>
 </module>

@@ -18,7 +18,7 @@ import java.util.logging.Level;
  */
 public class Display extends Controller {
     private final URL connectionControllerFXML = getClass().getResource("ConnectionController.fxml");
-    private final URL newConnectionFXML = getClass().getResource("NewConnection.fxml");
+    private final URL newConnectionFXML = getClass().getResource("AddConnection.fxml");
     private final URL chatFXML = getClass().getResource("Chat.fxml");
 
     @FXML
@@ -40,15 +40,6 @@ public class Display extends Controller {
     public void openConnections() {
         try {
             FXUtil.load(connectionControllerFXML, null);
-        } catch (IOException e) {
-            console.log(Level.SEVERE, e);
-        }
-    }
-
-    @FXML
-    public void openNewConnection() {
-        try {
-            FXUtil.load(newConnectionFXML, null);
         } catch (IOException e) {
             console.log(Level.SEVERE, e);
         }

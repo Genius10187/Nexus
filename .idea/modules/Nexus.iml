@@ -10,5 +10,6 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="Block2P" level="application" />
+    <orderEntry type="library" name="block2p-master-1.0" level="project" />
   </component>
 </module>
