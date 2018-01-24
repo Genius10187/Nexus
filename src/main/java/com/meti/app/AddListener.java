@@ -35,6 +35,7 @@ public class AddListener implements Initializable {
 
     @FXML
     public void openAdvancedSettings() {
+        //TODO: listener advanced settings
     }
 
     @FXML
