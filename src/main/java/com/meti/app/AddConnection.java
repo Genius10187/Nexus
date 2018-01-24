@@ -25,7 +25,7 @@ import static com.meti.app.Main.appState;
  * @version 0.0.0
  * @since 1/15/2018
  */
-public class NewConnection implements Initializable {
+public class AddConnection implements Initializable {
     @FXML
     private TextField addressField;
 
@@ -63,55 +63,7 @@ public class NewConnection implements Initializable {
             @Override
             protected void loop() {
                 if (next) {
-                    String addressToken = addressField.getText();
-                    String portToken = portField.getText();
-                    if (addressToken != null && portToken != null) {
-                        StringBuilder statusBuilder = new StringBuilder();
-                        boolean addressValid = true;
-                        boolean portValid = true;
-
-                        InetAddress address1 = null;
-                        int port1 = 0;
-
-                        try {
-                            address1 = InetAddress.getByName(addressToken);
-                        } catch (UnknownHostException e) {
-                            addressValid = false;
-                        }
-
-                        try {
-                            port1 = Integer.parseInt(portToken);
-                        } catch (NumberFormatException e) {
-                            portValid = false;
-                        }
-
-                        if (addressValid || portValid) {
-                            if (!addressValid) {
-                                statusBuilder.append("Invalid address!");
-                                nextButton.setDisable(true);
-                            }
-
-                            if (!portValid) {
-                                statusBuilder.append("Invalid port!");
-                                nextButton.setDisable(true);
-                            }
-
-                            if (addressValid && portValid) {
-                                try {
-                                    openConnection(address1, port1);
-                                    nextButton.setDisable(false);
-                                } catch (IOException e) {
-                                    statusBuilder.append("Failed to open connection!");
-                                    nextButton.setDisable(true);
-                                }
-                            }
-                        } else {
-                            statusBuilder.append("Invalid address and port!");
-                            nextButton.setDisable(true);
-                        }
-
-                        status = statusBuilder.toString();
-                    }
+                    buildSocket();
 
                     next = false;
                 }
@@ -119,6 +71,58 @@ public class NewConnection implements Initializable {
         };
 
         appState.getService().submit(loop);
+    }
+
+    private void buildSocket() {
+        String addressToken = addressField.getText();
+        String portToken = portField.getText();
+        if (addressToken != null && portToken != null) {
+            StringBuilder statusBuilder = new StringBuilder();
+            boolean addressValid = true;
+            boolean portValid = true;
+
+            InetAddress address1 = null;
+            int port1 = 0;
+
+            try {
+                address1 = InetAddress.getByName(addressToken);
+            } catch (UnknownHostException e) {
+                addressValid = false;
+            }
+
+            try {
+                port1 = Integer.parseInt(portToken);
+            } catch (NumberFormatException e) {
+                portValid = false;
+            }
+
+            if (addressValid || portValid) {
+                if (!addressValid) {
+                    statusBuilder.append("Invalid address!");
+                    nextButton.setDisable(true);
+                }
+
+                if (!portValid) {
+                    statusBuilder.append("Invalid port!");
+                    nextButton.setDisable(true);
+                }
+
+                if (addressValid && portValid) {
+                    try {
+                        openConnection(address1, port1);
+                        nextButton.setDisable(false);
+                    } catch (IOException e) {
+                        statusBuilder.append("Failed to open connection!");
+                        nextButton.setDisable(true);
+                    }
+                }
+            } else {
+                statusBuilder.append("Invalid address and port!");
+                nextButton.setDisable(true);
+            }
+
+            status = statusBuilder.toString();
+        }
     }
 
     public void openConnection(InetAddress address, int port) throws IOException {
