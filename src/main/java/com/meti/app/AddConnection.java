@@ -46,7 +46,7 @@ public class AddConnection implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        NewConnectionChangeListener listener = new NewConnectionChangeListener();
+        AddConnectionChangeListener listener = new AddConnectionChangeListener();
         addressField.textProperty().addListener(listener);
         portField.textProperty().addListener(listener);
         nextButton.setDisable(true);
@@ -141,7 +141,7 @@ public class AddConnection implements Initializable {
         appState.getContext().getPeer().startConnection(connection);
     }
 
-    private class NewConnectionChangeListener implements ChangeListener<String> {
+    private class AddConnectionChangeListener implements ChangeListener<String> {
         @Override
         public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
             next = true;
